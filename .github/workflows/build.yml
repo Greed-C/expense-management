@@ -36,13 +36,22 @@ jobs:
       - name: Rename
         run: cp app/build/outputs/apk/release/app-release.apk ExpenseManagement.apk
 
+      - name: Signing fingerprint (for Google sign-in setup)
+        env:
+          KS_PASS: ${{ secrets.KS_PASS }}
+        run: |
+          keytool -list -v -keystore signing/release.jks -storepass "$KS_PASS" -alias expense | grep -E "SHA1:|SHA256:" | sed 's/^[[:space:]]*//' > fp.txt
+          cat fp.txt
+
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          printf 'Open this page on your Android phone, tap ExpenseManagement.apk to download, then open the file to install.\n\nApp signing fingerprints:\n' > notes.md
+          sed 's/^/    /' fp.txt >> notes.md
           gh release create "v1.0.${{ github.run_number }}" ExpenseManagement.apk \
             --title "Expense Management 1.0.${{ github.run_number }}" \
-            --notes "Open this page on your Android phone, tap ExpenseManagement.apk to download, then open the file to install." \
+            --notes-file notes.md \
             --latest
 
       - name: Report build error

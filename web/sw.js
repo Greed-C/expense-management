@@ -1,6 +1,6 @@
 // Offline support: keep a copy of the app files. Your expenses are NOT here – they stay in this phone's storage.
 const CACHE = 'em-__BUILD__';
-const FILES = ['./', 'index.html', 'guide.html', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png'];
+const FILES = ['./', 'index.html', 'sync.js', 'firebase-config.js', 'guide.html', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));

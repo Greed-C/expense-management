@@ -26,7 +26,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir _site
-          cp app/src/main/assets/index.html _site/index.html
+          cp app/src/main/assets/* _site/
           cp web/* _site/
           sed -i "s/__BUILD__/${{ github.run_number }}/" _site/sw.js
           touch _site/.nojekyll

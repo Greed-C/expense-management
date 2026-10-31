@@ -1,0 +1,37 @@
+plugins { id 'com.android.application' }
+
+def vc = Integer.parseInt(System.getenv('VERSION_CODE') ?: '1')
+
+android {
+    namespace 'com.greedc.expensemanagement'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'com.greedc.expensemanagement'
+        minSdk 26
+        targetSdk 34
+        versionCode vc
+        versionName "1.0.${vc}"
+    }
+    signingConfigs {
+        release {
+            storeFile file(System.getenv('KS_PATH') ?: 'release.jks')
+            storePassword System.getenv('KS_PASS')
+            keyAlias 'expense'
+            keyPassword System.getenv('KS_PASS')
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.11.0'
+}

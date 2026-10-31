@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   build:
@@ -31,7 +32,9 @@ jobs:
           KS_PATH: ${{ runner.temp }}/release.jks
           KS_PASS: ${{ secrets.KS_PASS }}
           VERSION_CODE: ${{ github.run_number }}
-        run: gradle assembleRelease --no-daemon --stacktrace
+        run: |
+          set -o pipefail
+          gradle assembleRelease --no-daemon --stacktrace 2>&1 | tee build.log
 
       - name: Rename
         run: cp app/build/outputs/apk/release/app-release.apk ExpenseManagement.apk
@@ -44,3 +47,11 @@ jobs:
             --title "Expense Management 1.0.${{ github.run_number }}" \
             --notes "Open this page on your Android phone, tap ExpenseManagement.apk to download, then open the file to install." \
             --latest
+
+      - name: Report build error
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          { echo '```'; grep -n -A30 "What went wrong" build.log | head -80 || true; echo '---'; tail -n 60 build.log || true; echo '```'; } > err.md
+          gh issue create --title "Build ${{ github.run_number }} failed" --body-file err.md

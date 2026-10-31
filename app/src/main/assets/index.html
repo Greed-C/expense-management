@@ -145,6 +145,18 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .mleg div{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:13.5px}
 .mleg i{width:12px;height:12px;border-radius:4px;flex:0 0 auto}
 .mleg b{margin-inline-start:auto;font-variant-numeric:tabular-nums}
+.ftop{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:4px 0 8px}
+.ftop span{font-size:14px;color:var(--ink2)} .ftop b{font-size:clamp(20px,6vw,26px);font-variant-numeric:tabular-nums;white-space:nowrap}
+.fbar{display:flex;gap:2px;height:16px;border-radius:999px;overflow:hidden;background:var(--line)}
+.fbar .sg{height:100%}
+.fshares{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px;font-size:12.5px;color:var(--ink2)}
+.fshares span{display:inline-flex;align-items:center;gap:5px} .fshares i{width:9px;height:9px;border-radius:3px;display:inline-block}
+.flist{margin-top:14px}
+.frow{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 0;font-size:14.5px}
+.frow i{width:12px;height:12px;border-radius:4px}
+.frow b{font-variant-numeric:tabular-nums;white-space:nowrap;direction:ltr;unicode-bidi:isolate}
+.frow.total{font-weight:700;font-size:16px} .frow.total b{font-size:18px}
+.fsep{border-top:1px dashed var(--line);margin:4px 0} .fsep.strong{border-top:2px solid var(--line)}
 .mnote{margin-top:12px;font-size:13px;padding:9px 11px;border-radius:10px;background:var(--bad-soft);color:var(--bad)}
 .suggs{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 12px}
 .sugg{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer}
@@ -612,13 +624,22 @@ function flowChart(y){
   return s+'</svg>';
 }
 function moneyBars(carry,inc,out,inv,left){
-  const pos=Math.max(0,carry), debt=Math.max(0,-carry), lf=Math.max(0,left); const scale=Math.max(pos+inc,out+inv+debt,1);
-  const sg=(v,col,lbl)=>v>0?`<div class="sg" style="width:${v/scale*100}%;background:${col}" data-tip="${esc(lbl)}: ${ils(v)}"></div>`:'';
-  const leftCol='color-mix(in srgb,var(--accent) 35%,transparent)';
-  const leg=(col,lbl,v)=>`<div><i style="background:${col}"></i><span>${esc(lbl)}</span><b>${ils(v)}</b></div>`;
-  return `<div class="mrow"><div class="mlab">${t('inRow')}</div><div class="mbar">${sg(pos,'var(--muted)',t('carryIn'))}${sg(inc,'var(--inc)',t('incAmt'))}</div><div class="mval">${ils(pos+inc)}</div></div>
-  <div class="mrow"><div class="mlab">${t('outRow')}</div><div class="mbar">${sg(debt,'var(--bad)',t('debtPrev'))}${sg(out,'var(--exp)',t('spentL'))}${sg(inv,'var(--inv)',t('investedL'))}${sg(lf,leftCol,t('carryOut'))}</div><div class="mval">${ils(out+inv+debt)}</div></div>
-  <div class="mleg">${leg('var(--muted)',carry<0?t('debtPrev'):t('carryIn'),carry)}${leg('var(--inc)',t('incAmt'),inc)}${leg('var(--exp)',t('spentL'),out)}${leg('var(--inv)',t('investedL'),inv)}${leg(left<0?'var(--bad)':leftCol,t('carryOut'),left)}</div>
+  const pos=Math.max(0,carry), debt=Math.max(0,-carry), avail=pos+inc, used=out+inv+debt, lf=Math.max(0,left);
+  const base=Math.max(avail,used); const pct=v=>base?v/base*100:0;
+  const leftCol='color-mix(in srgb,var(--accent) 45%,transparent)';
+  const sg=(v,col,lbl)=>v>0?`<div class="sg" style="width:${pct(v)}%;background:${col}" data-tip="${esc(lbl)}: ${ils(v)}"></div>`:'';
+  const row=(col,lbl,v,sign)=>`<div class="frow"><i style="background:${col}"></i><span>${esc(lbl)}</span><b>${v?sign:''}${ils(v)}</b></div>`;
+  const shares=avail>0?[[out,'var(--exp)',t('spentL')],[inv,'var(--inv)',t('investedL')],[lf,leftCol,t('carryOut')]].filter(x=>x[0]>0).map(x=>`<span><i style="background:${x[1]}"></i>${Math.round(x[0]/avail*100)}% ${esc(x[2])}</span>`).join(''):'';
+  return `<div class="ftop"><span>${t('available')}</span><b>${ils(avail)}</b></div>
+  <div class="fbar">${sg(debt,'var(--bad)',t('debtPrev'))}${sg(out,'var(--exp)',t('spentL'))}${sg(inv,'var(--inv)',t('investedL'))}${sg(lf,leftCol,t('carryOut'))}</div>
+  ${shares?`<div class="fshares">${shares}</div>`:''}
+  <div class="flist">
+    ${carry<0?'':row('var(--muted)',t('carryIn'),pos,'+')}${row('var(--inc)',t('incAmt'),inc,'+')}
+    <div class="fsep"></div>
+    ${debt?row('var(--bad)',t('debtPrev'),debt,'−'):''}${row('var(--exp)',t('spentL'),out,'−')}${row('var(--inv)',t('investedL'),inv,'−')}
+    <div class="fsep strong"></div>
+    <div class="frow total"><i style="background:${left<0?'var(--bad)':leftCol}"></i><span>${t('carryOut')}</span><b style="color:${left<0?'var(--bad)':'var(--accent)'}">${left<0?'−':''}${ils(Math.abs(left))}</b></div>
+  </div>
   ${left<0?`<div class="mnote">${t('overNote')}: ${ils(-left)}</div>`:''}`;
 }
 function waterfall(rows){ // [{label,v,kind:'in'|'out'|'total',color}]

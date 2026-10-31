@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0d7a57">
+<meta name="theme-color" content="#f4f2ee">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,26 +12,21 @@
 <meta name="apple-mobile-web-app-title" content="Expenses">
 <title>Expense Management</title>
 <style>
-/* Ledger-green on paper: one calm accent, semantic colors only for over-budget states. Layout: summary first, then charts, then the list. */
+/* Calm paper (light) / slate (dark). Money colors: income green, expenses red, investments purple, carry-over gray; blue accent for controls. */
 :root{
-  --bg:#eef2ee; --card:#ffffff; --ink:#13241c; --ink2:#4e5f57; --muted:#86958d; --line:#dde5df;
-  --accent:#0d7a57; --accent-soft:#d8efe5; --needs:#2a78d6; --wants:#eb6834; --save:#1baf7a;
-  --bad:#c23b3b; --bad-soft:#fbe6e4; --warn:#b77900; --inc:#0d7a57; --exp:#eb6834; --inv:#6250d6;
+  --bg:#f4f2ee; --card:#ffffff; --ink:#1e2230; --ink2:#4f5567; --muted:#8a8f9c; --line:#e4e0d9; --accent:#2d5bd0; --accent-soft:#e3eafb; --needs:#0f97a6; --wants:#e8811f; --save:#6a4fd8; --bad:#b42318; --bad-soft:#fde8e6; --warn:#b77900; --inc:#1e9e57; --exp:#e0433f; --inv:#6a4fd8; --carry:#8a8f9c; --on-accent:#ffffff; color-scheme:light;
   --display:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --body:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-  color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f1714; --card:#17221d; --ink:#e9f1ec; --ink2:#b4c3bb; --muted:#7f8f87; --line:#26342d;
-  --accent:#3fbf8f; --accent-soft:#183a2d; --needs:#3987e5; --wants:#d95926; --save:#199e70; --bad:#e66767; --bad-soft:#3a1f1f; --warn:#e0a52b; --inc:#3fbf8f; --exp:#d95926; --inv:#9085e9; color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0f1714; --card:#17221d; --ink:#e9f1ec; --ink2:#b4c3bb; --muted:#7f8f87; --line:#26342d;
-  --accent:#3fbf8f; --accent-soft:#183a2d; --needs:#3987e5; --wants:#d95926; --save:#199e70; --bad:#e66767; --bad-soft:#3a1f1f; --warn:#e0a52b; --inc:#3fbf8f; --exp:#d95926; --inv:#9085e9; color-scheme:dark}
+:root[data-theme="light"]{--bg:#f4f2ee; --card:#ffffff; --ink:#1e2230; --ink2:#4f5567; --muted:#8a8f9c; --line:#e4e0d9; --accent:#2d5bd0; --accent-soft:#e3eafb; --needs:#0f97a6; --wants:#e8811f; --save:#6a4fd8; --bad:#b42318; --bad-soft:#fde8e6; --warn:#b77900; --inc:#1e9e57; --exp:#e0433f; --inv:#6a4fd8; --carry:#8a8f9c; --on-accent:#ffffff; color-scheme:light;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161b; --card:#1c1f26; --ink:#e9ebf1; --ink2:#b4b9c6; --muted:#878d9c; --line:#2b2f39; --accent:#7c9dff; --accent-soft:#222c46; --needs:#33c0cc; --wants:#f19446; --save:#a68bfa; --bad:#ff8a80; --bad-soft:#3b1f22; --warn:#e0a52b; --inc:#4cc38a; --exp:#f2625f; --inv:#a68bfa; --carry:#8b91a1; --on-accent:#0f1530; color-scheme:dark;}}
+:root[data-theme="dark"]{--bg:#14161b; --card:#1c1f26; --ink:#e9ebf1; --ink2:#b4b9c6; --muted:#878d9c; --line:#2b2f39; --accent:#7c9dff; --accent-soft:#222c46; --needs:#33c0cc; --wants:#f19446; --save:#a68bfa; --bad:#ff8a80; --bad-soft:#3b1f22; --warn:#e0a52b; --inc:#4cc38a; --exp:#f2625f; --inv:#a68bfa; --carry:#8b91a1; --on-accent:#0f1530; color-scheme:dark;}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;-webkit-tap-highlight-color:transparent}
 button,input,select,textarea{font:inherit;color:inherit}
 .wrap{max-width:1060px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 16px 110px}
 header.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .brand{font-family:var(--display);font-weight:700;font-size:20px;display:flex;align-items:center;gap:8px}
-.brand .dot{width:26px;height:26px;border-radius:8px;background:var(--accent);display:grid;place-items:center;color:#fff;font-size:15px}
+.brand .dot{width:26px;height:26px;border-radius:8px;background:var(--accent);display:grid;place-items:center;color:var(--on-accent);font-size:15px}
 .spacer{flex:1}
 .pillbtn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:13px}
 .pillbtn:focus-visible,.chip:focus-visible,.tab:focus-visible,.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -41,7 +36,12 @@ header.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom
 .monthnav .lbl{min-width:118px;text-align:center;font-weight:600;font-size:14px}
 nav.tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:16px}
 .tab{flex:1;border:0;background:transparent;padding:9px 6px;border-radius:10px;cursor:pointer;font-weight:500;color:var(--ink2)}
-.tab.on{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.tab{--tc:var(--accent);display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.15}
+.tab::before{content:"";width:20px;height:20px;background:currentColor;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat;opacity:.75}
+.tab.on::before{opacity:1}
+#t_list{--tc:var(--exp)} #t_flow{--tc:var(--inc)} #t_year{--tc:var(--inv)} #t_settings{--tc:var(--ink2)}
+#t_home{--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20d%3D%22M3%2011l9-7%209%207v9a1%201%200%200%201-1%201h-5v-6H9v6H4a1%201%200%200%201-1-1z%22/%3E%3C/svg%3E")}#t_list{--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20d%3D%22M6%202h12a1%201%200%200%201%201%201v19l-3-2-2%202-2-2-2%202-2-2-3%202V3a1%201%200%200%201%201-1zm3%206h6v2H9zm0%204h6v2H9z%22%20fill-rule%3D%22evenodd%22/%3E%3C/svg%3E")}#t_flow{--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20d%3D%22M7%203l4%204H8v6H6V7H3zm10%2018l-4-4h3v-6h2v6h3z%22/%3E%3C/svg%3E")}#t_year{--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20d%3D%22M4%2020h16v2H4zM5%2012h3v7H5zm5.5-5h3v12h-3zM16%209h3v10h-3z%22/%3E%3C/svg%3E")}#t_settings{--ic:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20d%3D%22M12%208a4%204%200%201%200%200%208%204%204%200%200%200%200-8zm9%205.5v-3l-2.4-.6a7%207%200%200%200-.8-1.9l1.3-2.1-2.1-2.1-2.1%201.3a7%207%200%200%200-1.9-.8L12.5%202h-3l-.6%202.4a7%207%200%200%200-1.9.8L4.9%203.9%202.8%206l1.3%202.1a7%207%200%200%200-.8%201.9L1%2010.5v3l2.4.6c.2.7.4%201.3.8%201.9l-1.3%202.1%202.1%202.1%202.1-1.3c.6.4%201.2.6%201.9.8l.6%202.4h3l.6-2.4c.7-.2%201.3-.4%201.9-.8l2.1%201.3%202.1-2.1-1.3-2.1c.4-.6.6-1.2.8-1.9z%22%20transform%3D%22translate%281%200%29%20scale%28.92%29%22/%3E%3C/svg%3E")}
+.tab.on{background:color-mix(in srgb,var(--tc) 15%,transparent);color:var(--tc);font-weight:700}
 @media (max-width:640px){nav.tabs{position:fixed;bottom:0;left:0;right:0;margin:0;border-radius:16px 16px 0 0;z-index:20;padding:6px 6px calc(6px + env(safe-area-inset-bottom))}}
 .grid{display:grid;gap:14px}
 .g2{grid-template-columns:1.25fr 1fr}
@@ -54,9 +54,9 @@ nav.tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--line
 .big{font-family:var(--display);font-size:clamp(30px,10vw,44px);overflow-wrap:anywhere;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.5px}
 .sub{color:var(--ink2);font-size:13.5px;margin-top:6px}
 .delta{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;font-size:12.5px;font-weight:600}
-.delta.up{background:var(--bad-soft);color:var(--bad)} .delta.down{background:var(--accent-soft);color:var(--accent)}
+.delta.up{background:var(--bad-soft);color:var(--bad)} .delta.down{background:color-mix(in srgb,var(--inc) 15%,transparent);color:var(--inc)}
 .meter{height:12px;border-radius:999px;background:var(--bg);overflow:hidden;margin-top:10px}
-.meter > i{display:block;height:100%;border-radius:999px;background:var(--accent)}
+.meter > i{display:block;height:100%;border-radius:999px;background:var(--exp)}
 .meter.over > i{background:var(--bad)}
 .kv{display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);margin-top:6px;font-variant-numeric:tabular-nums}
 .catrow{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
@@ -87,7 +87,7 @@ svg text{fill:var(--muted);font-family:var(--body)}
 .toolbar input,.toolbar select{flex:1;min-width:140px}
 input,select,textarea{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
-.fab{position:fixed;inset-inline-end:22px;bottom:26px;width:62px;height:62px;border-radius:20px;border:0;background:var(--accent);color:#fff;font-size:30px;cursor:pointer;box-shadow:0 10px 24px rgba(13,122,87,.35);z-index:25}
+.fab{position:fixed;inset-inline-end:22px;bottom:26px;width:62px;height:62px;border-radius:20px;border:0;background:var(--accent);color:var(--on-accent);font-size:30px;cursor:pointer;box-shadow:0 10px 24px color-mix(in srgb,var(--accent) 40%,transparent);z-index:25}
 @media (max-width:640px){.fab{bottom:86px}}
 .sheetbg{position:fixed;inset:0;background:rgba(10,20,15,.45);display:none;z-index:40;align-items:flex-end;justify-content:center}
 .sheetbg.open{display:flex}
@@ -106,13 +106,14 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .kindrow{display:flex;gap:8px;margin:-4px 0 12px}
 .chips.needpick{animation:needpick .9s ease 1;border-radius:14px}
 @keyframes needpick{0%,100%{box-shadow:0 0 0 0 transparent}30%,70%{box-shadow:0 0 0 3px var(--bad)}}
+.themerow{display:flex;gap:8px;max-width:460px}
 .kindbtn{flex:1;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:9px;cursor:pointer;font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px}
 .kindbtn i{width:12px;height:12px;border-radius:4px;display:inline-block}
 .kindbtn.on{border-color:var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 12%,var(--card));box-shadow:inset 0 0 0 1px var(--c)}
 .catlegend{display:flex;gap:14px;font-size:12px;color:var(--ink2);margin:0 0 8px}
 .catlegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px}
 .btn{border:0;border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700}
-.btn.primary{background:var(--accent);color:#fff;flex:1}
+.btn.primary{background:var(--accent);color:var(--on-accent);flex:1}
 .btn.ghost{background:var(--bg)}
 .btn.danger{background:var(--bad-soft);color:var(--bad)}
 .actions{display:flex;gap:8px;margin-top:6px}
@@ -182,7 +183,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .pkc:hover{background:var(--accent-soft)}
 .pkc.dim{color:var(--muted);opacity:.6}
 .pkc.today{box-shadow:inset 0 0 0 2px var(--accent)}
-.pkc.sel{background:var(--accent);color:#fff;font-weight:700}
+.pkc.sel{background:var(--accent);color:var(--on-accent);font-weight:700}
 .pkc:focus-visible,.pkarrow:focus-visible,.pktitle:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .pkfoot{display:flex;justify-content:space-between;margin-top:10px;gap:8px}
 .pkfoot button{border:0;background:var(--bg);border-radius:10px;padding:9px 14px;cursor:pointer;font-weight:600}
@@ -191,13 +192,13 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .flowk>*,.g2>*,.g3>*{min-width:0}
 .kt{font-size:12.5px;color:var(--ink2)}
 .kn{font-family:var(--display);font-size:clamp(14px,4.6vw,26px);white-space:nowrap;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums}
-.pos{color:var(--accent)} .neg{color:var(--bad)}
+.pos{color:var(--inc)} .neg{color:var(--bad)}
 .rec{display:grid;gap:10px}
 .recrow>*{min-width:0}.recrow .status{white-space:normal;text-align:center;max-width:110px}
 .recrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
 .recrow:last-child{border-bottom:0}
 .status{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
-.status.ok{background:var(--accent-soft);color:var(--accent)} .status.bad{background:var(--bad-soft);color:var(--bad)}
+.status.ok{background:color-mix(in srgb,var(--inc) 15%,transparent);color:var(--inc)} .status.bad{background:var(--bad-soft);color:var(--bad)}
 .tipline{background:var(--bg);border-radius:12px;padding:10px 12px;font-size:13.5px;line-height:1.55}
 .incform{display:grid;grid-template-columns:1.1fr 1.4fr 1fr 1fr auto;gap:8px;align-items:end}
 @media (max-width:820px){.incform{grid-template-columns:1fr 1fr}}
@@ -271,11 +272,15 @@ const BASE_CATS=[
  {id:'other',e:'📦',he:'אחר',en:'Other',type:'wants'}];
 const METHODS=[['card','כרטיס אשראי','Credit card'],['cash','מזומן','Cash'],['bit','ביט / פייבוקס','Bit / PayBox'],['transfer','העברה בנקאית','Bank transfer'],['standing','הוראת קבע','Standing order']];
 const T={
- he:{brand:'ניהול הוצאות',home:'ראשי',list:'הוצאות',year:'שנה',settings:'הגדרות',spentMonth:'הוצאת החודש',vsLast:'לעומת חודש קודם',noPrev:'אין נתונים לחודש הקודם',ofIncome:'מתוך הכנסה של',left:'נשאר להוציא',over:'חריגה של',setIncome:'הגדר הכנסה חודשית בהגדרות כדי לראות כמה נשאר',byCat:'לפי קטגוריה',byCatHint:'כמה הלך על כל דבר החודש',pace:'קצב ההוצאות',paceHint:'הוצאה מצטברת לפי יום בחודש',thisM:'החודש',lastM:'חודש קודם',split:'צרכים / רצונות / חיסכון',splitHint:'השוואה לכלל 50/30/20',needs:'צרכים',wants:'רצונות',save:'חיסכון',target:'יעד',top:'ההוצאות הגדולות',search:'חיפוש…',allCats:'כל הקטגוריות',noItems:'אין הוצאות בחודש הזה עדיין. לחץ על + כדי להוסיף.',add:'הוצאה חדשה',edit:'עריכת הוצאה',amount:'סכום (₪)',name:'על מה? (לא חובה)',cat:'קטגוריה',date:'תאריך',method:'אמצעי תשלום',note:'הערה',saveB:'שמירה',del:'מחיקה',cancel:'ביטול',confirmDel:'ללחוץ שוב כדי למחוק',saved:'נשמר ✓',deleted:'נמחק',yearTotal:'סה״כ השנה',avgM:'ממוצע לחודש',yearBars:'הוצאות לפי חודש',yearCats:'קטגוריות השנה',income:'הכנסה צפויה לחודש (₪)',budgets:'תקציב חודשי לכל קטגוריה (₪)',budgetsHint:'השאר ריק אם אין תקציב. מעבר לתקציב יסומן באדום.',lang:'שפה',copyCsv:'העתק את כל ההוצאות (CSV)',copied:'הועתק – אפשר להדביק באקסל',data:'הנתונים',count:'הוצאות',loading:'טוען…',offline:'לא מצליח להתחבר לנתונים כרגע. נסה לרענן בעוד רגע.',noDb:'לא ניתן לשמור נתונים במכשיר הזה.',budget:'תקציב',imported:'יובא',saveErr:'השמירה נכשלה – נסה שוב',perDay:'ליום',pickCat:'בחר קטגוריה',repeat:'חוזר כל חודש (הוראת קבע / מנוי)',endDate:'עד תאריך (לא חובה)',noEnd:'ללא סוף',clearEnd:'ללא סוף',editRec:'עריכת הוראת קבע',delSeries:'מחיקת כל החודשים',confirmDelSeries:'ללחוץ שוב – יימחק מכל החודשים',recTag:'קבוע',upcoming:'צפוי עוד החודש',recList:'הוראות קבע ומנויים',recListHint:'נרשמים אוטומטית בכל חודש בתאריך שבחרת. לחץ כדי לשנות סכום, תאריך סיום או צבע.',noRec:'אין עדיין. בהוספת הוצאה סמן ״חוזר כל חודש״.',perMonth:'לחודש',upcomingHome:'צפוי עוד החודש מהוראות קבע',inRow:'נכנס',outRow:'יצא',debtPrev:'חוסר מהחודש הקודם',overNote:'יצא יותר ממה שנכנס – ההפרש יירד מהחודש הבא',kindSpend:'הוצאה',kindSave:'חיסכון / השקעה',nameOpt:'לא חובה – למשל שופרסל',incTotal:'סה״כ הכנסות',expTotal:'סה״כ הוצאות',invTotal:'סה״כ השקעות',yearFlow:'הכנסות, הוצאות והשקעות לפי חודש',carryIn:'יתרה מהחודש הקודם',available:'זמין החודש',carryOut:'עובר לחודש הבא',monthFlow:'לאן הלך הכסף החודש',monthFlowHint:'יתרה שנשארה עוברת אוטומטית לחודש הבא',carryFrom:'מעקב יתרה החל מחודש',carryFromHint:'יתרה שלא הוצאה עוברת לחודש הבא. חודשים לפני התאריך הזה לא נספרים (שם חסרות חלק מההוצאות).',plusCarry:'כולל יתרה מהחודש הקודם',investedL:'הושקע / נחסך',spentL:'הוצאות',leftAcc:'נשאר בחשבון',incFrom:'הכנסה',incSrcThis:'משכורת החודש',incSrcAvg:'ממוצע 3 חודשים',incSrcSet:'הכנסה צפויה מההגדרות',invTag:'השקעה',noSpendNote:'חיסכון והשקעות לא נספרים כהוצאה',flowTab:'הכנסות / הוצאות',flow:'הכנסות והוצאות',inMonth:'נכנס החודש',outMonth:'יצא על הוצאות',savedMonth:'נשאר / נחסך',rate:'כמה מההכנסה הלך לחיסכון והשקעות',addInc:'הוספת הכנסה',incName:'מקור',incType:'סוג',salary:'משכורת',bonus:'בונוס / מענק',reserve:'מילואים',otherInc:'אחר',incList:'ההכנסות החודש',noInc:'אין הכנסות רשומות לחודש הזה. הוסף משכורת למעלה.',flowChart:'נכנס מול יצא',flowHint:'הכנסות מול ההוצאות שרשומות באפליקציה; הנקודה מראה כמה נשאר. חודשים בלי כל ההוצאות ייראו טובים מהמציאות.',cumSaved:'כמה נשאר מצטבר השנה',recTitle:'המלצה לפי המשכורת',recHint:'רק המלצה – לא משנה את המסך הראשי',recBase:'לפי הכנסה של',recNeeds:'צרכים – עד 50%',recWants:'רצונות – עד 30%',recSave:'חיסכון – לפחות 20%',actual:'בפועל',okS:'בסדר',overS:'מעל',underS:'מתחת',keep:'כל הכבוד – נשארת בתוך ההמלצה החודש.',noBase:'הוסף הכנסה כדי לקבל המלצה.',avg3:'(ממוצע 3 חודשים אחרונים)',year12:'אם תחסוך ככה כל חודש, בעוד שנה יהיו לך',today:'היום',edited:'עריכה',update:'עדכון',saveAmt:'נחסך (כולל השקעות)',spentAmt:'הוצאות',incAmt:'הכנסות'},
- en:{brand:'Expense Management',home:'Home',list:'Expenses',year:'Year',settings:'Settings',spentMonth:'Spent this month',vsLast:'vs last month',noPrev:'No data for last month',ofIncome:'of your income',left:'left to spend',over:'over by',setIncome:'Set your monthly income in Settings to see what’s left',byCat:'By category',byCatHint:'Where the money went this month',pace:'Spending pace',paceHint:'Running total by day of month',thisM:'This month',lastM:'Last month',split:'Needs / wants / savings',splitHint:'Compared with the 50/30/20 rule',needs:'Needs',wants:'Wants',save:'Savings',target:'target',top:'Biggest expenses',search:'Search…',allCats:'All categories',noItems:'No expenses this month yet. Tap + to add one.',add:'New expense',edit:'Edit expense',amount:'Amount (₪)',name:'What for? (optional)',cat:'Category',date:'Date',method:'Paid with',note:'Note',saveB:'Save',del:'Delete',cancel:'Cancel',confirmDel:'Tap again to delete',saved:'Saved ✓',deleted:'Deleted',yearTotal:'Total this year',avgM:'Monthly average',yearBars:'Spending by month',yearCats:'Categories this year',income:'Expected monthly income (₪)',budgets:'Monthly budget per category (₪)',budgetsHint:'Leave empty for no budget. Going over shows in red.',lang:'Language',copyCsv:'Copy all expenses (CSV)',copied:'Copied – paste into Excel',data:'Your data',count:'expenses',loading:'Loading…',offline:'Can’t reach your data right now. Try again in a moment.',noDb:'This device can’t store data.',budget:'budget',imported:'imported',saveErr:'Couldn’t save – please try again',perDay:'per day',pickCat:'Choose a category',repeat:'Repeats every month (standing order / subscription)',endDate:'Until (optional)',noEnd:'no end',clearEnd:'No end',editRec:'Edit standing order',delSeries:'Delete all months',confirmDelSeries:'Tap again – removes it from every month',recTag:'monthly',upcoming:'Coming up this month',recList:'Standing orders & subscriptions',recListHint:'Added automatically every month on the day you chose. Tap one to change the amount, end date or color.',noRec:'None yet. When adding an expense, turn on “Repeats every month”.',perMonth:'per month',upcomingHome:'Still to come this month from standing orders',inRow:'In',outRow:'Out',debtPrev:'Short from last month',overNote:'More went out than came in – the difference comes off next month',kindSpend:'Expense',kindSave:'Saving / investment',nameOpt:'Optional – e.g. Shufersal',incTotal:'Total income',expTotal:'Total expenses',invTotal:'Total investments',yearFlow:'Income, expenses and investments by month',carryIn:'Left from last month',available:'Available this month',carryOut:'Carries to next month',monthFlow:'Where the money went this month',monthFlowHint:'Whatever is left carries over to next month automatically',carryFrom:'Track the balance from',carryFromHint:'Money you didn’t use carries to the next month. Months before this date are skipped (some expenses there are missing).',plusCarry:'incl. left from last month',investedL:'Saved / invested',spentL:'Spent',leftAcc:'Left in account',incFrom:'Income',incSrcThis:'this month’s salary',incSrcAvg:'3-month average',incSrcSet:'expected income from Settings',invTag:'investment',noSpendNote:'Savings & investments are not counted as spending',flowTab:'In / Out',flow:'Money in/out',inMonth:'Came in this month',outMonth:'Went out on expenses',savedMonth:'Left / saved',rate:'Share of income saved & invested',addInc:'Add income',incName:'Source',incType:'Type',salary:'Salary',bonus:'Bonus / grant',reserve:'Reserve duty',otherInc:'Other',incList:'Income this month',noInc:'No income recorded for this month. Add your salary above.',flowChart:'Money in vs money out',flowHint:'Income vs the expenses recorded in the app; the dot shows what was left. Months where not every expense was recorded look better than reality.',cumSaved:'Left over, running total this year',recTitle:'Recommendation based on your salary',recHint:'Just a guide – it doesn’t change the Home tab',recBase:'Based on income of',recNeeds:'Needs – up to 50%',recWants:'Wants – up to 30%',recSave:'Savings – at least 20%',actual:'actual',okS:'OK',overS:'over',underS:'under',keep:'Nice – you stayed within the guide this month.',noBase:'Add your income to get a recommendation.',avg3:'(average of last 3 months)',year12:'If you keep this up every month, in a year you’ll have',today:'Today',edited:'Edit',update:'Update',saveAmt:'Saved (incl. investments)',spentAmt:'Expenses',incAmt:'Income'}};
+ he:{brand:'ניהול הוצאות',home:'ראשי',list:'הוצאות',year:'שנה',settings:'הגדרות',spentMonth:'הוצאת החודש',vsLast:'לעומת חודש קודם',noPrev:'אין נתונים לחודש הקודם',ofIncome:'מתוך הכנסה של',left:'נשאר להוציא',over:'חריגה של',setIncome:'הגדר הכנסה חודשית בהגדרות כדי לראות כמה נשאר',byCat:'לפי קטגוריה',byCatHint:'כמה הלך על כל דבר החודש',pace:'קצב ההוצאות',paceHint:'הוצאה מצטברת לפי יום בחודש',thisM:'החודש',lastM:'חודש קודם',split:'צרכים / רצונות / חיסכון',splitHint:'השוואה לכלל 50/30/20',needs:'צרכים',wants:'רצונות',save:'חיסכון',target:'יעד',top:'ההוצאות הגדולות',search:'חיפוש…',allCats:'כל הקטגוריות',noItems:'אין הוצאות בחודש הזה עדיין. לחץ על + כדי להוסיף.',add:'הוצאה חדשה',edit:'עריכת הוצאה',amount:'סכום (₪)',name:'על מה? (לא חובה)',cat:'קטגוריה',date:'תאריך',method:'אמצעי תשלום',note:'הערה',saveB:'שמירה',del:'מחיקה',cancel:'ביטול',confirmDel:'ללחוץ שוב כדי למחוק',saved:'נשמר ✓',deleted:'נמחק',yearTotal:'סה״כ השנה',avgM:'ממוצע לחודש',yearBars:'הוצאות לפי חודש',yearCats:'קטגוריות השנה',income:'הכנסה צפויה לחודש (₪)',budgets:'תקציב חודשי לכל קטגוריה (₪)',budgetsHint:'השאר ריק אם אין תקציב. מעבר לתקציב יסומן באדום.',lang:'שפה',copyCsv:'העתק את כל ההוצאות (CSV)',copied:'הועתק – אפשר להדביק באקסל',data:'הנתונים',count:'הוצאות',loading:'טוען…',offline:'לא מצליח להתחבר לנתונים כרגע. נסה לרענן בעוד רגע.',noDb:'לא ניתן לשמור נתונים במכשיר הזה.',budget:'תקציב',imported:'יובא',saveErr:'השמירה נכשלה – נסה שוב',perDay:'ליום',pickCat:'בחר קטגוריה',theme:'מראה',th_system:'לפי המכשיר',th_light:'בהיר',th_dark:'כהה',repeat:'חוזר כל חודש (הוראת קבע / מנוי)',endDate:'עד תאריך (לא חובה)',noEnd:'ללא סוף',clearEnd:'ללא סוף',editRec:'עריכת הוראת קבע',delSeries:'מחיקת כל החודשים',confirmDelSeries:'ללחוץ שוב – יימחק מכל החודשים',recTag:'קבוע',upcoming:'צפוי עוד החודש',recList:'הוראות קבע ומנויים',recListHint:'נרשמים אוטומטית בכל חודש בתאריך שבחרת. לחץ כדי לשנות סכום, תאריך סיום או צבע.',noRec:'אין עדיין. בהוספת הוצאה סמן ״חוזר כל חודש״.',perMonth:'לחודש',upcomingHome:'צפוי עוד החודש מהוראות קבע',inRow:'נכנס',outRow:'יצא',debtPrev:'חוסר מהחודש הקודם',overNote:'יצא יותר ממה שנכנס – ההפרש יירד מהחודש הבא',kindSpend:'הוצאה',kindSave:'חיסכון / השקעה',nameOpt:'לא חובה – למשל שופרסל',incTotal:'סה״כ הכנסות',expTotal:'סה״כ הוצאות',invTotal:'סה״כ השקעות',yearFlow:'הכנסות, הוצאות והשקעות לפי חודש',carryIn:'יתרה מהחודש הקודם',available:'זמין החודש',carryOut:'עובר לחודש הבא',monthFlow:'לאן הלך הכסף החודש',monthFlowHint:'יתרה שנשארה עוברת אוטומטית לחודש הבא',carryFrom:'מעקב יתרה החל מחודש',carryFromHint:'יתרה שלא הוצאה עוברת לחודש הבא. חודשים לפני התאריך הזה לא נספרים (שם חסרות חלק מההוצאות).',plusCarry:'כולל יתרה מהחודש הקודם',investedL:'הושקע / נחסך',spentL:'הוצאות',leftAcc:'נשאר בחשבון',incFrom:'הכנסה',incSrcThis:'משכורת החודש',incSrcAvg:'ממוצע 3 חודשים',incSrcSet:'הכנסה צפויה מההגדרות',invTag:'השקעה',noSpendNote:'חיסכון והשקעות לא נספרים כהוצאה',flowTab:'הכנסות / הוצאות',flow:'הכנסות והוצאות',inMonth:'נכנס החודש',outMonth:'יצא על הוצאות',savedMonth:'נשאר / נחסך',rate:'כמה מההכנסה הלך לחיסכון והשקעות',addInc:'הוספת הכנסה',incName:'מקור',incType:'סוג',salary:'משכורת',bonus:'בונוס / מענק',reserve:'מילואים',otherInc:'אחר',incList:'ההכנסות החודש',noInc:'אין הכנסות רשומות לחודש הזה. הוסף משכורת למעלה.',flowChart:'נכנס מול יצא',flowHint:'הכנסות מול ההוצאות שרשומות באפליקציה; הנקודה מראה כמה נשאר. חודשים בלי כל ההוצאות ייראו טובים מהמציאות.',cumSaved:'כמה נשאר מצטבר השנה',recTitle:'המלצה לפי המשכורת',recHint:'רק המלצה – לא משנה את המסך הראשי',recBase:'לפי הכנסה של',recNeeds:'צרכים – עד 50%',recWants:'רצונות – עד 30%',recSave:'חיסכון – לפחות 20%',actual:'בפועל',okS:'בסדר',overS:'מעל',underS:'מתחת',keep:'כל הכבוד – נשארת בתוך ההמלצה החודש.',noBase:'הוסף הכנסה כדי לקבל המלצה.',avg3:'(ממוצע 3 חודשים אחרונים)',year12:'אם תחסוך ככה כל חודש, בעוד שנה יהיו לך',today:'היום',edited:'עריכה',update:'עדכון',saveAmt:'נחסך (כולל השקעות)',spentAmt:'הוצאות',incAmt:'הכנסות'},
+ en:{brand:'Expense Management',home:'Home',list:'Expenses',year:'Year',settings:'Settings',spentMonth:'Spent this month',vsLast:'vs last month',noPrev:'No data for last month',ofIncome:'of your income',left:'left to spend',over:'over by',setIncome:'Set your monthly income in Settings to see what’s left',byCat:'By category',byCatHint:'Where the money went this month',pace:'Spending pace',paceHint:'Running total by day of month',thisM:'This month',lastM:'Last month',split:'Needs / wants / savings',splitHint:'Compared with the 50/30/20 rule',needs:'Needs',wants:'Wants',save:'Savings',target:'target',top:'Biggest expenses',search:'Search…',allCats:'All categories',noItems:'No expenses this month yet. Tap + to add one.',add:'New expense',edit:'Edit expense',amount:'Amount (₪)',name:'What for? (optional)',cat:'Category',date:'Date',method:'Paid with',note:'Note',saveB:'Save',del:'Delete',cancel:'Cancel',confirmDel:'Tap again to delete',saved:'Saved ✓',deleted:'Deleted',yearTotal:'Total this year',avgM:'Monthly average',yearBars:'Spending by month',yearCats:'Categories this year',income:'Expected monthly income (₪)',budgets:'Monthly budget per category (₪)',budgetsHint:'Leave empty for no budget. Going over shows in red.',lang:'Language',copyCsv:'Copy all expenses (CSV)',copied:'Copied – paste into Excel',data:'Your data',count:'expenses',loading:'Loading…',offline:'Can’t reach your data right now. Try again in a moment.',noDb:'This device can’t store data.',budget:'budget',imported:'imported',saveErr:'Couldn’t save – please try again',perDay:'per day',pickCat:'Choose a category',theme:'Appearance',th_system:'Match device',th_light:'Light',th_dark:'Dark',repeat:'Repeats every month (standing order / subscription)',endDate:'Until (optional)',noEnd:'no end',clearEnd:'No end',editRec:'Edit standing order',delSeries:'Delete all months',confirmDelSeries:'Tap again – removes it from every month',recTag:'monthly',upcoming:'Coming up this month',recList:'Standing orders & subscriptions',recListHint:'Added automatically every month on the day you chose. Tap one to change the amount, end date or color.',noRec:'None yet. When adding an expense, turn on “Repeats every month”.',perMonth:'per month',upcomingHome:'Still to come this month from standing orders',inRow:'In',outRow:'Out',debtPrev:'Short from last month',overNote:'More went out than came in – the difference comes off next month',kindSpend:'Expense',kindSave:'Saving / investment',nameOpt:'Optional – e.g. Shufersal',incTotal:'Total income',expTotal:'Total expenses',invTotal:'Total investments',yearFlow:'Income, expenses and investments by month',carryIn:'Left from last month',available:'Available this month',carryOut:'Carries to next month',monthFlow:'Where the money went this month',monthFlowHint:'Whatever is left carries over to next month automatically',carryFrom:'Track the balance from',carryFromHint:'Money you didn’t use carries to the next month. Months before this date are skipped (some expenses there are missing).',plusCarry:'incl. left from last month',investedL:'Saved / invested',spentL:'Spent',leftAcc:'Left in account',incFrom:'Income',incSrcThis:'this month’s salary',incSrcAvg:'3-month average',incSrcSet:'expected income from Settings',invTag:'investment',noSpendNote:'Savings & investments are not counted as spending',flowTab:'In / Out',flow:'Money in/out',inMonth:'Came in this month',outMonth:'Went out on expenses',savedMonth:'Left / saved',rate:'Share of income saved & invested',addInc:'Add income',incName:'Source',incType:'Type',salary:'Salary',bonus:'Bonus / grant',reserve:'Reserve duty',otherInc:'Other',incList:'Income this month',noInc:'No income recorded for this month. Add your salary above.',flowChart:'Money in vs money out',flowHint:'Income vs the expenses recorded in the app; the dot shows what was left. Months where not every expense was recorded look better than reality.',cumSaved:'Left over, running total this year',recTitle:'Recommendation based on your salary',recHint:'Just a guide – it doesn’t change the Home tab',recBase:'Based on income of',recNeeds:'Needs – up to 50%',recWants:'Wants – up to 30%',recSave:'Savings – at least 20%',actual:'actual',okS:'OK',overS:'over',underS:'under',keep:'Nice – you stayed within the guide this month.',noBase:'Add your income to get a recommendation.',avg3:'(average of last 3 months)',year12:'If you keep this up every month, in a year you’ll have',today:'Today',edited:'Edit',update:'Update',saveAmt:'Saved (incl. investments)',spentAmt:'Expenses',incAmt:'Income'}};
 // ---------- state ----------
 let LANG='he', VIEW='home', EXP=[], RAW=[], REC=[], UPC=[], INC=[], incEdit=null, editRec=null, repeatOn=false, SET={income:0,budgets:{},carryFrom:null}, setVersion=null, db=null, editId=null, delArm=false;
 try{LANG=localStorage.getItem('mm_lang')||'he'}catch(e){}
+let THEME='system';try{THEME=localStorage.getItem('mm_theme')||'system'}catch(e){}
+function applyTheme(){if(THEME==='system')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=THEME;const m=document.querySelector('meta[name=theme-color]');if(m)m.content=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()||m.content}
+applyTheme();
+document.addEventListener('click',e=>{const b=e.target.closest('[data-theme-set]');if(!b)return;THEME=b.dataset.themeSet;try{localStorage.setItem('mm_theme',THEME)}catch(err){}applyTheme();render()});
 let now=new Date(); let CUR={y:now.getFullYear(),m:now.getMonth()+1};
 const t=k=>T[LANG][k]; const cat=id=>BASE_CATS.find(c=>c.id===id)||BASE_CATS[BASE_CATS.length-1];
 const cname=c=>c[LANG];
@@ -326,7 +331,7 @@ function paceChart(y,m){
   [1,8,15,22,days].forEach(d=>{s+=`<text x="${X(d-1)}" y="${H-7}" font-size="11" text-anchor="middle">${d}</text>`});
   const path=a=>a.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1)).join('');
   if(B.some(v=>v>0)) s+=`<path d="${path(B)}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 4"/>`;
-  if(A.length){s+=`<path d="${path(A)}L${X(A.length-1)},${Y(0)}L${X(0)},${Y(0)}Z" fill="var(--accent)" opacity=".1"/><path d="${path(A)}" fill="none" stroke="var(--accent)" stroke-width="2.5"/><circle cx="${X(A.length-1)}" cy="${Y(A[A.length-1])}" r="4.5" fill="var(--accent)" stroke="var(--card)" stroke-width="2"/>`}
+  if(A.length){s+=`<path d="${path(A)}L${X(A.length-1)},${Y(0)}L${X(0)},${Y(0)}Z" fill="var(--exp)" opacity=".1"/><path d="${path(A)}" fill="none" stroke="var(--exp)" stroke-width="2.5"/><circle cx="${X(A.length-1)}" cy="${Y(A[A.length-1])}" r="4.5" fill="var(--exp)" stroke="var(--card)" stroke-width="2"/>`}
   const n=Math.max(days,pdays);const cw=(W-pl-pr)/(n-1);
   for(let i=0;i<n;i++){s+=`<rect x="${X(i)-cw/2}" y="${pt}" width="${cw}" height="${H-pt-pb}" fill="transparent" data-tip="${i+1} · ${t('thisM')}: ${A[i]!=null?ils(A[i]):'–'}<br>${t('lastM')}: ${B[i]!=null?ils(B[i]):'–'}"/>`}
   return s+'</svg>';
@@ -348,7 +353,7 @@ function yearBars(y){
   let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" style="direction:ltr">`;
   for(let i=0;i<=4;i++){const yy=pt+(H-pt-pb)*(1-i/4);s+=`<line x1="${pl}" x2="${W-pr}" y1="${yy}" y2="${yy}" stroke="var(--line)"/><text x="${pl-8}" y="${yy+4}" font-size="11" text-anchor="end">${(step*i/1000).toLocaleString('en-US',{maximumFractionDigits:1})}k</text>`}
   vals.forEach((v,i)=>{const x=pl+cw*i+(cw-bw)/2,h=(H-pt-pb)*v/top,yy=H-pb-h;const rr=Math.min(4,h);const sel=(i+1===CUR.m);
-    if(h>0)s+=`<path d="M${x},${H-pb}V${yy+rr}Q${x},${yy} ${x+rr},${yy}H${x+bw-rr}Q${x+bw},${yy} ${x+bw},${yy+rr}V${H-pb}Z" fill="var(--accent)" opacity="${sel?1:.55}"/>`;
+    if(h>0)s+=`<path d="M${x},${H-pb}V${yy+rr}Q${x},${yy} ${x+rr},${yy}H${x+bw-rr}Q${x+bw},${yy} ${x+bw},${yy+rr}V${H-pb}Z" fill="var(--exp)" opacity="${sel?1:.55}"/>`;
     s+=`<text x="${pl+cw*i+cw/2}" y="${H-9}" font-size="11" text-anchor="middle" ${sel?'font-weight="700" style="fill:var(--ink)"':''}>${monthName(y,i+1,true)}</text>`;
     s+=`<rect x="${pl+cw*i}" y="${pt}" width="${cw}" height="${H-pt-pb}" fill="transparent" data-tip="${monthName(y,i+1)}: ${ils(v)}" data-month="${i+1}" style="cursor:pointer"/>`});
   if(avg){const yy=pt+(H-pt-pb)*(1-avg/top);s+=`<line x1="${pl}" x2="${W-pr}" y1="${yy}" y2="${yy}" stroke="var(--ink2)" stroke-dasharray="5 4"/><text x="${W-pr}" y="${yy-5}" font-size="11" text-anchor="end" style="fill:var(--ink2)">${t('avgM')} ${ils(avg)}</text>`}
@@ -377,9 +382,9 @@ function vHome(){
     <div class="hero"><div><div class="sub" style="margin:0 0 6px">${t('spentMonth')} · ${monthName(y,m)}</div><div class="big">${ils(tot)}</div>
      <div class="sub">${S.length} ${t('count')} · ${ils(tot/(isCur?Math.max(1,now.getDate()):days))} ${t('perDay')}${inv?` · <span style="color:var(--inv);font-weight:600">${t('investedL')}: ${ils(inv)}</span>`:''}</div></div>
      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">${(()=>{const u=sum(UPC.filter(e=>inMonth(e,y,m)));return u?`<span class="small">${t('upcomingHome')}: <b>${ils(u)}</b></span>`:''})()}${d===null?`<span class="small">${t('noPrev')}</span>`:`<span class="delta ${d>0?'up':'down'}">${d>0?'▲':'▼'} ${Math.abs(d)}% ${t('vsLast')}</span>`}</div></div>
-    ${inc?`<div class="meter ${left<0?'over':''}" style="display:flex"><i style="width:${pct(tot)}%;border-radius:0"></i><i style="width:${pct(inv)}%;background:var(--inv);border-radius:0"></i></div>
+    ${inc?`<div class="meter ${left<0?'over':''}" style="display:flex"><i style="width:${pct(tot)}%;border-radius:0"></i><i style="width:${pct(inv)}%;background:var(--inv);border-radius:0"></i><i style="width:${pct(Math.max(0,left))}%;background:var(--carry);border-radius:0;opacity:.55"></i></div>
       <div class="kv"><span>${t('available')}: <b>${ils(inc)}</b> <span class="small">(${I.v?t('incFrom')+' '+ils(I.v)+' · '+t(I.src):''}${carry?(I.v?' + ':'')+t('carryIn')+' '+ils(carry):''})</span></span><span style="${left<0?'color:var(--bad);font-weight:700':''}">${left<0?t('over')+' '+ils(-left):t('left')+': '+ils(left)}</span></div>
-      <div class="legend" style="margin-top:8px"><span><i style="background:var(--accent)"></i>${t('spentL')} ${ils(tot)}</span><span><i style="background:var(--inv)"></i>${t('investedL')} ${ils(inv)}</span><span><i style="background:var(--bg);border:1px solid var(--line)"></i>${t('leftAcc')} ${ils(Math.max(0,left))}</span></div>`
+      <div class="legend" style="margin-top:8px"><span><i style="background:var(--exp)"></i>${t('spentL')} ${ils(tot)}</span><span><i style="background:var(--inv)"></i>${t('investedL')} ${ils(inv)}</span><span><i style="background:var(--carry)"></i>${t('leftAcc')} ${ils(Math.max(0,left))}</span></div>`
      :`<p class="small" style="margin:12px 0 0">${t('setIncome')}</p>`}
    </section>
    <section class="card"><h3>${t('split')}</h3><p class="hint">${t('splitHint')}</p>
@@ -388,7 +393,7 @@ function vHome(){
    </section>
   </div>
   <div class="grid g2" style="margin-top:14px">
-   <section class="card"><h3>${t('pace')}</h3><p class="hint">${t('paceHint')}</p><div class="legend" style="margin-bottom:6px"><span><i style="background:var(--accent)"></i>${t('thisM')}</span><span><i style="background:var(--muted)"></i>${t('lastM')}</span></div>${paceChart(y,m)}</section>
+   <section class="card"><h3>${t('pace')}</h3><p class="hint">${t('paceHint')}</p><div class="legend" style="margin-bottom:6px"><span><i style="background:var(--exp)"></i>${t('thisM')}</span><span><i style="background:var(--muted)"></i>${t('lastM')}</span></div>${paceChart(y,m)}</section>
    <section class="card"><h3>${t('byCat')}</h3><p class="hint">${t('byCatHint')} · ${t('noSpendNote')}</p>${catRows(S,true)}</section>
   </div>
   ${top.length?`<section class="card" style="margin-top:14px"><h3>${t('top')}</h3><div class="list" style="margin-top:8px">${top.map(itemHtml).join('')}</div></section>`:''}`;
@@ -433,7 +438,7 @@ function vYear(){
 }
 function vSettings(){
   const b=SET.budgets||{};
-  return `<section class="card"><h3>${t('income')}</h3><p class="hint">${LANG==='he'?'משמש רק בחודשים שעוד לא נרשמה בהם משכורת בלשונית הכנסות / הוצאות':'Used only for months with no salary recorded yet in the In / Out tab'}</p><input id="s_income" class="money" type="text" inputmode="decimal" autocomplete="off" value="${SET.income?fmtNum(SET.income):''}" style="max-width:220px"></section>
+  return `<section class="card" style="margin-bottom:14px"><h3>${t('theme')}</h3><div class="themerow">${['system','light','dark'].map(k=>`<button type="button" class="kindbtn ${THEME===k?'on':''}" data-theme-set="${k}" style="--c:var(--accent)">${k==='system'?'⚙️':k==='light'?'☀️':'🌙'} ${t('th_'+k)}</button>`).join('')}</div></section><section class="card"><h3>${t('income')}</h3><p class="hint">${LANG==='he'?'משמש רק בחודשים שעוד לא נרשמה בהם משכורת בלשונית הכנסות / הוצאות':'Used only for months with no salary recorded yet in the In / Out tab'}</p><input id="s_income" class="money" type="text" inputmode="decimal" autocomplete="off" value="${SET.income?fmtNum(SET.income):''}" style="max-width:220px"></section>
   <section class="card" style="margin-top:14px"><h3>${t('carryFrom')}</h3><p class="hint">${t('carryFromHint')}</p><button type="button" class="datebtn" id="s_carry" style="max-width:260px"><span>${monthName(+carryStart().slice(0,4),+carryStart().slice(5,7))}</span><span aria-hidden="true">📅</span></button></section>
   <section class="card" style="margin-top:14px"><h3>${t('budgets')}</h3><p class="hint">${t('budgetsHint')}</p><div class="setgrid">${BASE_CATS.map(c=>`<label><span class="ico">${c.e}</span><span>${esc(cname(c))}</span><input class="money" type="text" inputmode="decimal" autocomplete="off" data-bud="${c.id}" value="${b[c.id]?fmtNum(b[c.id]):''}"></label>`).join('')}</div>
    <div class="actions" style="margin-top:12px"><button class="btn primary" id="saveSet" style="flex:0 0 auto">${t('saveB')}</button></div></section>
@@ -617,7 +622,7 @@ function flowChart(y){
   let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" style="direction:ltr">`;
   for(let i=0;i<=4;i++){const yy=Y(step*i);s+=`<line x1="${pl}" x2="${W-pr}" y1="${yy}" y2="${yy}" stroke="var(--line)"/><text x="${pl-8}" y="${yy+4}" font-size="11" text-anchor="end">${(step*i/1000).toLocaleString('en-US',{maximumFractionDigits:1})}k</text>`}
   const bar=(x,v,col)=>{const h=(H-pt-pb)*v/top;if(h<=0)return '';const yy=H-pb-h,r=Math.min(4,h);return `<path d="M${x},${H-pb}V${yy+r}Q${x},${yy} ${x+r},${yy}H${x+bw-r}Q${x+bw},${yy} ${x+bw},${yy+r}V${H-pb}Z" fill="${col}"/>`};
-  for(let i=0;i<12;i++){const cx=pl+cw*i+cw/2; s+=bar(cx-bw-1,inV[i],'var(--save)')+bar(cx+1,outV[i],'var(--wants)');
+  for(let i=0;i<12;i++){const cx=pl+cw*i+cw/2; s+=bar(cx-bw-1,inV[i],'var(--inc)')+bar(cx+1,outV[i],'var(--exp)');
     const net=inV[i]-outV[i]; if(inV[i]||outV[i]){s+=`<circle cx="${cx}" cy="${Y(Math.max(0,net))}" r="4" fill="${net>=0?'var(--ink)':'var(--bad)'}" stroke="var(--card)" stroke-width="2"/>`}
     s+=`<text x="${cx}" y="${H-9}" font-size="11" text-anchor="middle" ${i+1===CUR.m?'font-weight="700" style="fill:var(--ink)"':''}>${monthName(y,i+1,true)}</text>`;
     s+=`<rect x="${pl+cw*i}" y="${pt}" width="${cw}" height="${H-pt-pb}" fill="transparent" data-month="${i+1}" style="cursor:pointer" data-tip="<b>${monthName(y,i+1)}</b><br>${t('incAmt')}: ${ils(inV[i])}<br>${t('spentAmt')}: ${ils(outV[i])}<br>${t('saveAmt')}: ${ils(net)}"/>`}
@@ -626,7 +631,7 @@ function flowChart(y){
 function moneyBars(carry,inc,out,inv,left){
   const pos=Math.max(0,carry), debt=Math.max(0,-carry), avail=pos+inc, used=out+inv+debt, lf=Math.max(0,left);
   const base=Math.max(avail,used); const pct=v=>base?v/base*100:0;
-  const leftCol='color-mix(in srgb,var(--accent) 45%,transparent)';
+  const leftCol='var(--carry)';
   const sg=(v,col,lbl)=>v>0?`<div class="sg" style="width:${pct(v)}%;background:${col}" data-tip="${esc(lbl)}: ${ils(v)}"></div>`:'';
   const row=(col,lbl,v,sign)=>`<div class="frow"><i style="background:${col}"></i><span>${esc(lbl)}</span><b>${v?sign:''}${ils(v)}</b></div>`;
   const shares=avail>0?[[out,'var(--exp)',t('spentL')],[inv,'var(--inv)',t('investedL')],[lf,leftCol,t('carryOut')]].filter(x=>x[0]>0).map(x=>`<span><i style="background:${x[1]}"></i>${Math.round(x[0]/avail*100)}% ${esc(x[2])}</span>`).join(''):'';
@@ -634,11 +639,11 @@ function moneyBars(carry,inc,out,inv,left){
   <div class="fbar">${sg(debt,'var(--bad)',t('debtPrev'))}${sg(out,'var(--exp)',t('spentL'))}${sg(inv,'var(--inv)',t('investedL'))}${sg(lf,leftCol,t('carryOut'))}</div>
   ${shares?`<div class="fshares">${shares}</div>`:''}
   <div class="flist">
-    ${carry<0?'':row('var(--muted)',t('carryIn'),pos,'+')}${row('var(--inc)',t('incAmt'),inc,'+')}
+    ${carry<0?'':row('var(--carry)',t('carryIn'),pos,'+')}${row('var(--inc)',t('incAmt'),inc,'+')}
     <div class="fsep"></div>
     ${debt?row('var(--bad)',t('debtPrev'),debt,'−'):''}${row('var(--exp)',t('spentL'),out,'−')}${row('var(--inv)',t('investedL'),inv,'−')}
     <div class="fsep strong"></div>
-    <div class="frow total"><i style="background:${left<0?'var(--bad)':leftCol}"></i><span>${t('carryOut')}</span><b style="color:${left<0?'var(--bad)':'var(--accent)'}">${left<0?'−':''}${ils(Math.abs(left))}</b></div>
+    <div class="frow total"><i style="background:${left<0?'var(--bad)':leftCol}"></i><span>${t('carryOut')}</span><b style="color:${left<0?'var(--bad)':'var(--ink)'}">${left<0?'−':''}${ils(Math.abs(left))}</b></div>
   </div>
   ${left<0?`<div class="mnote">${t('overNote')}: ${ils(-left)}</div>`:''}`;
 }
@@ -664,8 +669,8 @@ function cumChart(y){
   [mn,(mn+mx)/2,mx].forEach(v=>{s+=`<line x1="${pl}" x2="${W-pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${pl-8}" y="${Y(v)+4}" font-size="11" text-anchor="end">${(v/1000).toLocaleString('en-US',{maximumFractionDigits:1})}k</text>`});
   if(mn<0)s+=`<line x1="${pl}" x2="${W-pr}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--ink2)"/>`;
   for(let i=0;i<12;i++)s+=`<text x="${X(i)}" y="${H-8}" font-size="11" text-anchor="middle">${monthName(y,i+1,true)}</text>`;
-  if(vals.length){const d=vals.map((v,i)=>(i?'L':'M')+X(i)+','+Y(v)).join('');s+=`<path d="${d}L${X(vals.length-1)},${Y(Math.max(0,mn))}L${X(0)},${Y(Math.max(0,mn))}Z" fill="var(--accent)" opacity=".1"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>`;
-    vals.forEach((v,i)=>{s+=`<circle cx="${X(i)}" cy="${Y(v)}" r="${i===vals.length-1?4.5:3}" fill="var(--accent)" stroke="var(--card)" stroke-width="1.5" data-tip="${monthName(y,i+1)}: ${ils(v)}"/>`})}
+  if(vals.length){const d=vals.map((v,i)=>(i?'L':'M')+X(i)+','+Y(v)).join('');s+=`<path d="${d}L${X(vals.length-1)},${Y(Math.max(0,mn))}L${X(0)},${Y(Math.max(0,mn))}Z" fill="var(--inc)" opacity=".1"/><path d="${d}" fill="none" stroke="var(--inc)" stroke-width="2.5"/>`;
+    vals.forEach((v,i)=>{s+=`<circle cx="${X(i)}" cy="${Y(v)}" r="${i===vals.length-1?4.5:3}" fill="var(--inc)" stroke="var(--card)" stroke-width="1.5" data-tip="${monthName(y,i+1)}: ${ils(v)}"/>`})}
   return s+'</svg>';
 }
 function incItem(x){return `<button class="item" data-inc="${esc(x.id)}"><div class="ico">💼</div><div><div class="t">${esc(x.name)}</div><div class="small">${t(x.type==='other'?'otherInc':x.type)} · ${fmtDate(x.date)}${x.note?' · '+esc(x.note):''}</div></div><div class="amt pos">+${ils2(x.amount)}</div></button>`}

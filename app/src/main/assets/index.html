@@ -269,8 +269,11 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const monthName=(y,m,short)=>new Date(y,m-1,1).toLocaleString(LANG==='he'?'he-IL':'en-US',{month:short?'short':'long',year:short?undefined:'numeric'});
 const inMonth=(e,y,m)=>e.date&&e.date.startsWith(ym(y,m));
 const sum=a=>a.reduce((s,e)=>s+(+e.amount||0),0);
-const isSave=e=>e.kind==='save'?true:(e.kind==='spend'?false:cat(e.cat).type==='save');
-const kindColor=e=>isSave(e)?'var(--inv)':'var(--exp)';
+const GC={needs:'var(--needs)',wants:'var(--wants)',save:'var(--inv)'};
+const KMAP={need:'needs',want:'wants',save:'save'};
+const grp=e=>{if(KMAP[e.kind])return KMAP[e.kind];const ty=cat(e.cat).type;if(e.kind==='spend'&&ty==='save')return 'wants';return ty};
+const isSave=e=>grp(e)==='save';
+const kindColor=e=>GC[grp(e)];
 const spendOf=a=>sum(a.filter(e=>!isSave(e)));
 const savedOf=a=>sum(a.filter(isSave));
 function prevYM(y,m){return m===1?{y:y-1,m:12}:{y,m:m-1}}
@@ -333,7 +336,7 @@ function catRows(list,withBudget){
   const rows=Object.entries(by).sort((a,b)=>b[1]-a[1]); const max=Math.max(1,...rows.map(r=>r[1]));
   if(!rows.length) return `<div class="empty">${t('noItems')}</div>`;
   return rows.map(([id,v])=>{const c=cat(id);const b=withBudget?+(SET.budgets||{})[id]||0:0;const over=b&&v>b;const w=b?Math.min(100,v/b*100):v/max*100;
-    return `<div class="catrow" data-tip="${esc(cname(c))}: ${ils(v)}${b?' / '+t('budget')+' '+ils(b):''}"><div class="ico" style="background:color-mix(in srgb,var(--exp) 14%,transparent)">${c.e}</div><div><div class="nm">${esc(cname(c))}${b?` <span class="small">${t('budget')} ${ils(b)}</span>`:''}</div><div class="bar ${over?'over':''}"><i style="width:${w}%"></i></div></div><div class="amt" style="${over?'color:var(--bad)':''}">${ils(v)}</div></div>`}).join('');
+    return `<div class="catrow" data-tip="${esc(cname(c))}: ${ils(v)}${b?' / '+t('budget')+' '+ils(b):''}"><div class="ico" style="background:color-mix(in srgb,${GC[c.type]} 14%,transparent)">${c.e}</div><div><div class="nm">${esc(cname(c))}${b?` <span class="small">${t('budget')} ${ils(b)}</span>`:''}</div><div class="bar ${over?'over':''}"><i style="width:${w}%;${over?'':'background:'+GC[c.type]}"></i></div></div><div class="amt" style="${over?'color:var(--bad)':''}">${ils(v)}</div></div>`}).join('');
 }
 function incomeFor(y,m){const v=sum(incOf(y,m));if(v)return {v,src:'incSrcThis'};const b=salaryBase(y,m);if(b.v)return {v:b.v,src:'incSrcAvg'};const st=+SET.income||0;return st?{v:st,src:'incSrcSet'}:{v:0,src:null}}
 function vHome(){
@@ -341,8 +344,8 @@ function vHome(){
   const p=prevYM(y,m); const ptot=spendOf(EXP.filter(e=>inMonth(e,p.y,p.m)));
   const d=ptot?Math.round((tot-ptot)/ptot*100):null; const I=incomeFor(y,m); const carry=carryInto(y,m); const inc=I.v+carry; const left=inc-tot-inv;
   const days=new Date(y,m,0).getDate(); const isCur=(y===now.getFullYear()&&m===now.getMonth()+1);
-  const split={needs:0,wants:0,save:0};L.forEach(e=>{split[isSave(e)?'save':cat(e.cat).type]+= +e.amount||0});
-  const base=I.v||(tot+inv)||1; const targets={needs:.5,wants:.3,save:.2}; const colors={needs:'var(--needs)',wants:'var(--wants)',save:'var(--inv)'};
+  const split={needs:0,wants:0,save:0};L.forEach(e=>{split[grp(e)]+= +e.amount||0});
+  const base=I.v||(tot+inv)||1; const targets={needs:.5,wants:.3,save:.2}; const colors=GC;
   const top=[...S].sort((a,b)=>b.amount-a.amount).slice(0,5);
   const pct=v=>inc?Math.min(100,v/inc*100):0;
   return `<div class="grid g2">
@@ -372,7 +375,7 @@ function vList(){
   const {y,m}=CUR; let L=EXP.filter(e=>inMonth(e,y,m));
   const U=UPC.filter(e=>inMonth(e,y,m));
   return `${U.length?`<section class="card" style="margin-bottom:12px"><h3>${t('upcoming')} · ${ils(sum(U))}</h3><div class="list" style="margin-top:8px">${U.sort((a,b)=>a.date.localeCompare(b.date)).map(itemHtml).join('')}</div></section>`:''}<div class="toolbar"><input id="q" placeholder="${t('search')}" value="${esc(Q)}"><select id="qc"><option value="">${t('allCats')}</option>${BASE_CATS.map(c=>`<option value="${c.id}" ${QC===c.id?'selected':''}>${c.e} ${esc(cname(c))}</option>`).join('')}</select></div><div class="list" id="listBody">${listBody(L)}</div>
-  <section class="card" style="margin-top:16px"><h3>${t('recList')}</h3><p class="hint">${t('recListHint')}</p>${REC.length?`<div class="list">${[...REC].sort((a,b)=>(a.start||'').localeCompare(b.start||'')).map(r=>{const c=cat(r.cat);const col=r.kind==='save'?'var(--inv)':'var(--exp)';return `<button class="item" data-rec="${esc(r.id)}" style="border-inline-start:4px solid ${col}"><div class="ico" style="background:color-mix(in srgb,${col} 14%,transparent)">${c.e}</div><div><div class="t">${esc(r.name)}</div><div class="small">${esc(cname(c))} · ${recPeriod(r)}</div></div><div class="amt">${ils2(r.amount)} <span class="small">${t('perMonth')}</span></div></button>`}).join('')}</div>`:`<div class="empty">${t('noRec')}</div>`}</section>`;
+  <section class="card" style="margin-top:16px"><h3>${t('recList')}</h3><p class="hint">${t('recListHint')}</p>${REC.length?`<div class="list">${[...REC].sort((a,b)=>(a.start||'').localeCompare(b.start||'')).map(r=>{const c=cat(r.cat);const col=kindColor(r);return `<button class="item" data-rec="${esc(r.id)}" style="border-inline-start:4px solid ${col}"><div class="ico" style="background:color-mix(in srgb,${col} 14%,transparent)">${c.e}</div><div><div class="t">${esc(r.name)}</div><div class="small">${esc(cname(c))} · ${recPeriod(r)}</div></div><div class="amt">${ils2(r.amount)} <span class="small">${t('perMonth')}</span></div></button>`}).join('')}</div>`:`<div class="empty">${t('noRec')}</div>`}</section>`;
 }
 function listBody(L){
   if(Q) L=L.filter(e=>(e.name+' '+(e.note||'')).toLowerCase().includes(Q.toLowerCase()));
@@ -428,7 +431,7 @@ function render(){
 }
 // ---------- sheet ----------
 const sheetbg=document.getElementById('sheetbg');
-let selCat='groceries', selKind='spend';
+let selCat='groceries', selKind='needs';
 function openSheet(e){
   let r=null; if(e&&e.recId){r=REC.find(x=>x.id===e.recId); if(!r)return; e=Object.assign({},r,{date:r.start});}
   editId=(e&&!r)?e.id:null; editRec=r?r.id:null; repeatOn=!!r; delArm=false;
@@ -445,14 +448,14 @@ function openSheet(e){
   document.getElementById('f_amount').value=e?fmtNum(e.amount):'';document.getElementById('f_name').value=e?e.name:'';
   setDateBtn('f_date',e?e.date:(isCur?isoToday():ym(CUR.y,CUR.m)+'-01'));
   document.getElementById('f_method').value=e?(e.method||'card'):'card';document.getElementById('f_note').value=e?(e.note||''):'';
-  selCat=e?e.cat:'groceries'; selKind=e?(e.kind==='save'||(!e.kind&&cat(e.cat).type==='save')?'save':'spend'):'spend'; drawChips(); sheetbg.classList.add('open'); setTimeout(()=>document.getElementById('f_amount').focus(),50);
+  selCat=e?e.cat:'groceries'; selKind=e?grp(e):'needs'; drawChips(); sheetbg.classList.add('open'); setTimeout(()=>document.getElementById('f_amount').focus(),50);
 }
-function chipColor(c){if(c.id===selCat&&(repeatOn||c.id==='other'))return selKind==='save'?'var(--inv)':'var(--exp)';return c.type==='save'?'var(--inv)':'var(--exp)'}
-function drawChips(){document.getElementById('f_cats').innerHTML=`<div class="catlegend" style="grid-column:1/-1"><span><i style="background:var(--exp)"></i>${t('kindSpend')}</span><span><i style="background:var(--inv)"></i>${t('kindSave')}</span></div>`+BASE_CATS.map(c=>`<button type="button" class="chip ${c.id===selCat?'on':''}" data-cat="${c.id}" style="--c:${chipColor(c)}"><span class="e">${c.e}</span>${esc(cname(c))}</button>`).join('');
+function chipColor(c){if(c.id===selCat&&(repeatOn||c.id==='other'))return GC[selKind];return GC[c.type]}
+function drawChips(){document.getElementById('f_cats').innerHTML=`<div class="catlegend" style="grid-column:1/-1"><span><i style="background:var(--needs)"></i>${t('needs')}</span><span><i style="background:var(--wants)"></i>${t('wants')}</span><span><i style="background:var(--inv)"></i>${t('kindSave')}</span></div>`+BASE_CATS.map(c=>`<button type="button" class="chip ${c.id===selCat?'on':''}" data-cat="${c.id}" style="--c:${chipColor(c)}"><span class="e">${c.e}</span>${esc(cname(c))}</button>`).join('');
   const kr=document.getElementById('kindRow');kr.classList.toggle('hidden',!(selCat==='other'||repeatOn));document.getElementById('endField').classList.toggle('hidden',!repeatOn);
-  kr.innerHTML=`<button type="button" class="kindbtn ${selKind!=='save'?'on':''}" data-kind="spend" style="--c:var(--exp)"><i style="background:var(--exp)"></i>${t('kindSpend')}</button><button type="button" class="kindbtn ${selKind==='save'?'on':''}" data-kind="save" style="--c:var(--inv)"><i style="background:var(--inv)"></i>${t('kindSave')}</button>`}
+  kr.innerHTML=[['needs','needs'],['wants','wants'],['save','kindSave']].map(([k,l])=>`<button type="button" class="kindbtn ${selKind===k?'on':''}" data-kind="${k}" style="--c:${GC[k]}"><i style="background:${GC[k]}"></i>${t(l)}</button>`).join('')}
 function closeSheet(){sheetbg.classList.remove('open');editId=null;editRec=null}
-document.getElementById('f_cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(b){selCat=b.dataset.cat;if(selCat!=='other')selKind=cat(selCat).type==='save'?'save':'spend';drawChips()}});
+document.getElementById('f_cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(b){selCat=b.dataset.cat;selKind=cat(selCat).type;drawChips()}});
 document.getElementById('f_repeat').addEventListener('change',e=>{repeatOn=e.target.checked;drawChips()});
 document.getElementById('f_end').onclick=()=>openPicker({value:document.getElementById('f_end').dataset.value||document.getElementById('f_date').dataset.value,mode:'day',onPick:v=>setDateBtn('f_end',v)});
 document.getElementById('endClear').onclick=()=>{setDateBtn('f_end','');document.querySelector('#f_end span').textContent=t('noEnd')};
@@ -472,14 +475,14 @@ document.getElementById('sheet').addEventListener('submit',async ev=>{
   if(!(amount>0)||!date){document.getElementById('f_amount').focus();return}
   const end=document.getElementById('f_end').dataset.value||'';
   if(repeatOn){ const prevR=editRec?REC.find(x=>x.id===editRec):null;
-    const rd={name,amount,cat:selCat,kind:selKind,method:document.getElementById('f_method').value,note:document.getElementById('f_note').value.trim(),start:date,end:(end&&end>=date)?end:'',source:prevR?(prevR.source||'app'):'app',created:prevR?(prevR.created||Date.now()):Date.now(),updated:Date.now()};
+    const rd={name,amount,cat:selCat,kind:{needs:'need',wants:'want',save:'save'}[selKind],method:document.getElementById('f_method').value,note:document.getElementById('f_note').value.trim(),start:date,end:(end&&end>=date)?end:'',source:prevR?(prevR.source||'app'):'app',created:prevR?(prevR.created||Date.now()):Date.now(),updated:Date.now()};
     const btn=document.getElementById('saveBtn'); btn.disabled=true;
     try{ await (editRec?db.collection('recurring').doc(editRec):db.collection('recurring').doc()).set(rd);
       if(editId) await db.collection('expenses').doc(editId).delete();
       closeSheet(); toast(t('saved')); render(); }catch(err){toast(t('saveErr'))} finally{btn.disabled=false}
     return; }
   const prev=editId?EXP.find(x=>x.id===editId):null;
-  const data={name,amount,cat:selCat,kind:selCat==='other'?selKind:'',date,method:document.getElementById('f_method').value,note:document.getElementById('f_note').value.trim(),source:prev?(prev.source||'app'):'app',created:prev?(prev.created||Date.now()):Date.now(),updated:Date.now()};
+  const data={name,amount,cat:selCat,kind:selCat==='other'?{needs:'need',wants:'want',save:'save'}[selKind]:'',date,method:document.getElementById('f_method').value,note:document.getElementById('f_note').value.trim(),source:prev?(prev.source||'app'):'app',created:prev?(prev.created||Date.now()):Date.now(),updated:Date.now()};
   const btn=document.getElementById('saveBtn'); btn.disabled=true;
   try{ const ref=editId?db.collection('expenses').doc(editId):db.collection('expenses').doc(); await ref.set(data); if(editRec) await db.collection('recurring').doc(editRec).delete();
     if(!date.startsWith(ym(CUR.y,CUR.m))){CUR={y:+date.slice(0,4),m:+date.slice(5,7)}}
@@ -633,7 +636,7 @@ function cumChart(y){
 function incItem(x){return `<button class="item" data-inc="${esc(x.id)}"><div class="ico">💼</div><div><div class="t">${esc(x.name)}</div><div class="small">${t(x.type==='other'?'otherInc':x.type)} · ${fmtDate(x.date)}${x.note?' · '+esc(x.note):''}</div></div><div class="amt pos">+${ils2(x.amount)}</div></button>`}
 function vFlow(){
   const {y,m}=CUR; const IN=sum(incOf(y,m)); const L=EXP.filter(e=>inMonth(e,y,m)); const OUT=spendOf(L); const INV=savedOf(L); const CARRY=carryInto(y,m); const left=IN-OUT; const inAcc=CARRY+IN-OUT-INV; const rate=IN?Math.round(left/IN*100):null;
-  const base=salaryBase(y,m); const split={needs:0,wants:0,save:0};L.forEach(e=>{split[isSave(e)?'save':cat(e.cat).type]+= +e.amount||0});
+  const base=salaryBase(y,m); const split={needs:0,wants:0,save:0};L.forEach(e=>{split[grp(e)]+= +e.amount||0});
   let rec;
   if(!base.v) rec=`<p class="small">${t('noBase')}</p>`;
   else{const B=base.v;const savedActual=Math.max(0,B-OUT);

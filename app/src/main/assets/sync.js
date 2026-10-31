@@ -111,7 +111,9 @@
     var out = [], cur = cursor, tk = await token();
     for (var guard = 0; guard < 200; guard++) {
       var q = { from: [{ collectionId: 'items' }], orderBy: [{ field: { fieldPath: 's' } }], limit: 1000 };
-      if (cur) q.where = { fieldFilter: { field: { fieldPath: 's' }, op: 'GREATER_THAN_OR_EQUAL', value: { timestampValue: cur } } };
+      // first page: only changes strictly after what we already have (costs 1 read when nothing changed);
+      // next pages: >= so items sharing the boundary timestamp aren't skipped (duplicates are filtered)
+      if (cur) q.where = { fieldFilter: { field: { fieldPath: 's' }, op: guard ? 'GREATER_THAN_OR_EQUAL' : 'GREATER_THAN', value: { timestampValue: cur } } };
       var res = await post(FS + '/users/' + st.uid + ':runQuery', { structuredQuery: q }, tk);
       var docs = (res || []).filter(function (x) { return x.document }).map(function (x) { return x.document });
       var fresh = docs.filter(function (d) { return !out.some(function (o) { return o.name === d.name }) });

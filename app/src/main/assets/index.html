@@ -338,7 +338,7 @@ function vSettings(){
   return `<section class="card"><h3>${t('income')}</h3><p class="hint">${LANG==='he'?'משמש לחישוב כמה נשאר ולכלל 50/30/20':'Used for “left to spend” and the 50/30/20 split'}</p><input id="s_income" type="number" inputmode="decimal" min="0" value="${SET.income||''}" style="max-width:220px"></section>
   <section class="card" style="margin-top:14px"><h3>${t('budgets')}</h3><p class="hint">${t('budgetsHint')}</p><div class="setgrid">${BASE_CATS.map(c=>`<label><span class="ico">${c.e}</span><span>${esc(cname(c))}</span><input type="number" min="0" inputmode="decimal" data-bud="${c.id}" value="${b[c.id]||''}"></label>`).join('')}</div>
    <div class="actions" style="margin-top:12px"><button class="btn primary" id="saveSet" style="flex:0 0 auto">${t('saveB')}</button></div></section>
-  <section class="card" style="margin-top:14px"><h3>${t('data')}</h3><p class="hint">${t('dataHint')}</p><button class="btn ghost" id="copyCsv">${t('copyCsv')}</button> <span class="small">${EXP.length} ${t('count')}</span><div class="actions" style="margin-top:12px;flex-wrap:wrap"><button class="btn ghost" id="copyBk">${t('copyBk')}</button><button class="btn ghost" id="showRs">${t('restore')}</button></div><div id="rsBox" class="hidden" style="margin-top:10px"><textarea id="rsText" rows="4" placeholder="${t('pasteBk')}"></textarea><div class="actions"><button class="btn primary" id="doRs" style="flex:0 0 auto">${t('restore')}</button></div></div></section>`;
+  `;
 }
 // ---------- render ----------
 function applyLang(){

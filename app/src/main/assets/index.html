@@ -58,7 +58,7 @@ nav.tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--line
 .ico{width:30px;height:30px;border-radius:9px;background:var(--bg);display:grid;place-items:center;font-size:16px}
 .catrow .nm{font-size:14px;font-weight:500}
 .bar{height:7px;border-radius:999px;background:var(--bg);margin-top:5px;overflow:hidden}
-.bar > i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.bar > i{display:block;height:100%;background:var(--exp);border-radius:999px}
 .bar.over > i{background:var(--bad)}
 .amt{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .small{font-size:12px;color:var(--muted)}
@@ -93,8 +93,16 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .amountin{font-family:var(--display);font-size:28px;font-weight:700;text-align:center}
 .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:7px}
 .chip{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px}
-.chip .e{font-size:20px}
-.chip.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:700}
+.chip .e{font-size:19px}
+.chip{--c:var(--exp)}
+.chip .e{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,transparent)}
+.chip.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 14%,var(--card));color:var(--c);font-weight:700;box-shadow:inset 0 0 0 1px var(--c)}
+.kindrow{display:flex;gap:8px;margin:-4px 0 12px}
+.kindbtn{flex:1;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:9px;cursor:pointer;font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px}
+.kindbtn i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.kindbtn.on{border-color:var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 12%,var(--card));box-shadow:inset 0 0 0 1px var(--c)}
+.catlegend{display:flex;gap:14px;font-size:12px;color:var(--ink2);margin:0 0 8px}
+.catlegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px}
 .btn{border:0;border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700}
 .btn.primary{background:var(--accent);color:#fff;flex:1}
 .btn.ghost{background:var(--bg)}
@@ -180,7 +188,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
     <h2 id="sheetTitle"></h2>
     <label class="field"><span id="l_amount"></span><input id="f_amount" class="amountin money" type="text" inputmode="decimal" autocomplete="off" placeholder="₪ 0" required></label>
     <label class="field"><span id="l_name"></span><input id="f_name" autocomplete="off" maxlength="80"></label><div class="suggs" id="nameSugg"></div>
-    <div class="field"><span id="l_cat"></span><div class="chips" id="f_cats"></div></div>
+    <div class="field"><span id="l_cat"></span><div class="chips" id="f_cats"></div></div><div class="kindrow hidden" id="kindRow"></div>
     <div class="row2">
       <div class="field"><span id="l_date"></span><button type="button" class="datebtn" id="f_date" data-value=""><span id="f_date_txt"></span><span aria-hidden="true">📅</span></button></div>
       <label class="field"><span id="l_method"></span><select id="f_method"></select></label>
@@ -218,12 +226,12 @@ const BASE_CATS=[
  {id:'other',e:'📦',he:'אחר',en:'Other',type:'wants'}];
 const METHODS=[['card','כרטיס אשראי','Credit card'],['cash','מזומן','Cash'],['bit','ביט / פייבוקס','Bit / PayBox'],['transfer','העברה בנקאית','Bank transfer'],['standing','הוראת קבע','Standing order']];
 const T={
- he:{brand:'ניהול הוצאות',home:'ראשי',list:'הוצאות',year:'שנה',settings:'הגדרות',spentMonth:'הוצאת החודש',vsLast:'לעומת חודש קודם',noPrev:'אין נתונים לחודש הקודם',ofIncome:'מתוך הכנסה של',left:'נשאר להוציא',over:'חריגה של',setIncome:'הגדר הכנסה חודשית בהגדרות כדי לראות כמה נשאר',byCat:'לפי קטגוריה',byCatHint:'כמה הלך על כל דבר החודש',pace:'קצב ההוצאות',paceHint:'הוצאה מצטברת לפי יום בחודש',thisM:'החודש',lastM:'חודש קודם',split:'צרכים / רצונות / חיסכון',splitHint:'השוואה לכלל 50/30/20',needs:'צרכים',wants:'רצונות',save:'חיסכון',target:'יעד',top:'ההוצאות הגדולות',search:'חיפוש…',allCats:'כל הקטגוריות',noItems:'אין הוצאות בחודש הזה עדיין. לחץ על + כדי להוסיף.',add:'הוצאה חדשה',edit:'עריכת הוצאה',amount:'סכום (₪)',name:'על מה? (לא חובה)',cat:'קטגוריה',date:'תאריך',method:'אמצעי תשלום',note:'הערה',saveB:'שמירה',del:'מחיקה',cancel:'ביטול',confirmDel:'ללחוץ שוב כדי למחוק',saved:'נשמר ✓',deleted:'נמחק',yearTotal:'סה״כ השנה',avgM:'ממוצע לחודש',yearBars:'הוצאות לפי חודש',yearCats:'קטגוריות השנה',income:'הכנסה צפויה לחודש (₪)',budgets:'תקציב חודשי לכל קטגוריה (₪)',budgetsHint:'השאר ריק אם אין תקציב. מעבר לתקציב יסומן באדום.',lang:'שפה',copyCsv:'העתק את כל ההוצאות (CSV)',copied:'הועתק – אפשר להדביק באקסל',data:'הנתונים',count:'הוצאות',loading:'טוען…',offline:'לא מצליח להתחבר לנתונים כרגע. נסה לרענן בעוד רגע.',noDb:'לא ניתן לשמור נתונים במכשיר הזה.',budget:'תקציב',imported:'יובא',saveErr:'השמירה נכשלה – נסה שוב',perDay:'ליום',nameOpt:'לא חובה – למשל שופרסל',incTotal:'סה״כ הכנסות',expTotal:'סה״כ הוצאות',invTotal:'סה״כ השקעות',yearFlow:'הכנסות, הוצאות והשקעות לפי חודש',carryIn:'יתרה מהחודש הקודם',available:'זמין החודש',carryOut:'עובר לחודש הבא',monthFlow:'לאן הלך הכסף החודש',monthFlowHint:'יתרה שנשארה עוברת אוטומטית לחודש הבא',carryFrom:'מעקב יתרה החל מחודש',carryFromHint:'יתרה שלא הוצאה עוברת לחודש הבא. חודשים לפני התאריך הזה לא נספרים (שם חסרות חלק מההוצאות).',plusCarry:'כולל יתרה מהחודש הקודם',investedL:'הושקע / נחסך',spentL:'הוצאות',leftAcc:'נשאר בחשבון',incFrom:'הכנסה',incSrcThis:'משכורת החודש',incSrcAvg:'ממוצע 3 חודשים',incSrcSet:'הכנסה צפויה מההגדרות',invTag:'השקעה',noSpendNote:'חיסכון והשקעות לא נספרים כהוצאה',flowTab:'הכנסות / הוצאות',flow:'הכנסות והוצאות',inMonth:'נכנס החודש',outMonth:'יצא על הוצאות',savedMonth:'נשאר / נחסך',rate:'אחוז חיסכון (כולל השקעות)',addInc:'הוספת הכנסה',incName:'מקור',incType:'סוג',salary:'משכורת',bonus:'בונוס / מענק',reserve:'מילואים',otherInc:'אחר',incList:'ההכנסות החודש',noInc:'אין הכנסות רשומות לחודש הזה. הוסף משכורת למעלה.',flowChart:'נכנס מול יצא',flowHint:'הכנסות מול ההוצאות שרשומות באפליקציה; הנקודה מראה כמה נשאר. חודשים בלי כל ההוצאות ייראו טובים מהמציאות.',cumSaved:'כמה נשאר מצטבר השנה',recTitle:'המלצה לפי המשכורת',recHint:'רק המלצה – לא משנה את המסך הראשי',recBase:'לפי הכנסה של',recNeeds:'צרכים – עד 50%',recWants:'רצונות – עד 30%',recSave:'חיסכון – לפחות 20%',actual:'בפועל',okS:'בסדר',overS:'מעל',underS:'מתחת',keep:'כל הכבוד – נשארת בתוך ההמלצה החודש.',noBase:'הוסף הכנסה כדי לקבל המלצה.',avg3:'(ממוצע 3 חודשים אחרונים)',year12:'אם תחסוך ככה כל חודש, בעוד שנה יהיו לך',today:'היום',edited:'עריכה',update:'עדכון',saveAmt:'נחסך (כולל השקעות)',spentAmt:'הוצאות',incAmt:'הכנסות'},
- en:{brand:'Expense Management',home:'Home',list:'Expenses',year:'Year',settings:'Settings',spentMonth:'Spent this month',vsLast:'vs last month',noPrev:'No data for last month',ofIncome:'of your income',left:'left to spend',over:'over by',setIncome:'Set your monthly income in Settings to see what’s left',byCat:'By category',byCatHint:'Where the money went this month',pace:'Spending pace',paceHint:'Running total by day of month',thisM:'This month',lastM:'Last month',split:'Needs / wants / savings',splitHint:'Compared with the 50/30/20 rule',needs:'Needs',wants:'Wants',save:'Savings',target:'target',top:'Biggest expenses',search:'Search…',allCats:'All categories',noItems:'No expenses this month yet. Tap + to add one.',add:'New expense',edit:'Edit expense',amount:'Amount (₪)',name:'What for? (optional)',cat:'Category',date:'Date',method:'Paid with',note:'Note',saveB:'Save',del:'Delete',cancel:'Cancel',confirmDel:'Tap again to delete',saved:'Saved ✓',deleted:'Deleted',yearTotal:'Total this year',avgM:'Monthly average',yearBars:'Spending by month',yearCats:'Categories this year',income:'Expected monthly income (₪)',budgets:'Monthly budget per category (₪)',budgetsHint:'Leave empty for no budget. Going over shows in red.',lang:'Language',copyCsv:'Copy all expenses (CSV)',copied:'Copied – paste into Excel',data:'Your data',count:'expenses',loading:'Loading…',offline:'Can’t reach your data right now. Try again in a moment.',noDb:'This device can’t store data.',budget:'budget',imported:'imported',saveErr:'Couldn’t save – please try again',perDay:'per day',nameOpt:'Optional – e.g. Shufersal',incTotal:'Total income',expTotal:'Total expenses',invTotal:'Total investments',yearFlow:'Income, expenses and investments by month',carryIn:'Left from last month',available:'Available this month',carryOut:'Carries to next month',monthFlow:'Where the money went this month',monthFlowHint:'Whatever is left carries over to next month automatically',carryFrom:'Track the balance from',carryFromHint:'Money you didn’t use carries to the next month. Months before this date are skipped (some expenses there are missing).',plusCarry:'incl. left from last month',investedL:'Saved / invested',spentL:'Spent',leftAcc:'Left in account',incFrom:'Income',incSrcThis:'this month’s salary',incSrcAvg:'3-month average',incSrcSet:'expected income from Settings',invTag:'investment',noSpendNote:'Savings & investments are not counted as spending',flowTab:'In / Out',flow:'Money in/out',inMonth:'Came in this month',outMonth:'Went out on expenses',savedMonth:'Left / saved',rate:'Savings rate (incl. investments)',addInc:'Add income',incName:'Source',incType:'Type',salary:'Salary',bonus:'Bonus / grant',reserve:'Reserve duty',otherInc:'Other',incList:'Income this month',noInc:'No income recorded for this month. Add your salary above.',flowChart:'Money in vs money out',flowHint:'Income vs the expenses recorded in the app; the dot shows what was left. Months where not every expense was recorded look better than reality.',cumSaved:'Left over, running total this year',recTitle:'Recommendation based on your salary',recHint:'Just a guide – it doesn’t change the Home tab',recBase:'Based on income of',recNeeds:'Needs – up to 50%',recWants:'Wants – up to 30%',recSave:'Savings – at least 20%',actual:'actual',okS:'OK',overS:'over',underS:'under',keep:'Nice – you stayed within the guide this month.',noBase:'Add your income to get a recommendation.',avg3:'(average of last 3 months)',year12:'If you keep this up every month, in a year you’ll have',today:'Today',edited:'Edit',update:'Update',saveAmt:'Saved (incl. investments)',spentAmt:'Expenses',incAmt:'Income'}};
+ he:{brand:'ניהול הוצאות',home:'ראשי',list:'הוצאות',year:'שנה',settings:'הגדרות',spentMonth:'הוצאת החודש',vsLast:'לעומת חודש קודם',noPrev:'אין נתונים לחודש הקודם',ofIncome:'מתוך הכנסה של',left:'נשאר להוציא',over:'חריגה של',setIncome:'הגדר הכנסה חודשית בהגדרות כדי לראות כמה נשאר',byCat:'לפי קטגוריה',byCatHint:'כמה הלך על כל דבר החודש',pace:'קצב ההוצאות',paceHint:'הוצאה מצטברת לפי יום בחודש',thisM:'החודש',lastM:'חודש קודם',split:'צרכים / רצונות / חיסכון',splitHint:'השוואה לכלל 50/30/20',needs:'צרכים',wants:'רצונות',save:'חיסכון',target:'יעד',top:'ההוצאות הגדולות',search:'חיפוש…',allCats:'כל הקטגוריות',noItems:'אין הוצאות בחודש הזה עדיין. לחץ על + כדי להוסיף.',add:'הוצאה חדשה',edit:'עריכת הוצאה',amount:'סכום (₪)',name:'על מה? (לא חובה)',cat:'קטגוריה',date:'תאריך',method:'אמצעי תשלום',note:'הערה',saveB:'שמירה',del:'מחיקה',cancel:'ביטול',confirmDel:'ללחוץ שוב כדי למחוק',saved:'נשמר ✓',deleted:'נמחק',yearTotal:'סה״כ השנה',avgM:'ממוצע לחודש',yearBars:'הוצאות לפי חודש',yearCats:'קטגוריות השנה',income:'הכנסה צפויה לחודש (₪)',budgets:'תקציב חודשי לכל קטגוריה (₪)',budgetsHint:'השאר ריק אם אין תקציב. מעבר לתקציב יסומן באדום.',lang:'שפה',copyCsv:'העתק את כל ההוצאות (CSV)',copied:'הועתק – אפשר להדביק באקסל',data:'הנתונים',count:'הוצאות',loading:'טוען…',offline:'לא מצליח להתחבר לנתונים כרגע. נסה לרענן בעוד רגע.',noDb:'לא ניתן לשמור נתונים במכשיר הזה.',budget:'תקציב',imported:'יובא',saveErr:'השמירה נכשלה – נסה שוב',perDay:'ליום',kindSpend:'הוצאה',kindSave:'חיסכון / השקעה',nameOpt:'לא חובה – למשל שופרסל',incTotal:'סה״כ הכנסות',expTotal:'סה״כ הוצאות',invTotal:'סה״כ השקעות',yearFlow:'הכנסות, הוצאות והשקעות לפי חודש',carryIn:'יתרה מהחודש הקודם',available:'זמין החודש',carryOut:'עובר לחודש הבא',monthFlow:'לאן הלך הכסף החודש',monthFlowHint:'יתרה שנשארה עוברת אוטומטית לחודש הבא',carryFrom:'מעקב יתרה החל מחודש',carryFromHint:'יתרה שלא הוצאה עוברת לחודש הבא. חודשים לפני התאריך הזה לא נספרים (שם חסרות חלק מההוצאות).',plusCarry:'כולל יתרה מהחודש הקודם',investedL:'הושקע / נחסך',spentL:'הוצאות',leftAcc:'נשאר בחשבון',incFrom:'הכנסה',incSrcThis:'משכורת החודש',incSrcAvg:'ממוצע 3 חודשים',incSrcSet:'הכנסה צפויה מההגדרות',invTag:'השקעה',noSpendNote:'חיסכון והשקעות לא נספרים כהוצאה',flowTab:'הכנסות / הוצאות',flow:'הכנסות והוצאות',inMonth:'נכנס החודש',outMonth:'יצא על הוצאות',savedMonth:'נשאר / נחסך',rate:'אחוז חיסכון (כולל השקעות)',addInc:'הוספת הכנסה',incName:'מקור',incType:'סוג',salary:'משכורת',bonus:'בונוס / מענק',reserve:'מילואים',otherInc:'אחר',incList:'ההכנסות החודש',noInc:'אין הכנסות רשומות לחודש הזה. הוסף משכורת למעלה.',flowChart:'נכנס מול יצא',flowHint:'הכנסות מול ההוצאות שרשומות באפליקציה; הנקודה מראה כמה נשאר. חודשים בלי כל ההוצאות ייראו טובים מהמציאות.',cumSaved:'כמה נשאר מצטבר השנה',recTitle:'המלצה לפי המשכורת',recHint:'רק המלצה – לא משנה את המסך הראשי',recBase:'לפי הכנסה של',recNeeds:'צרכים – עד 50%',recWants:'רצונות – עד 30%',recSave:'חיסכון – לפחות 20%',actual:'בפועל',okS:'בסדר',overS:'מעל',underS:'מתחת',keep:'כל הכבוד – נשארת בתוך ההמלצה החודש.',noBase:'הוסף הכנסה כדי לקבל המלצה.',avg3:'(ממוצע 3 חודשים אחרונים)',year12:'אם תחסוך ככה כל חודש, בעוד שנה יהיו לך',today:'היום',edited:'עריכה',update:'עדכון',saveAmt:'נחסך (כולל השקעות)',spentAmt:'הוצאות',incAmt:'הכנסות'},
+ en:{brand:'Expense Management',home:'Home',list:'Expenses',year:'Year',settings:'Settings',spentMonth:'Spent this month',vsLast:'vs last month',noPrev:'No data for last month',ofIncome:'of your income',left:'left to spend',over:'over by',setIncome:'Set your monthly income in Settings to see what’s left',byCat:'By category',byCatHint:'Where the money went this month',pace:'Spending pace',paceHint:'Running total by day of month',thisM:'This month',lastM:'Last month',split:'Needs / wants / savings',splitHint:'Compared with the 50/30/20 rule',needs:'Needs',wants:'Wants',save:'Savings',target:'target',top:'Biggest expenses',search:'Search…',allCats:'All categories',noItems:'No expenses this month yet. Tap + to add one.',add:'New expense',edit:'Edit expense',amount:'Amount (₪)',name:'What for? (optional)',cat:'Category',date:'Date',method:'Paid with',note:'Note',saveB:'Save',del:'Delete',cancel:'Cancel',confirmDel:'Tap again to delete',saved:'Saved ✓',deleted:'Deleted',yearTotal:'Total this year',avgM:'Monthly average',yearBars:'Spending by month',yearCats:'Categories this year',income:'Expected monthly income (₪)',budgets:'Monthly budget per category (₪)',budgetsHint:'Leave empty for no budget. Going over shows in red.',lang:'Language',copyCsv:'Copy all expenses (CSV)',copied:'Copied – paste into Excel',data:'Your data',count:'expenses',loading:'Loading…',offline:'Can’t reach your data right now. Try again in a moment.',noDb:'This device can’t store data.',budget:'budget',imported:'imported',saveErr:'Couldn’t save – please try again',perDay:'per day',kindSpend:'Expense',kindSave:'Saving / investment',nameOpt:'Optional – e.g. Shufersal',incTotal:'Total income',expTotal:'Total expenses',invTotal:'Total investments',yearFlow:'Income, expenses and investments by month',carryIn:'Left from last month',available:'Available this month',carryOut:'Carries to next month',monthFlow:'Where the money went this month',monthFlowHint:'Whatever is left carries over to next month automatically',carryFrom:'Track the balance from',carryFromHint:'Money you didn’t use carries to the next month. Months before this date are skipped (some expenses there are missing).',plusCarry:'incl. left from last month',investedL:'Saved / invested',spentL:'Spent',leftAcc:'Left in account',incFrom:'Income',incSrcThis:'this month’s salary',incSrcAvg:'3-month average',incSrcSet:'expected income from Settings',invTag:'investment',noSpendNote:'Savings & investments are not counted as spending',flowTab:'In / Out',flow:'Money in/out',inMonth:'Came in this month',outMonth:'Went out on expenses',savedMonth:'Left / saved',rate:'Savings rate (incl. investments)',addInc:'Add income',incName:'Source',incType:'Type',salary:'Salary',bonus:'Bonus / grant',reserve:'Reserve duty',otherInc:'Other',incList:'Income this month',noInc:'No income recorded for this month. Add your salary above.',flowChart:'Money in vs money out',flowHint:'Income vs the expenses recorded in the app; the dot shows what was left. Months where not every expense was recorded look better than reality.',cumSaved:'Left over, running total this year',recTitle:'Recommendation based on your salary',recHint:'Just a guide – it doesn’t change the Home tab',recBase:'Based on income of',recNeeds:'Needs – up to 50%',recWants:'Wants – up to 30%',recSave:'Savings – at least 20%',actual:'actual',okS:'OK',overS:'over',underS:'under',keep:'Nice – you stayed within the guide this month.',noBase:'Add your income to get a recommendation.',avg3:'(average of last 3 months)',year12:'If you keep this up every month, in a year you’ll have',today:'Today',edited:'Edit',update:'Update',saveAmt:'Saved (incl. investments)',spentAmt:'Expenses',incAmt:'Income'}};
 // ---------- state ----------
 let LANG='he', VIEW='home', EXP=[], INC=[], incEdit=null, SET={income:0,budgets:{},carryFrom:null}, setVersion=null, db=null, editId=null, delArm=false;
 try{LANG=localStorage.getItem('mm_lang')||'he'}catch(e){}
-const now=new Date(); let CUR={y:now.getFullYear(),m:now.getMonth()+1};
+let now=new Date(); let CUR={y:now.getFullYear(),m:now.getMonth()+1};
 const t=k=>T[LANG][k]; const cat=id=>BASE_CATS.find(c=>c.id===id)||BASE_CATS[BASE_CATS.length-1];
 const cname=c=>c[LANG];
 const ils=n=>'₪'+Math.round(n).toLocaleString('en-US');
@@ -239,7 +247,8 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const monthName=(y,m,short)=>new Date(y,m-1,1).toLocaleString(LANG==='he'?'he-IL':'en-US',{month:short?'short':'long',year:short?undefined:'numeric'});
 const inMonth=(e,y,m)=>e.date&&e.date.startsWith(ym(y,m));
 const sum=a=>a.reduce((s,e)=>s+(+e.amount||0),0);
-const isSave=e=>cat(e.cat).type==='save';
+const isSave=e=>cat(e.cat).type==='save'||(e.cat==='other'&&e.kind==='save');
+const kindColor=e=>isSave(e)?'var(--inv)':'var(--exp)';
 const spendOf=a=>sum(a.filter(e=>!isSave(e)));
 const savedOf=a=>sum(a.filter(isSave));
 function prevYM(y,m){return m===1?{y:y-1,m:12}:{y,m:m-1}}
@@ -302,7 +311,7 @@ function catRows(list,withBudget){
   const rows=Object.entries(by).sort((a,b)=>b[1]-a[1]); const max=Math.max(1,...rows.map(r=>r[1]));
   if(!rows.length) return `<div class="empty">${t('noItems')}</div>`;
   return rows.map(([id,v])=>{const c=cat(id);const b=withBudget?+(SET.budgets||{})[id]||0:0;const over=b&&v>b;const w=b?Math.min(100,v/b*100):v/max*100;
-    return `<div class="catrow" data-tip="${esc(cname(c))}: ${ils(v)}${b?' / '+t('budget')+' '+ils(b):''}"><div class="ico">${c.e}</div><div><div class="nm">${esc(cname(c))}${b?` <span class="small">${t('budget')} ${ils(b)}</span>`:''}</div><div class="bar ${over?'over':''}"><i style="width:${w}%"></i></div></div><div class="amt" style="${over?'color:var(--bad)':''}">${ils(v)}</div></div>`}).join('');
+    return `<div class="catrow" data-tip="${esc(cname(c))}: ${ils(v)}${b?' / '+t('budget')+' '+ils(b):''}"><div class="ico" style="background:color-mix(in srgb,var(--exp) 14%,transparent)">${c.e}</div><div><div class="nm">${esc(cname(c))}${b?` <span class="small">${t('budget')} ${ils(b)}</span>`:''}</div><div class="bar ${over?'over':''}"><i style="width:${w}%"></i></div></div><div class="amt" style="${over?'color:var(--bad)':''}">${ils(v)}</div></div>`}).join('');
 }
 function incomeFor(y,m){const v=sum(incOf(y,m));if(v)return {v,src:'incSrcThis'};const b=salaryBase(y,m);if(b.v)return {v:b.v,src:'incSrcAvg'};const st=+SET.income||0;return st?{v:st,src:'incSrcSet'}:{v:0,src:null}}
 function vHome(){
@@ -310,7 +319,7 @@ function vHome(){
   const p=prevYM(y,m); const ptot=spendOf(EXP.filter(e=>inMonth(e,p.y,p.m)));
   const d=ptot?Math.round((tot-ptot)/ptot*100):null; const I=incomeFor(y,m); const carry=carryInto(y,m); const inc=I.v+carry; const left=inc-tot-inv;
   const days=new Date(y,m,0).getDate(); const isCur=(y===now.getFullYear()&&m===now.getMonth()+1);
-  const split={needs:0,wants:0,save:0};L.forEach(e=>{split[cat(e.cat).type]+= +e.amount||0});
+  const split={needs:0,wants:0,save:0};L.forEach(e=>{split[isSave(e)?'save':cat(e.cat).type]+= +e.amount||0});
   const base=I.v||(tot+inv)||1; const targets={needs:.5,wants:.3,save:.2}; const colors={needs:'var(--needs)',wants:'var(--wants)',save:'var(--inv)'};
   const top=[...S].sort((a,b)=>b.amount-a.amount).slice(0,5);
   const pct=v=>inc?Math.min(100,v/inc*100):0;
@@ -335,7 +344,7 @@ function vHome(){
   </div>
   ${top.length?`<section class="card" style="margin-top:14px"><h3>${t('top')}</h3><div class="list" style="margin-top:8px">${top.map(itemHtml).join('')}</div></section>`:''}`;
 }
-function itemHtml(e){const c=cat(e.cat);const mth=METHODS.find(x=>x[0]===e.method);return `<button class="item" data-id="${esc(e.id)}"><div class="ico">${c.e}</div><div><div class="t">${esc(e.name)}${isSave(e)?` <span class="status ok" style="font-size:11px;padding:1px 7px">${t('invTag')}</span>`:''}</div><div class="small">${esc(cname(c))}${mth?' · '+(LANG==='he'?mth[1]:mth[2]):''}${e.note?' · '+esc(e.note):''}</div></div><div class="amt">${ils2(e.amount)}</div></button>`}
+function itemHtml(e){const c=cat(e.cat);const mth=METHODS.find(x=>x[0]===e.method);return `<button class="item" data-id="${esc(e.id)}" style="border-inline-start:4px solid ${kindColor(e)}"><div class="ico" style="background:color-mix(in srgb,${kindColor(e)} 14%,transparent)">${c.e}</div><div><div class="t">${esc(e.name)}${isSave(e)?` <span class="status" style="font-size:11px;padding:1px 7px;color:var(--inv);background:color-mix(in srgb,var(--inv) 14%,transparent)">${t('invTag')}</span>`:''}</div><div class="small">${esc(cname(c))}${mth?' · '+(LANG==='he'?mth[1]:mth[2]):''}${e.note?' · '+esc(e.note):''}</div></div><div class="amt">${ils2(e.amount)}</div></button>`}
 let Q='',QC='';
 function vList(){
   const {y,m}=CUR; let L=EXP.filter(e=>inMonth(e,y,m));
@@ -395,7 +404,7 @@ function render(){
 }
 // ---------- sheet ----------
 const sheetbg=document.getElementById('sheetbg');
-let selCat='groceries';
+let selCat='groceries', selKind='spend';
 function openSheet(e){
   editId=e?e.id:null; delArm=false;
   document.getElementById('sheetTitle').textContent=t(e?'edit':'add');
@@ -409,11 +418,15 @@ function openSheet(e){
   document.getElementById('f_amount').value=e?fmtNum(e.amount):'';document.getElementById('f_name').value=e?e.name:'';
   setDateBtn('f_date',e?e.date:(isCur?isoToday():ym(CUR.y,CUR.m)+'-01'));
   document.getElementById('f_method').value=e?(e.method||'card'):'card';document.getElementById('f_note').value=e?(e.note||''):'';
-  selCat=e?e.cat:'groceries'; drawChips(); sheetbg.classList.add('open'); setTimeout(()=>document.getElementById('f_amount').focus(),50);
+  selCat=e?e.cat:'groceries'; selKind=e&&e.kind==='save'?'save':'spend'; drawChips(); sheetbg.classList.add('open'); setTimeout(()=>document.getElementById('f_amount').focus(),50);
 }
-function drawChips(){document.getElementById('f_cats').innerHTML=BASE_CATS.map(c=>`<button type="button" class="chip ${c.id===selCat?'on':''}" data-cat="${c.id}"><span class="e">${c.e}</span>${esc(cname(c))}</button>`).join('')}
+function chipColor(c){return c.type==='save'||(c.id==='other'&&selKind==='save')?'var(--inv)':'var(--exp)'}
+function drawChips(){document.getElementById('f_cats').innerHTML=`<div class="catlegend" style="grid-column:1/-1"><span><i style="background:var(--exp)"></i>${t('kindSpend')}</span><span><i style="background:var(--inv)"></i>${t('kindSave')}</span></div>`+BASE_CATS.map(c=>`<button type="button" class="chip ${c.id===selCat?'on':''}" data-cat="${c.id}" style="--c:${chipColor(c)}"><span class="e">${c.e}</span>${esc(cname(c))}</button>`).join('');
+  const kr=document.getElementById('kindRow');kr.classList.toggle('hidden',selCat!=='other');
+  kr.innerHTML=`<button type="button" class="kindbtn ${selKind!=='save'?'on':''}" data-kind="spend" style="--c:var(--exp)"><i style="background:var(--exp)"></i>${t('kindSpend')}</button><button type="button" class="kindbtn ${selKind==='save'?'on':''}" data-kind="save" style="--c:var(--inv)"><i style="background:var(--inv)"></i>${t('kindSave')}</button>`}
 function closeSheet(){sheetbg.classList.remove('open');editId=null}
 document.getElementById('f_cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(b){selCat=b.dataset.cat;drawChips()}});
+document.getElementById('kindRow').addEventListener('click',e=>{const b=e.target.closest('[data-kind]');if(b){selKind=b.dataset.kind;drawChips()}});
 function drawSugg(){const q=document.getElementById('f_name').value.trim().toLowerCase();const cnt={};EXP.forEach(x=>{if(x.source==='imported')return;cnt[x.name]=(cnt[x.name]||0)+1});
   let names=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);if(q)names=names.filter(n=>n.toLowerCase().includes(q)&&n.toLowerCase()!==q);
   document.getElementById('nameSugg').innerHTML=editId?'':names.slice(0,6).map(n=>`<button type="button" class="sugg" data-name="${esc(n)}">${esc(n)}</button>`).join('')}
@@ -428,7 +441,7 @@ document.getElementById('sheet').addEventListener('submit',async ev=>{
   const amount=Math.round(parseAmt(document.getElementById('f_amount').value)*100)/100; const name=document.getElementById('f_name').value.trim()||cname(cat(selCat)); const date=document.getElementById('f_date').dataset.value;
   if(!(amount>0)||!date){document.getElementById('f_amount').focus();return}
   const prev=editId?EXP.find(x=>x.id===editId):null;
-  const data={name,amount,cat:selCat,date,method:document.getElementById('f_method').value,note:document.getElementById('f_note').value.trim(),source:prev?(prev.source||'app'):'app',created:prev?(prev.created||Date.now()):Date.now(),updated:Date.now()};
+  const data={name,amount,cat:selCat,kind:selCat==='other'?selKind:'',date,method:document.getElementById('f_method').value,note:document.getElementById('f_note').value.trim(),source:prev?(prev.source||'app'):'app',created:prev?(prev.created||Date.now()):Date.now(),updated:Date.now()};
   const btn=document.getElementById('saveBtn'); btn.disabled=true;
   try{ const ref=editId?db.collection('expenses').doc(editId):db.collection('expenses').doc(); await ref.set(data);
     if(!date.startsWith(ym(CUR.y,CUR.m))){CUR={y:+date.slice(0,4),m:+date.slice(5,7)}}
@@ -572,7 +585,7 @@ function cumChart(y){
 function incItem(x){return `<button class="item" data-inc="${esc(x.id)}"><div class="ico">💼</div><div><div class="t">${esc(x.name)}</div><div class="small">${t(x.type==='other'?'otherInc':x.type)} · ${fmtDate(x.date)}${x.note?' · '+esc(x.note):''}</div></div><div class="amt pos">+${ils2(x.amount)}</div></button>`}
 function vFlow(){
   const {y,m}=CUR; const IN=sum(incOf(y,m)); const L=EXP.filter(e=>inMonth(e,y,m)); const OUT=spendOf(L); const INV=savedOf(L); const CARRY=carryInto(y,m); const left=IN-OUT; const inAcc=CARRY+IN-OUT-INV; const rate=IN?Math.round(left/IN*100):null;
-  const base=salaryBase(y,m); const split={needs:0,wants:0,save:0};L.forEach(e=>{split[cat(e.cat).type]+= +e.amount||0});
+  const base=salaryBase(y,m); const split={needs:0,wants:0,save:0};L.forEach(e=>{split[isSave(e)?'save':cat(e.cat).type]+= +e.amount||0});
   let rec;
   if(!base.v) rec=`<p class="small">${t('noBase')}</p>`;
   else{const B=base.v;const savedActual=Math.max(0,B-OUT);
@@ -622,6 +635,10 @@ document.getElementById('view').addEventListener('submit',async e=>{
     incEdit=null; if(!date.startsWith(ym(CUR.y,CUR.m)))CUR={y:+date.slice(0,4),m:+date.slice(5,7)}; toast(t('saved')); render();}catch(err){toast(t('saveErr'))}
 });
 
+// ---------- keep the date in step with the phone's clock ----------
+function refreshToday(){const n=new Date();if(n.toDateString()===now.toDateString())return;const wasCur=(CUR.y===now.getFullYear()&&CUR.m===now.getMonth()+1);now=n;if(wasCur){CUR={y:n.getFullYear(),m:n.getMonth()+1}}if(LOADED)render()}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshToday()});
+addEventListener('focus',refreshToday); setInterval(refreshToday,60000);
 async function copyText(s){try{await navigator.clipboard.writeText(s)}catch(err){const ta=document.createElement('textarea');ta.value=s;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove()}toast(t('copied'))}
 // ---------- local on-device store (same API shape the app uses) ----------
 const LS_KEY='expense_mgmt_v1';

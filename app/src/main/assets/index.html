@@ -117,6 +117,26 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .setgrid label{display:grid;grid-template-columns:28px 1fr 96px;gap:8px;align-items:center;font-size:13.5px}
 .setgrid input{padding:7px 9px}
 .hidden{display:none!important}
+.reprow{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-size:14px;font-weight:600}
+.switch{position:relative;width:46px;height:26px;flex:0 0 auto}
+.switch input{opacity:0;width:0;height:0}
+.switch .sl{position:absolute;inset:0;background:var(--line);border-radius:999px;cursor:pointer;transition:background .2s}
+.switch .sl:before{content:"";position:absolute;width:20px;height:20px;inset-inline-start:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.switch input:checked + .sl{background:var(--accent)}
+[dir=ltr] .switch input:checked + .sl:before{transform:translateX(20px)} [dir=rtl] .switch input:checked + .sl:before{transform:translateX(-20px)}
+.switch input:focus-visible + .sl{outline:2px solid var(--accent);outline-offset:2px}
+.item.upc{border-style:dashed;opacity:.8}
+.rectag{font-size:11px;padding:1px 7px;border-radius:999px;background:var(--bg);color:var(--ink2);font-weight:600}
+.mrow{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;margin:12px 0}
+.mlab{font-weight:700;font-size:14px}
+.mval{font-weight:700;font-variant-numeric:tabular-nums;font-size:14px}
+.mbar{display:flex;gap:2px;height:30px;border-radius:9px;overflow:hidden;background:var(--bg)}
+.mbar .sg{height:100%}
+.mleg{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin-top:14px}
+.mleg div{display:flex;align-items:center;gap:8px;font-size:13.5px}
+.mleg i{width:12px;height:12px;border-radius:4px;flex:0 0 auto}
+.mleg b{margin-inline-start:auto;font-variant-numeric:tabular-nums}
+.mnote{margin-top:12px;font-size:13px;padding:9px 11px;border-radius:10px;background:var(--bad-soft);color:var(--bad)}
 .suggs{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 12px}
 .sugg{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer}
 .sugg:hover{border-color:var(--accent)}
@@ -193,6 +213,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
       <div class="field"><span id="l_date"></span><button type="button" class="datebtn" id="f_date" data-value=""><span id="f_date_txt"></span><span aria-hidden="true">📅</span></button></div>
       <label class="field"><span id="l_method"></span><select id="f_method"></select></label>
     </div>
+    <div class="reprow"><label class="switch"><input type="checkbox" id="f_repeat"><span class="sl"></span></label><span id="l_repeat"></span></div>
+    <div class="field hidden" id="endField"><span id="l_end"></span><div style="display:flex;gap:8px"><button type="button" class="datebtn" id="f_end" data-value=""><span></span><span aria-hidden="true">📅</span></button><button type="button" class="btn ghost" id="endClear" style="flex:0 0 auto;padding:10px 12px"></button></div></div>
     <label class="field"><span id="l_note"></span><input id="f_note"></label>
     <div class="actions"><button type="submit" class="btn primary" id="saveBtn"></button><button type="button" class="btn danger hidden" id="delBtn"></button><button type="button" class="btn ghost" id="cancelBtn"></button></div>
   </form>
@@ -226,10 +248,10 @@ const BASE_CATS=[
  {id:'other',e:'📦',he:'אחר',en:'Other',type:'wants'}];
 const METHODS=[['card','כרטיס אשראי','Credit card'],['cash','מזומן','Cash'],['bit','ביט / פייבוקס','Bit / PayBox'],['transfer','העברה בנקאית','Bank transfer'],['standing','הוראת קבע','Standing order']];
 const T={
- he:{brand:'ניהול הוצאות',home:'ראשי',list:'הוצאות',year:'שנה',settings:'הגדרות',spentMonth:'הוצאת החודש',vsLast:'לעומת חודש קודם',noPrev:'אין נתונים לחודש הקודם',ofIncome:'מתוך הכנסה של',left:'נשאר להוציא',over:'חריגה של',setIncome:'הגדר הכנסה חודשית בהגדרות כדי לראות כמה נשאר',byCat:'לפי קטגוריה',byCatHint:'כמה הלך על כל דבר החודש',pace:'קצב ההוצאות',paceHint:'הוצאה מצטברת לפי יום בחודש',thisM:'החודש',lastM:'חודש קודם',split:'צרכים / רצונות / חיסכון',splitHint:'השוואה לכלל 50/30/20',needs:'צרכים',wants:'רצונות',save:'חיסכון',target:'יעד',top:'ההוצאות הגדולות',search:'חיפוש…',allCats:'כל הקטגוריות',noItems:'אין הוצאות בחודש הזה עדיין. לחץ על + כדי להוסיף.',add:'הוצאה חדשה',edit:'עריכת הוצאה',amount:'סכום (₪)',name:'על מה? (לא חובה)',cat:'קטגוריה',date:'תאריך',method:'אמצעי תשלום',note:'הערה',saveB:'שמירה',del:'מחיקה',cancel:'ביטול',confirmDel:'ללחוץ שוב כדי למחוק',saved:'נשמר ✓',deleted:'נמחק',yearTotal:'סה״כ השנה',avgM:'ממוצע לחודש',yearBars:'הוצאות לפי חודש',yearCats:'קטגוריות השנה',income:'הכנסה צפויה לחודש (₪)',budgets:'תקציב חודשי לכל קטגוריה (₪)',budgetsHint:'השאר ריק אם אין תקציב. מעבר לתקציב יסומן באדום.',lang:'שפה',copyCsv:'העתק את כל ההוצאות (CSV)',copied:'הועתק – אפשר להדביק באקסל',data:'הנתונים',count:'הוצאות',loading:'טוען…',offline:'לא מצליח להתחבר לנתונים כרגע. נסה לרענן בעוד רגע.',noDb:'לא ניתן לשמור נתונים במכשיר הזה.',budget:'תקציב',imported:'יובא',saveErr:'השמירה נכשלה – נסה שוב',perDay:'ליום',kindSpend:'הוצאה',kindSave:'חיסכון / השקעה',nameOpt:'לא חובה – למשל שופרסל',incTotal:'סה״כ הכנסות',expTotal:'סה״כ הוצאות',invTotal:'סה״כ השקעות',yearFlow:'הכנסות, הוצאות והשקעות לפי חודש',carryIn:'יתרה מהחודש הקודם',available:'זמין החודש',carryOut:'עובר לחודש הבא',monthFlow:'לאן הלך הכסף החודש',monthFlowHint:'יתרה שנשארה עוברת אוטומטית לחודש הבא',carryFrom:'מעקב יתרה החל מחודש',carryFromHint:'יתרה שלא הוצאה עוברת לחודש הבא. חודשים לפני התאריך הזה לא נספרים (שם חסרות חלק מההוצאות).',plusCarry:'כולל יתרה מהחודש הקודם',investedL:'הושקע / נחסך',spentL:'הוצאות',leftAcc:'נשאר בחשבון',incFrom:'הכנסה',incSrcThis:'משכורת החודש',incSrcAvg:'ממוצע 3 חודשים',incSrcSet:'הכנסה צפויה מההגדרות',invTag:'השקעה',noSpendNote:'חיסכון והשקעות לא נספרים כהוצאה',flowTab:'הכנסות / הוצאות',flow:'הכנסות והוצאות',inMonth:'נכנס החודש',outMonth:'יצא על הוצאות',savedMonth:'נשאר / נחסך',rate:'אחוז חיסכון (כולל השקעות)',addInc:'הוספת הכנסה',incName:'מקור',incType:'סוג',salary:'משכורת',bonus:'בונוס / מענק',reserve:'מילואים',otherInc:'אחר',incList:'ההכנסות החודש',noInc:'אין הכנסות רשומות לחודש הזה. הוסף משכורת למעלה.',flowChart:'נכנס מול יצא',flowHint:'הכנסות מול ההוצאות שרשומות באפליקציה; הנקודה מראה כמה נשאר. חודשים בלי כל ההוצאות ייראו טובים מהמציאות.',cumSaved:'כמה נשאר מצטבר השנה',recTitle:'המלצה לפי המשכורת',recHint:'רק המלצה – לא משנה את המסך הראשי',recBase:'לפי הכנסה של',recNeeds:'צרכים – עד 50%',recWants:'רצונות – עד 30%',recSave:'חיסכון – לפחות 20%',actual:'בפועל',okS:'בסדר',overS:'מעל',underS:'מתחת',keep:'כל הכבוד – נשארת בתוך ההמלצה החודש.',noBase:'הוסף הכנסה כדי לקבל המלצה.',avg3:'(ממוצע 3 חודשים אחרונים)',year12:'אם תחסוך ככה כל חודש, בעוד שנה יהיו לך',today:'היום',edited:'עריכה',update:'עדכון',saveAmt:'נחסך (כולל השקעות)',spentAmt:'הוצאות',incAmt:'הכנסות'},
- en:{brand:'Expense Management',home:'Home',list:'Expenses',year:'Year',settings:'Settings',spentMonth:'Spent this month',vsLast:'vs last month',noPrev:'No data for last month',ofIncome:'of your income',left:'left to spend',over:'over by',setIncome:'Set your monthly income in Settings to see what’s left',byCat:'By category',byCatHint:'Where the money went this month',pace:'Spending pace',paceHint:'Running total by day of month',thisM:'This month',lastM:'Last month',split:'Needs / wants / savings',splitHint:'Compared with the 50/30/20 rule',needs:'Needs',wants:'Wants',save:'Savings',target:'target',top:'Biggest expenses',search:'Search…',allCats:'All categories',noItems:'No expenses this month yet. Tap + to add one.',add:'New expense',edit:'Edit expense',amount:'Amount (₪)',name:'What for? (optional)',cat:'Category',date:'Date',method:'Paid with',note:'Note',saveB:'Save',del:'Delete',cancel:'Cancel',confirmDel:'Tap again to delete',saved:'Saved ✓',deleted:'Deleted',yearTotal:'Total this year',avgM:'Monthly average',yearBars:'Spending by month',yearCats:'Categories this year',income:'Expected monthly income (₪)',budgets:'Monthly budget per category (₪)',budgetsHint:'Leave empty for no budget. Going over shows in red.',lang:'Language',copyCsv:'Copy all expenses (CSV)',copied:'Copied – paste into Excel',data:'Your data',count:'expenses',loading:'Loading…',offline:'Can’t reach your data right now. Try again in a moment.',noDb:'This device can’t store data.',budget:'budget',imported:'imported',saveErr:'Couldn’t save – please try again',perDay:'per day',kindSpend:'Expense',kindSave:'Saving / investment',nameOpt:'Optional – e.g. Shufersal',incTotal:'Total income',expTotal:'Total expenses',invTotal:'Total investments',yearFlow:'Income, expenses and investments by month',carryIn:'Left from last month',available:'Available this month',carryOut:'Carries to next month',monthFlow:'Where the money went this month',monthFlowHint:'Whatever is left carries over to next month automatically',carryFrom:'Track the balance from',carryFromHint:'Money you didn’t use carries to the next month. Months before this date are skipped (some expenses there are missing).',plusCarry:'incl. left from last month',investedL:'Saved / invested',spentL:'Spent',leftAcc:'Left in account',incFrom:'Income',incSrcThis:'this month’s salary',incSrcAvg:'3-month average',incSrcSet:'expected income from Settings',invTag:'investment',noSpendNote:'Savings & investments are not counted as spending',flowTab:'In / Out',flow:'Money in/out',inMonth:'Came in this month',outMonth:'Went out on expenses',savedMonth:'Left / saved',rate:'Savings rate (incl. investments)',addInc:'Add income',incName:'Source',incType:'Type',salary:'Salary',bonus:'Bonus / grant',reserve:'Reserve duty',otherInc:'Other',incList:'Income this month',noInc:'No income recorded for this month. Add your salary above.',flowChart:'Money in vs money out',flowHint:'Income vs the expenses recorded in the app; the dot shows what was left. Months where not every expense was recorded look better than reality.',cumSaved:'Left over, running total this year',recTitle:'Recommendation based on your salary',recHint:'Just a guide – it doesn’t change the Home tab',recBase:'Based on income of',recNeeds:'Needs – up to 50%',recWants:'Wants – up to 30%',recSave:'Savings – at least 20%',actual:'actual',okS:'OK',overS:'over',underS:'under',keep:'Nice – you stayed within the guide this month.',noBase:'Add your income to get a recommendation.',avg3:'(average of last 3 months)',year12:'If you keep this up every month, in a year you’ll have',today:'Today',edited:'Edit',update:'Update',saveAmt:'Saved (incl. investments)',spentAmt:'Expenses',incAmt:'Income'}};
+ he:{brand:'ניהול הוצאות',home:'ראשי',list:'הוצאות',year:'שנה',settings:'הגדרות',spentMonth:'הוצאת החודש',vsLast:'לעומת חודש קודם',noPrev:'אין נתונים לחודש הקודם',ofIncome:'מתוך הכנסה של',left:'נשאר להוציא',over:'חריגה של',setIncome:'הגדר הכנסה חודשית בהגדרות כדי לראות כמה נשאר',byCat:'לפי קטגוריה',byCatHint:'כמה הלך על כל דבר החודש',pace:'קצב ההוצאות',paceHint:'הוצאה מצטברת לפי יום בחודש',thisM:'החודש',lastM:'חודש קודם',split:'צרכים / רצונות / חיסכון',splitHint:'השוואה לכלל 50/30/20',needs:'צרכים',wants:'רצונות',save:'חיסכון',target:'יעד',top:'ההוצאות הגדולות',search:'חיפוש…',allCats:'כל הקטגוריות',noItems:'אין הוצאות בחודש הזה עדיין. לחץ על + כדי להוסיף.',add:'הוצאה חדשה',edit:'עריכת הוצאה',amount:'סכום (₪)',name:'על מה? (לא חובה)',cat:'קטגוריה',date:'תאריך',method:'אמצעי תשלום',note:'הערה',saveB:'שמירה',del:'מחיקה',cancel:'ביטול',confirmDel:'ללחוץ שוב כדי למחוק',saved:'נשמר ✓',deleted:'נמחק',yearTotal:'סה״כ השנה',avgM:'ממוצע לחודש',yearBars:'הוצאות לפי חודש',yearCats:'קטגוריות השנה',income:'הכנסה צפויה לחודש (₪)',budgets:'תקציב חודשי לכל קטגוריה (₪)',budgetsHint:'השאר ריק אם אין תקציב. מעבר לתקציב יסומן באדום.',lang:'שפה',copyCsv:'העתק את כל ההוצאות (CSV)',copied:'הועתק – אפשר להדביק באקסל',data:'הנתונים',count:'הוצאות',loading:'טוען…',offline:'לא מצליח להתחבר לנתונים כרגע. נסה לרענן בעוד רגע.',noDb:'לא ניתן לשמור נתונים במכשיר הזה.',budget:'תקציב',imported:'יובא',saveErr:'השמירה נכשלה – נסה שוב',perDay:'ליום',repeat:'חוזר כל חודש (הוראת קבע / מנוי)',endDate:'עד תאריך (לא חובה)',noEnd:'ללא סוף',clearEnd:'ללא סוף',editRec:'עריכת הוראת קבע',delSeries:'מחיקת כל החודשים',confirmDelSeries:'ללחוץ שוב – יימחק מכל החודשים',recTag:'קבוע',upcoming:'צפוי עוד החודש',recList:'הוראות קבע ומנויים',recListHint:'נרשמים אוטומטית בכל חודש בתאריך שבחרת. לחץ כדי לשנות סכום, תאריך סיום או צבע.',noRec:'אין עדיין. בהוספת הוצאה סמן ״חוזר כל חודש״.',perMonth:'לחודש',upcomingHome:'צפוי עוד החודש מהוראות קבע',inRow:'נכנס',outRow:'יצא',debtPrev:'חוסר מהחודש הקודם',overNote:'יצא יותר ממה שנכנס – ההפרש יירד מהחודש הבא',kindSpend:'הוצאה',kindSave:'חיסכון / השקעה',nameOpt:'לא חובה – למשל שופרסל',incTotal:'סה״כ הכנסות',expTotal:'סה״כ הוצאות',invTotal:'סה״כ השקעות',yearFlow:'הכנסות, הוצאות והשקעות לפי חודש',carryIn:'יתרה מהחודש הקודם',available:'זמין החודש',carryOut:'עובר לחודש הבא',monthFlow:'לאן הלך הכסף החודש',monthFlowHint:'יתרה שנשארה עוברת אוטומטית לחודש הבא',carryFrom:'מעקב יתרה החל מחודש',carryFromHint:'יתרה שלא הוצאה עוברת לחודש הבא. חודשים לפני התאריך הזה לא נספרים (שם חסרות חלק מההוצאות).',plusCarry:'כולל יתרה מהחודש הקודם',investedL:'הושקע / נחסך',spentL:'הוצאות',leftAcc:'נשאר בחשבון',incFrom:'הכנסה',incSrcThis:'משכורת החודש',incSrcAvg:'ממוצע 3 חודשים',incSrcSet:'הכנסה צפויה מההגדרות',invTag:'השקעה',noSpendNote:'חיסכון והשקעות לא נספרים כהוצאה',flowTab:'הכנסות / הוצאות',flow:'הכנסות והוצאות',inMonth:'נכנס החודש',outMonth:'יצא על הוצאות',savedMonth:'נשאר / נחסך',rate:'אחוז חיסכון (כולל השקעות)',addInc:'הוספת הכנסה',incName:'מקור',incType:'סוג',salary:'משכורת',bonus:'בונוס / מענק',reserve:'מילואים',otherInc:'אחר',incList:'ההכנסות החודש',noInc:'אין הכנסות רשומות לחודש הזה. הוסף משכורת למעלה.',flowChart:'נכנס מול יצא',flowHint:'הכנסות מול ההוצאות שרשומות באפליקציה; הנקודה מראה כמה נשאר. חודשים בלי כל ההוצאות ייראו טובים מהמציאות.',cumSaved:'כמה נשאר מצטבר השנה',recTitle:'המלצה לפי המשכורת',recHint:'רק המלצה – לא משנה את המסך הראשי',recBase:'לפי הכנסה של',recNeeds:'צרכים – עד 50%',recWants:'רצונות – עד 30%',recSave:'חיסכון – לפחות 20%',actual:'בפועל',okS:'בסדר',overS:'מעל',underS:'מתחת',keep:'כל הכבוד – נשארת בתוך ההמלצה החודש.',noBase:'הוסף הכנסה כדי לקבל המלצה.',avg3:'(ממוצע 3 חודשים אחרונים)',year12:'אם תחסוך ככה כל חודש, בעוד שנה יהיו לך',today:'היום',edited:'עריכה',update:'עדכון',saveAmt:'נחסך (כולל השקעות)',spentAmt:'הוצאות',incAmt:'הכנסות'},
+ en:{brand:'Expense Management',home:'Home',list:'Expenses',year:'Year',settings:'Settings',spentMonth:'Spent this month',vsLast:'vs last month',noPrev:'No data for last month',ofIncome:'of your income',left:'left to spend',over:'over by',setIncome:'Set your monthly income in Settings to see what’s left',byCat:'By category',byCatHint:'Where the money went this month',pace:'Spending pace',paceHint:'Running total by day of month',thisM:'This month',lastM:'Last month',split:'Needs / wants / savings',splitHint:'Compared with the 50/30/20 rule',needs:'Needs',wants:'Wants',save:'Savings',target:'target',top:'Biggest expenses',search:'Search…',allCats:'All categories',noItems:'No expenses this month yet. Tap + to add one.',add:'New expense',edit:'Edit expense',amount:'Amount (₪)',name:'What for? (optional)',cat:'Category',date:'Date',method:'Paid with',note:'Note',saveB:'Save',del:'Delete',cancel:'Cancel',confirmDel:'Tap again to delete',saved:'Saved ✓',deleted:'Deleted',yearTotal:'Total this year',avgM:'Monthly average',yearBars:'Spending by month',yearCats:'Categories this year',income:'Expected monthly income (₪)',budgets:'Monthly budget per category (₪)',budgetsHint:'Leave empty for no budget. Going over shows in red.',lang:'Language',copyCsv:'Copy all expenses (CSV)',copied:'Copied – paste into Excel',data:'Your data',count:'expenses',loading:'Loading…',offline:'Can’t reach your data right now. Try again in a moment.',noDb:'This device can’t store data.',budget:'budget',imported:'imported',saveErr:'Couldn’t save – please try again',perDay:'per day',repeat:'Repeats every month (standing order / subscription)',endDate:'Until (optional)',noEnd:'no end',clearEnd:'No end',editRec:'Edit standing order',delSeries:'Delete all months',confirmDelSeries:'Tap again – removes it from every month',recTag:'monthly',upcoming:'Coming up this month',recList:'Standing orders & subscriptions',recListHint:'Added automatically every month on the day you chose. Tap one to change the amount, end date or color.',noRec:'None yet. When adding an expense, turn on “Repeats every month”.',perMonth:'per month',upcomingHome:'Still to come this month from standing orders',inRow:'In',outRow:'Out',debtPrev:'Short from last month',overNote:'More went out than came in – the difference comes off next month',kindSpend:'Expense',kindSave:'Saving / investment',nameOpt:'Optional – e.g. Shufersal',incTotal:'Total income',expTotal:'Total expenses',invTotal:'Total investments',yearFlow:'Income, expenses and investments by month',carryIn:'Left from last month',available:'Available this month',carryOut:'Carries to next month',monthFlow:'Where the money went this month',monthFlowHint:'Whatever is left carries over to next month automatically',carryFrom:'Track the balance from',carryFromHint:'Money you didn’t use carries to the next month. Months before this date are skipped (some expenses there are missing).',plusCarry:'incl. left from last month',investedL:'Saved / invested',spentL:'Spent',leftAcc:'Left in account',incFrom:'Income',incSrcThis:'this month’s salary',incSrcAvg:'3-month average',incSrcSet:'expected income from Settings',invTag:'investment',noSpendNote:'Savings & investments are not counted as spending',flowTab:'In / Out',flow:'Money in/out',inMonth:'Came in this month',outMonth:'Went out on expenses',savedMonth:'Left / saved',rate:'Savings rate (incl. investments)',addInc:'Add income',incName:'Source',incType:'Type',salary:'Salary',bonus:'Bonus / grant',reserve:'Reserve duty',otherInc:'Other',incList:'Income this month',noInc:'No income recorded for this month. Add your salary above.',flowChart:'Money in vs money out',flowHint:'Income vs the expenses recorded in the app; the dot shows what was left. Months where not every expense was recorded look better than reality.',cumSaved:'Left over, running total this year',recTitle:'Recommendation based on your salary',recHint:'Just a guide – it doesn’t change the Home tab',recBase:'Based on income of',recNeeds:'Needs – up to 50%',recWants:'Wants – up to 30%',recSave:'Savings – at least 20%',actual:'actual',okS:'OK',overS:'over',underS:'under',keep:'Nice – you stayed within the guide this month.',noBase:'Add your income to get a recommendation.',avg3:'(average of last 3 months)',year12:'If you keep this up every month, in a year you’ll have',today:'Today',edited:'Edit',update:'Update',saveAmt:'Saved (incl. investments)',spentAmt:'Expenses',incAmt:'Income'}};
 // ---------- state ----------
-let LANG='he', VIEW='home', EXP=[], INC=[], incEdit=null, SET={income:0,budgets:{},carryFrom:null}, setVersion=null, db=null, editId=null, delArm=false;
+let LANG='he', VIEW='home', EXP=[], RAW=[], REC=[], UPC=[], INC=[], incEdit=null, editRec=null, repeatOn=false, SET={income:0,budgets:{},carryFrom:null}, setVersion=null, db=null, editId=null, delArm=false;
 try{LANG=localStorage.getItem('mm_lang')||'he'}catch(e){}
 let now=new Date(); let CUR={y:now.getFullYear(),m:now.getMonth()+1};
 const t=k=>T[LANG][k]; const cat=id=>BASE_CATS.find(c=>c.id===id)||BASE_CATS[BASE_CATS.length-1];
@@ -247,7 +269,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const monthName=(y,m,short)=>new Date(y,m-1,1).toLocaleString(LANG==='he'?'he-IL':'en-US',{month:short?'short':'long',year:short?undefined:'numeric'});
 const inMonth=(e,y,m)=>e.date&&e.date.startsWith(ym(y,m));
 const sum=a=>a.reduce((s,e)=>s+(+e.amount||0),0);
-const isSave=e=>cat(e.cat).type==='save'||(e.cat==='other'&&e.kind==='save');
+const isSave=e=>e.kind==='save'?true:(e.kind==='spend'?false:cat(e.cat).type==='save');
 const kindColor=e=>isSave(e)?'var(--inv)':'var(--exp)';
 const spendOf=a=>sum(a.filter(e=>!isSave(e)));
 const savedOf=a=>sum(a.filter(isSave));
@@ -327,7 +349,7 @@ function vHome(){
    <section class="card">
     <div class="hero"><div><div class="sub" style="margin:0 0 6px">${t('spentMonth')} · ${monthName(y,m)}</div><div class="big">${ils(tot)}</div>
      <div class="sub">${S.length} ${t('count')} · ${ils(tot/(isCur?Math.max(1,now.getDate()):days))} ${t('perDay')}${inv?` · <span style="color:var(--inv);font-weight:600">${t('investedL')}: ${ils(inv)}</span>`:''}</div></div>
-     <div>${d===null?`<span class="small">${t('noPrev')}</span>`:`<span class="delta ${d>0?'up':'down'}">${d>0?'▲':'▼'} ${Math.abs(d)}% ${t('vsLast')}</span>`}</div></div>
+     <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">${(()=>{const u=sum(UPC.filter(e=>inMonth(e,y,m)));return u?`<span class="small">${t('upcomingHome')}: <b>${ils(u)}</b></span>`:''})()}${d===null?`<span class="small">${t('noPrev')}</span>`:`<span class="delta ${d>0?'up':'down'}">${d>0?'▲':'▼'} ${Math.abs(d)}% ${t('vsLast')}</span>`}</div></div>
     ${inc?`<div class="meter ${left<0?'over':''}" style="display:flex"><i style="width:${pct(tot)}%;border-radius:0"></i><i style="width:${pct(inv)}%;background:var(--inv);border-radius:0"></i></div>
       <div class="kv"><span>${t('available')}: <b>${ils(inc)}</b> <span class="small">(${I.v?t('incFrom')+' '+ils(I.v)+' · '+t(I.src):''}${carry?(I.v?' + ':'')+t('carryIn')+' '+ils(carry):''})</span></span><span style="${left<0?'color:var(--bad);font-weight:700':''}">${left<0?t('over')+' '+ils(-left):t('left')+': '+ils(left)}</span></div>
       <div class="legend" style="margin-top:8px"><span><i style="background:var(--accent)"></i>${t('spentL')} ${ils(tot)}</span><span><i style="background:var(--inv)"></i>${t('investedL')} ${ils(inv)}</span><span><i style="background:var(--bg);border:1px solid var(--line)"></i>${t('leftAcc')} ${ils(Math.max(0,left))}</span></div>`
@@ -344,11 +366,13 @@ function vHome(){
   </div>
   ${top.length?`<section class="card" style="margin-top:14px"><h3>${t('top')}</h3><div class="list" style="margin-top:8px">${top.map(itemHtml).join('')}</div></section>`:''}`;
 }
-function itemHtml(e){const c=cat(e.cat);const mth=METHODS.find(x=>x[0]===e.method);return `<button class="item" data-id="${esc(e.id)}" style="border-inline-start:4px solid ${kindColor(e)}"><div class="ico" style="background:color-mix(in srgb,${kindColor(e)} 14%,transparent)">${c.e}</div><div><div class="t">${esc(e.name)}${isSave(e)?` <span class="status" style="font-size:11px;padding:1px 7px;color:var(--inv);background:color-mix(in srgb,var(--inv) 14%,transparent)">${t('invTag')}</span>`:''}</div><div class="small">${esc(cname(c))}${mth?' · '+(LANG==='he'?mth[1]:mth[2]):''}${e.note?' · '+esc(e.note):''}</div></div><div class="amt">${ils2(e.amount)}</div></button>`}
+function itemHtml(e){const c=cat(e.cat);const mth=METHODS.find(x=>x[0]===e.method);return `<button class="item ${e.upcoming?'upc':''}" data-id="${esc(e.id)}" style="border-inline-start:4px solid ${kindColor(e)}"><div class="ico" style="background:color-mix(in srgb,${kindColor(e)} 14%,transparent)">${c.e}</div><div><div class="t">${esc(e.name)}${e.recId?` <span class="rectag">🔁 ${t('recTag')}</span>`:''}${isSave(e)?` <span class="status" style="font-size:11px;padding:1px 7px;color:var(--inv);background:color-mix(in srgb,var(--inv) 14%,transparent)">${t('invTag')}</span>`:''}</div><div class="small">${esc(cname(c))}${mth?' · '+(LANG==='he'?mth[1]:mth[2]):''}${e.note?' · '+esc(e.note):''}</div></div><div class="amt">${ils2(e.amount)}</div></button>`}
 let Q='',QC='';
 function vList(){
   const {y,m}=CUR; let L=EXP.filter(e=>inMonth(e,y,m));
-  return `<div class="toolbar"><input id="q" placeholder="${t('search')}" value="${esc(Q)}"><select id="qc"><option value="">${t('allCats')}</option>${BASE_CATS.map(c=>`<option value="${c.id}" ${QC===c.id?'selected':''}>${c.e} ${esc(cname(c))}</option>`).join('')}</select></div><div class="list" id="listBody">${listBody(L)}</div>`;
+  const U=UPC.filter(e=>inMonth(e,y,m));
+  return `${U.length?`<section class="card" style="margin-bottom:12px"><h3>${t('upcoming')} · ${ils(sum(U))}</h3><div class="list" style="margin-top:8px">${U.sort((a,b)=>a.date.localeCompare(b.date)).map(itemHtml).join('')}</div></section>`:''}<div class="toolbar"><input id="q" placeholder="${t('search')}" value="${esc(Q)}"><select id="qc"><option value="">${t('allCats')}</option>${BASE_CATS.map(c=>`<option value="${c.id}" ${QC===c.id?'selected':''}>${c.e} ${esc(cname(c))}</option>`).join('')}</select></div><div class="list" id="listBody">${listBody(L)}</div>
+  <section class="card" style="margin-top:16px"><h3>${t('recList')}</h3><p class="hint">${t('recListHint')}</p>${REC.length?`<div class="list">${[...REC].sort((a,b)=>(a.start||'').localeCompare(b.start||'')).map(r=>{const c=cat(r.cat);const col=r.kind==='save'?'var(--inv)':'var(--exp)';return `<button class="item" data-rec="${esc(r.id)}" style="border-inline-start:4px solid ${col}"><div class="ico" style="background:color-mix(in srgb,${col} 14%,transparent)">${c.e}</div><div><div class="t">${esc(r.name)}</div><div class="small">${esc(cname(c))} · ${recPeriod(r)}</div></div><div class="amt">${ils2(r.amount)} <span class="small">${t('perMonth')}</span></div></button>`}).join('')}</div>`:`<div class="empty">${t('noRec')}</div>`}</section>`;
 }
 function listBody(L){
   if(Q) L=L.filter(e=>(e.name+' '+(e.note||'')).toLowerCase().includes(Q.toLowerCase()));
@@ -406,26 +430,32 @@ function render(){
 const sheetbg=document.getElementById('sheetbg');
 let selCat='groceries', selKind='spend';
 function openSheet(e){
-  editId=e?e.id:null; delArm=false;
-  document.getElementById('sheetTitle').textContent=t(e?'edit':'add');
+  let r=null; if(e&&e.recId){r=REC.find(x=>x.id===e.recId); if(!r)return; e=Object.assign({},r,{date:r.start});}
+  editId=(e&&!r)?e.id:null; editRec=r?r.id:null; repeatOn=!!r; delArm=false;
+  document.getElementById('sheetTitle').textContent=t(r?'editRec':(e?'edit':'add'));
+  document.getElementById('l_repeat').textContent=t('repeat');document.getElementById('l_end').textContent=t('endDate');document.getElementById('endClear').textContent=t('clearEnd');
+  document.getElementById('f_repeat').checked=repeatOn; setDateBtn('f_end',r&&r.end?r.end:''); if(!(r&&r.end))document.querySelector('#f_end span').textContent=t('noEnd');
   document.getElementById('l_amount').textContent=t('amount');document.getElementById('l_name').textContent=t('name');document.getElementById('l_cat').textContent=t('cat');
   document.getElementById('l_date').textContent=t('date');document.getElementById('l_method').textContent=t('method');document.getElementById('l_note').textContent=t('note');
   document.getElementById('saveBtn').textContent=t('saveB');document.getElementById('cancelBtn').textContent=t('cancel');
-  const del=document.getElementById('delBtn');del.textContent=t('del');del.classList.toggle('hidden',!e);
+  const del=document.getElementById('delBtn');del.textContent=t(r?'delSeries':'del');del.classList.toggle('hidden',!e);
   document.getElementById('f_method').innerHTML=METHODS.map(x=>`<option value="${x[0]}">${LANG==='he'?x[1]:x[2]}</option>`).join('');
   document.getElementById('f_name').placeholder=t('nameOpt');drawSugg();
   const today=new Date();const isCur=CUR.y===today.getFullYear()&&CUR.m===today.getMonth()+1;
   document.getElementById('f_amount').value=e?fmtNum(e.amount):'';document.getElementById('f_name').value=e?e.name:'';
   setDateBtn('f_date',e?e.date:(isCur?isoToday():ym(CUR.y,CUR.m)+'-01'));
   document.getElementById('f_method').value=e?(e.method||'card'):'card';document.getElementById('f_note').value=e?(e.note||''):'';
-  selCat=e?e.cat:'groceries'; selKind=e&&e.kind==='save'?'save':'spend'; drawChips(); sheetbg.classList.add('open'); setTimeout(()=>document.getElementById('f_amount').focus(),50);
+  selCat=e?e.cat:'groceries'; selKind=e?(e.kind==='save'||(!e.kind&&cat(e.cat).type==='save')?'save':'spend'):'spend'; drawChips(); sheetbg.classList.add('open'); setTimeout(()=>document.getElementById('f_amount').focus(),50);
 }
-function chipColor(c){return c.type==='save'||(c.id==='other'&&selKind==='save')?'var(--inv)':'var(--exp)'}
+function chipColor(c){if(c.id===selCat&&(repeatOn||c.id==='other'))return selKind==='save'?'var(--inv)':'var(--exp)';return c.type==='save'?'var(--inv)':'var(--exp)'}
 function drawChips(){document.getElementById('f_cats').innerHTML=`<div class="catlegend" style="grid-column:1/-1"><span><i style="background:var(--exp)"></i>${t('kindSpend')}</span><span><i style="background:var(--inv)"></i>${t('kindSave')}</span></div>`+BASE_CATS.map(c=>`<button type="button" class="chip ${c.id===selCat?'on':''}" data-cat="${c.id}" style="--c:${chipColor(c)}"><span class="e">${c.e}</span>${esc(cname(c))}</button>`).join('');
-  const kr=document.getElementById('kindRow');kr.classList.toggle('hidden',selCat!=='other');
+  const kr=document.getElementById('kindRow');kr.classList.toggle('hidden',!(selCat==='other'||repeatOn));document.getElementById('endField').classList.toggle('hidden',!repeatOn);
   kr.innerHTML=`<button type="button" class="kindbtn ${selKind!=='save'?'on':''}" data-kind="spend" style="--c:var(--exp)"><i style="background:var(--exp)"></i>${t('kindSpend')}</button><button type="button" class="kindbtn ${selKind==='save'?'on':''}" data-kind="save" style="--c:var(--inv)"><i style="background:var(--inv)"></i>${t('kindSave')}</button>`}
-function closeSheet(){sheetbg.classList.remove('open');editId=null}
-document.getElementById('f_cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(b){selCat=b.dataset.cat;drawChips()}});
+function closeSheet(){sheetbg.classList.remove('open');editId=null;editRec=null}
+document.getElementById('f_cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(b){selCat=b.dataset.cat;if(selCat!=='other')selKind=cat(selCat).type==='save'?'save':'spend';drawChips()}});
+document.getElementById('f_repeat').addEventListener('change',e=>{repeatOn=e.target.checked;drawChips()});
+document.getElementById('f_end').onclick=()=>openPicker({value:document.getElementById('f_end').dataset.value||document.getElementById('f_date').dataset.value,mode:'day',onPick:v=>setDateBtn('f_end',v)});
+document.getElementById('endClear').onclick=()=>{setDateBtn('f_end','');document.querySelector('#f_end span').textContent=t('noEnd')};
 document.getElementById('kindRow').addEventListener('click',e=>{const b=e.target.closest('[data-kind]');if(b){selKind=b.dataset.kind;drawChips()}});
 function drawSugg(){const q=document.getElementById('f_name').value.trim().toLowerCase();const cnt={};EXP.forEach(x=>{if(x.source==='imported')return;cnt[x.name]=(cnt[x.name]||0)+1});
   let names=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);if(q)names=names.filter(n=>n.toLowerCase().includes(q)&&n.toLowerCase()!==q);
@@ -440,17 +470,25 @@ document.getElementById('sheet').addEventListener('submit',async ev=>{
   ev.preventDefault(); if(!db){banner(t('noDb'));return}
   const amount=Math.round(parseAmt(document.getElementById('f_amount').value)*100)/100; const name=document.getElementById('f_name').value.trim()||cname(cat(selCat)); const date=document.getElementById('f_date').dataset.value;
   if(!(amount>0)||!date){document.getElementById('f_amount').focus();return}
+  const end=document.getElementById('f_end').dataset.value||'';
+  if(repeatOn){ const prevR=editRec?REC.find(x=>x.id===editRec):null;
+    const rd={name,amount,cat:selCat,kind:selKind,method:document.getElementById('f_method').value,note:document.getElementById('f_note').value.trim(),start:date,end:(end&&end>=date)?end:'',source:prevR?(prevR.source||'app'):'app',created:prevR?(prevR.created||Date.now()):Date.now(),updated:Date.now()};
+    const btn=document.getElementById('saveBtn'); btn.disabled=true;
+    try{ await (editRec?db.collection('recurring').doc(editRec):db.collection('recurring').doc()).set(rd);
+      if(editId) await db.collection('expenses').doc(editId).delete();
+      closeSheet(); toast(t('saved')); render(); }catch(err){toast(t('saveErr'))} finally{btn.disabled=false}
+    return; }
   const prev=editId?EXP.find(x=>x.id===editId):null;
   const data={name,amount,cat:selCat,kind:selCat==='other'?selKind:'',date,method:document.getElementById('f_method').value,note:document.getElementById('f_note').value.trim(),source:prev?(prev.source||'app'):'app',created:prev?(prev.created||Date.now()):Date.now(),updated:Date.now()};
   const btn=document.getElementById('saveBtn'); btn.disabled=true;
-  try{ const ref=editId?db.collection('expenses').doc(editId):db.collection('expenses').doc(); await ref.set(data);
+  try{ const ref=editId?db.collection('expenses').doc(editId):db.collection('expenses').doc(); await ref.set(data); if(editRec) await db.collection('recurring').doc(editRec).delete();
     if(!date.startsWith(ym(CUR.y,CUR.m))){CUR={y:+date.slice(0,4),m:+date.slice(5,7)}}
     closeSheet(); toast(t('saved')); render();
   }catch(err){ toast(err&&err.code==='quota_exceeded'?(err.message||t('saveErr')):t('saveErr')) } finally{btn.disabled=false}
 });
 document.getElementById('delBtn').onclick=async()=>{
-  if(!delArm){delArm=true;document.getElementById('delBtn').textContent=t('confirmDel');return}
-  try{await db.collection('expenses').doc(editId).delete();closeSheet();toast(t('deleted'))}catch(e){toast(t('saveErr'))}
+  if(!delArm){delArm=true;document.getElementById('delBtn').textContent=t(editRec?'confirmDelSeries':'confirmDel');return}
+  try{if(editRec)await db.collection('recurring').doc(editRec).delete();else await db.collection('expenses').doc(editId).delete();closeSheet();toast(t('deleted'))}catch(e){toast(t('saveErr'))}
 };
 // ---------- events ----------
 document.getElementById('fab').onclick=()=>openSheet(null);
@@ -460,7 +498,7 @@ document.getElementById('prev').onclick=()=>{if(VIEW==='year')CUR.y--;else CUR=p
 document.getElementById('next').onclick=()=>{if(VIEW==='year')CUR.y++;else CUR=CUR.m===12?{y:CUR.y+1,m:1}:{y:CUR.y,m:CUR.m+1};render()};
 document.getElementById('langBtn').onclick=()=>{LANG=LANG==='he'?'en':'he';try{localStorage.setItem('mm_lang',LANG)}catch(e){};render()};
 document.getElementById('view').addEventListener('click',async e=>{
-  const it=e.target.closest('.item'); if(it){const x=EXP.find(z=>z.id===it.dataset.id);if(x)openSheet(x);return}
+  const it=e.target.closest('.item'); if(it){if(it.dataset.rec){openSheet({recId:it.dataset.rec});return}const x=EXP.find(z=>z.id===it.dataset.id)||UPC.find(z=>z.id===it.dataset.id);if(x)openSheet(x);return}
   const mo=e.target.closest('[data-month]'); if(mo){CUR.m=+mo.dataset.month;if(VIEW==='year')VIEW='home';render();return}
   if(e.target.id==='saveSet'){ if(!db)return; const budgets={};document.querySelectorAll('[data-bud]').forEach(i=>{const v=parseAmt(i.value);if(v>0)budgets[i.dataset.bud]=v});
     const income=parseAmt(document.getElementById('s_income').value)||0;
@@ -556,6 +594,16 @@ function flowChart(y){
     s+=`<rect x="${pl+cw*i}" y="${pt}" width="${cw}" height="${H-pt-pb}" fill="transparent" data-month="${i+1}" style="cursor:pointer" data-tip="<b>${monthName(y,i+1)}</b><br>${t('incAmt')}: ${ils(inV[i])}<br>${t('spentAmt')}: ${ils(outV[i])}<br>${t('saveAmt')}: ${ils(net)}"/>`}
   return s+'</svg>';
 }
+function moneyBars(carry,inc,out,inv,left){
+  const pos=Math.max(0,carry), debt=Math.max(0,-carry), lf=Math.max(0,left); const scale=Math.max(pos+inc,out+inv+debt,1);
+  const sg=(v,col,lbl)=>v>0?`<div class="sg" style="width:${v/scale*100}%;background:${col}" data-tip="${esc(lbl)}: ${ils(v)}"></div>`:'';
+  const leftCol='color-mix(in srgb,var(--accent) 35%,transparent)';
+  const leg=(col,lbl,v)=>`<div><i style="background:${col}"></i><span>${esc(lbl)}</span><b>${ils(v)}</b></div>`;
+  return `<div class="mrow"><div class="mlab">${t('inRow')}</div><div class="mbar">${sg(pos,'var(--muted)',t('carryIn'))}${sg(inc,'var(--inc)',t('incAmt'))}</div><div class="mval">${ils(pos+inc)}</div></div>
+  <div class="mrow"><div class="mlab">${t('outRow')}</div><div class="mbar">${sg(debt,'var(--bad)',t('debtPrev'))}${sg(out,'var(--exp)',t('spentL'))}${sg(inv,'var(--inv)',t('investedL'))}${sg(lf,leftCol,t('carryOut'))}</div><div class="mval">${ils(out+inv+debt)}</div></div>
+  <div class="mleg">${leg('var(--muted)',carry<0?t('debtPrev'):t('carryIn'),carry)}${leg('var(--inc)',t('incAmt'),inc)}${leg('var(--exp)',t('spentL'),out)}${leg('var(--inv)',t('investedL'),inv)}${leg(left<0?'var(--bad)':leftCol,t('carryOut'),left)}</div>
+  ${left<0?`<div class="mnote">${t('overNote')}: ${ils(-left)}</div>`:''}`;
+}
 function waterfall(rows){ // [{label,v,kind:'in'|'out'|'total',color}]
   const W=640,rowH=44,pl=150,pr=90,pt=6,H=pt+rows.length*rowH+6; let run=0,mx=0;
   const segs=rows.map(r=>{let a,b;if(r.kind==='in'){a=run;b=run+r.v;run=b}else if(r.kind==='out'){a=run-r.v;b=run;run=a}else{a=Math.min(0,r.v);b=Math.max(0,r.v)}mx=Math.max(mx,a,b);return {...r,a,b}});
@@ -605,7 +653,7 @@ function vFlow(){
     <section class="card"><div class="kt">${t('rate')}</div><div class="kn ${rate!==null&&rate<0?'neg':''}">${rate===null?'–':rate+'%'}</div><div class="meter ${rate!==null&&rate<0?'over':''}"><i style="width:${rate===null?0:Math.max(0,Math.min(100,rate))}%"></i></div></section>
   </div>
   <div class="grid g2" style="margin-top:14px">
-    <section class="card"><h3>${t('monthFlow')} · ${monthName(y,m)}</h3><p class="hint">${t('monthFlowHint')}</p>${waterfall(wf)}</section>
+    <section class="card"><h3>${t('monthFlow')} · ${monthName(y,m)}</h3><p class="hint">${t('monthFlowHint')}</p>${moneyBars(CARRY,IN,OUT,INV,inAcc)}</section>
     <section class="card"><h3>${t('recTitle')}</h3><p class="hint">${t('recHint')}</p>${rec}</section>
   </div>
   <section class="card" style="margin-top:14px"><h3>${e?t('edited'):t('addInc')}</h3>
@@ -635,8 +683,16 @@ document.getElementById('view').addEventListener('submit',async e=>{
     incEdit=null; if(!date.startsWith(ym(CUR.y,CUR.m)))CUR={y:+date.slice(0,4),m:+date.slice(5,7)}; toast(t('saved')); render();}catch(err){toast(t('saveErr'))}
 });
 
+// ---------- recurring (standing orders / subscriptions) ----------
+function recOcc(){const out=[];const today=isoToday();const lim=new Date(now.getFullYear(),now.getMonth()+13,1);
+  REC.forEach(r=>{if(!r.start||!(+r.amount>0))return;let y=+r.start.slice(0,4),m=+r.start.slice(5,7);const d0=+r.start.slice(8,10)||1;
+    for(let k=0;k<600;k++){if(new Date(y,m-1,1)>=lim)break;const dim=new Date(y,m,0).getDate();const date=ym(y,m)+'-'+pad(Math.min(d0,dim));if(r.end&&date>r.end)break;
+      out.push({id:'rec_'+r.id+'_'+ym(y,m),recId:r.id,name:r.name,amount:+r.amount,cat:r.cat,kind:r.kind||'',method:r.method||'standing',note:r.note||'',date,source:'recurring',created:r.created||0,upcoming:date>today});
+      m++;if(m>12){m=1;y++}}});return out}
+function recompute(){const occ=recOcc();EXP=RAW.concat(occ.filter(o=>!o.upcoming));UPC=occ.filter(o=>o.upcoming)}
+function recPeriod(r){const f=d=>d?new Date(d+'T12:00').toLocaleDateString(LANG==='he'?'he-IL':'en-GB',{day:'numeric',month:'numeric',year:'2-digit'}):'';return f(r.start)+' – '+(r.end?f(r.end):t('noEnd'))}
 // ---------- keep the date in step with the phone's clock ----------
-function refreshToday(){const n=new Date();if(n.toDateString()===now.toDateString())return;const wasCur=(CUR.y===now.getFullYear()&&CUR.m===now.getMonth()+1);now=n;if(wasCur){CUR={y:n.getFullYear(),m:n.getMonth()+1}}if(LOADED)render()}
+function refreshToday(){const n=new Date();if(n.toDateString()===now.toDateString())return;const wasCur=(CUR.y===now.getFullYear()&&CUR.m===now.getMonth()+1);now=n;if(wasCur){CUR={y:n.getFullYear(),m:n.getMonth()+1}}recompute();if(LOADED)render()}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshToday()});
 addEventListener('focus',refreshToday); setInterval(refreshToday,60000);
 async function copyText(s){try{await navigator.clipboard.writeText(s)}catch(err){const ta=document.createElement('textarea');ta.value=s;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove()}toast(t('copied'))}
@@ -644,8 +700,8 @@ async function copyText(s){try{await navigator.clipboard.writeText(s)}catch(err)
 const LS_KEY='expense_mgmt_v1';
 function makeLocalDb(){
   let S; try{S=JSON.parse(localStorage.getItem(LS_KEY)||'{}')}catch(e){S={}}
-  S.expenses=S.expenses||{}; S.income=S.income||{}; S.settings=S.settings||{};
-  const subs={expenses:[],income:[],settings:[]};
+  ['expenses','income','settings','recurring'].forEach(c=>{S[c]=S[c]||{}});
+  const subs={expenses:[],income:[],settings:[],recurring:[]};
   const persist=()=>{try{localStorage.setItem(LS_KEY,JSON.stringify(S))}catch(e){throw {code:'quota_exceeded',message:e.message}}};
   const snapOf=c=>({docs:Object.entries(S[c]).map(([id,d])=>({id,exists:true,data:()=>d})),metadata:{fromCache:false}});
   const fire=c=>{subs[c].forEach(f=>{try{f()}catch(e){}})};
@@ -665,10 +721,11 @@ render();
   try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); db=makeLocalDb(); }catch(e){ db=null }
   if(!db){clearTimeout(timer);LOADED=true;banner(t('noDb'));render();return}
   db.collection('expenses').onSnapshot(snap=>{
-    EXP=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(x=>x.date&&+x.amount>0);
+    RAW=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(x=>x.date&&+x.amount>0); recompute();
     if(!snap.metadata.fromCache){clearTimeout(timer);banner('')}
     LOADED=true; const ae=document.activeElement; if(!(ae&&document.getElementById('view').contains(ae)&&ae.tagName==='INPUT')) render();
   },err=>{clearTimeout(timer);LOADED=true;banner(t('offline'));render()});
+  db.collection('recurring').onSnapshot(snap=>{REC=snap.docs.map(d=>Object.assign({id:d.id},d.data()));recompute();if(LOADED){const ae=document.activeElement;if(!(ae&&document.getElementById('view').contains(ae)&&ae.tagName==='INPUT'))render()}},()=>{});
   db.collection('income').onSnapshot(snap=>{INC=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(x=>x.date&&+x.amount>0);if(LOADED){const ae=document.activeElement;if(!(ae&&document.getElementById('view').contains(ae)&&ae.tagName==='INPUT'))render()}},()=>{});
   db.doc('settings/main').onSnapshot(s=>{if(s.exists){const d=s.data();SET={income:d.income||0,budgets:d.budgets||{},carryFrom:d.carryFrom||null}};if(LOADED&&VIEW!=='settings')render()},()=>{});
 })();

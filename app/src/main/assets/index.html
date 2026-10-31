@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0d7a57">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Expenses">
 <title>Expense Management</title>
 <style>
 /* Ledger-green on paper: one calm accent, semantic colors only for over-budget states. Layout: summary first, then charts, then the list. */
@@ -731,6 +737,24 @@ render();
   db.collection('recurring').onSnapshot(snap=>{REC=snap.docs.map(d=>Object.assign({id:d.id},d.data()));recompute();if(LOADED){const ae=document.activeElement;if(!(ae&&document.getElementById('view').contains(ae)&&ae.tagName==='INPUT'))render()}},()=>{});
   db.collection('income').onSnapshot(snap=>{INC=snap.docs.map(d=>Object.assign({id:d.id},d.data())).filter(x=>x.date&&+x.amount>0);if(LOADED){const ae=document.activeElement;if(!(ae&&document.getElementById('view').contains(ae)&&ae.tagName==='INPUT'))render()}},()=>{});
   db.doc('settings/main').onSnapshot(s=>{if(s.exists){const d=s.data();SET={income:d.income||0,budgets:d.budgets||{},carryFrom:d.carryFrom||null}};if(LOADED&&VIEW!=='settings')render()},()=>{});
+})();
+</script>
+<script>
+/* Web version (iPhone / browser): offline cache + "Add to Home Screen" hint. Does nothing inside the Android app. */
+(function(){
+  var web=location.protocol==='https:'&&location.hostname.indexOf('appassets')<0;
+  if(!web)return;
+  if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}
+  var ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  var standalone=navigator.standalone||matchMedia('(display-mode: standalone)').matches;
+  try{if(!ios||standalone||localStorage.getItem('em_hint_off'))return}catch(e){return}
+  var he=(function(){try{return (localStorage.getItem('mm_lang')||'he')==='he'}catch(e){return true}})();
+  var b=document.createElement('div');
+  b.setAttribute('style','margin:calc(10px + env(safe-area-inset-top)) 12px 0;padding:12px 14px;border-radius:14px;background:var(--accent-soft);color:var(--ink);font:14px/1.45 system-ui,-apple-system,sans-serif;display:flex;gap:10px;align-items:flex-start');
+  b.dir=he?'rtl':'ltr';
+  b.innerHTML='<div style="flex:1">'+(he?'<b>להתקנה באייפון:</b> לחץ על כפתור השיתוף <b style="display:inline-block;padding:0 6px;border:1px solid var(--line);border-radius:6px">⬆︎</b> בספארי ← <b>הוספה למסך הבית</b>. אחרי ההתקנה פתח רק מהאייקון. <a href="guide.html" style="color:var(--accent);font-weight:700">מדריך מלא</a>':'<b>Install on iPhone:</b> tap Share in Safari → <b>Add to Home Screen</b>. After that, always open it from the icon. <a href="guide.html#en" style="color:var(--accent);font-weight:700">Full guide</a>')+'</div><button aria-label="close" style="border:0;background:none;font-size:20px;line-height:1;color:var(--muted);cursor:pointer">×</button>';
+  b.querySelector('button').onclick=function(){try{localStorage.setItem('em_hint_off','1')}catch(e){}b.remove()};
+  document.body.insertBefore(b,document.body.firstChild);
 })();
 </script>
 </body>

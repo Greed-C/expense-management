@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d7a57">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Expense Management – מדריך התקנה / Install guide</title>
+<style>
+:root{--bg:#eef2ee;--card:#fff;--ink:#13241c;--ink2:#4e5f57;--line:#dde5df;--accent:#0d7a57;--soft:#d8efe5;--warn:#b77900;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1714;--card:#17221d;--ink:#e9f1ec;--ink2:#b4c3bb;--line:#26342d;--accent:#3fbf8f;--soft:#183a2d;--warn:#e0a52b;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+.wrap{max-width:640px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) 16px 48px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+header img{width:52px;height:52px;border-radius:13px}
+h1{font-size:22px;margin:0;line-height:1.25}
+.sub{color:var(--ink2);margin:0 0 18px}
+.lang{display:flex;gap:8px;margin:0 0 18px}
+.lang a{padding:6px 14px;border-radius:999px;border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:600;background:var(--card)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 14px}
+h2{font-size:18px;margin:0 0 10px}
+ol{margin:0;padding-inline-start:0;list-style:none;counter-reset:s}
+ol li{counter-increment:s;position:relative;padding-inline-start:40px;margin:0 0 14px}
+ol li::before{content:counter(s);position:absolute;inset-inline-start:0;top:0;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:grid;place-items:center;font-size:14px}
+.key{display:inline-block;padding:1px 8px;border-radius:7px;border:1px solid var(--line);background:var(--bg);font-weight:600;white-space:nowrap}
+.btn{display:block;text-align:center;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:13px;border-radius:14px;margin:6px 0 0}
+.note{border-inline-start:4px solid var(--warn)}
+ul{margin:0;padding-inline-start:20px} ul li{margin:0 0 8px}
+.small{color:var(--ink2);font-size:14px}
+code{direction:ltr;unicode-bidi:embed;word-break:break-all}
+hr{border:0;border-top:1px solid var(--line);margin:30px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header><img src="icon-180.png" alt=""><div><h1>Expense Management</h1></div></header>
+<div class="lang"><a href="#he">עברית</a><a href="#en">English</a></div>
+
+<!-- ===================== עברית ===================== -->
+<section id="he" dir="rtl" lang="he">
+<p class="sub">אפליקציה פשוטה לניהול הוצאות, הכנסות והוראות קבע. עובדת בלי אינטרנט, והנתונים נשמרים רק בטלפון שלך – אף אחד אחר לא רואה אותם.</p>
+
+<div class="card">
+<h2>📱 התקנה באייפון</h2>
+<ol>
+<li>פתח את הקישור הזה ב-<b>Safari</b> (לא בתוך וואטסאפ או אינסטגרם – אם נפתח שם, לחץ על <span class="key">•••</span> ← <b>פתח ב-Safari</b>):<br><a class="btn" href="./">פתח את האפליקציה</a></li>
+<li>לחץ על כפתור <b>השיתוף</b> <span class="key">⬆︎</span> בתחתית המסך.<br><span class="small">בגרסאות iOS חדשות: לחץ קודם על <span class="key">•••</span> ואז על <b>שיתוף</b>.</span></li>
+<li>גלול למטה ובחר <b>הוספה למסך הבית</b> <span class="small">(Add to Home Screen)</span>. אם מופיע מתג <b>"פתח כאפליקציית רשת"</b> – השאר אותו דלוק.</li>
+<li>לחץ <b>הוסף</b> בפינה העליונה. אייקון ירוק עם ארנק יופיע במסך הבית.</li>
+<li>מעכשיו פתח את האפליקציה <b>רק מהאייקון</b>. היא נפתחת במסך מלא כמו כל אפליקציה, ועובדת גם בלי אינטרנט.</li>
+</ol>
+</div>
+
+<div class="card note">
+<h2>⚠️ חשוב לדעת</h2>
+<ul>
+<li><b>התקן לפני שאתה מתחיל להזין נתונים.</b> באייפון, האפליקציה מהאייקון שומרת את הנתונים בנפרד מ-Safari – מה שהוזן בלשונית Safari לא יופיע באייקון.</li>
+<li><b>מחיקת האייקון מוחקת את כל הנתונים.</b> גם "ניקוי היסטוריה ונתוני אתרים" בהגדרות Safari עלול למחוק אותם.</li>
+<li><b>גיבוי:</b> מדי פעם היכנס ל<b>הגדרות</b> באפליקציה ← <b>העתק את כל ההוצאות (CSV)</b>, והדבק בפתקים או במייל לעצמך.</li>
+<li><b>עדכונים מגיעים לבד</b> – כשיש אינטרנט, פתיחת האפליקציה טוענת את הגרסה החדשה. הנתונים נשארים.</li>
+<li>הנתונים לא עוברים בין מכשירים – כל טלפון שומר רק את מה שהוזן בו.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>🧭 שימוש בסיסי</h2>
+<ul>
+<li><b>+</b> – הוספת הוצאה: סכום, קטגוריה ותאריך. השם לא חובה.</li>
+<li><b>צבעים:</b> כחול = צרכים, כתום = רצונות, סגול = חיסכון והשקעות (לפי כלל 50/30/20). בקטגוריה "אחר" אתה בוחר את הצבע.</li>
+<li><b>הוראת קבע / מנוי:</b> בהוספת הוצאה הדלק "חוזר כל חודש" ובחר "עד תאריך". ההוצאה תירשם לבד כל חודש. ניהול בלשונית <b>הוצאות</b> ← <b>הוראות קבע ומנויים</b>.</li>
+<li><b>הכנסות / הוצאות:</b> הוסף משכורת וראה כמה נכנס, כמה יצא וכמה עובר לחודש הבא.</li>
+<li><b>הגדרות:</b> שפה (עברית / English), תקציב לכל קטגוריה, וגיבוי.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>🤖 אנדרואיד או מחשב?</h2>
+<ul>
+<li><b>אנדרואיד:</b> <a href="https://github.com/Greed-C/expense-management/releases/latest/download/ExpenseManagement.apk">הורד את קובץ ההתקנה (APK)</a>, פתח אותו ואשר "התקנה ממקורות לא ידועים" אם מתבקש.</li>
+<li><b>מחשב:</b> פשוט פתח את <a href="./">הקישור לאפליקציה</a> בדפדפן. ב-Chrome או Edge אפשר גם להתקין דרך סמל ההתקנה בשורת הכתובת.</li>
+</ul>
+</div>
+</section>
+
+<hr>
+
+<!-- ===================== English ===================== -->
+<section id="en" dir="ltr" lang="en">
+<p class="sub">A simple app for expenses, income and standing orders. Works offline, and your data is saved only on your phone – nobody else can see it.</p>
+
+<div class="card">
+<h2>📱 Install on iPhone</h2>
+<ol>
+<li>Open this link in <b>Safari</b> (not inside WhatsApp or Instagram – if it opened there, tap <span class="key">•••</span> → <b>Open in Safari</b>):<br><a class="btn" href="./">Open the app</a></li>
+<li>Tap the <b>Share</b> button <span class="key">⬆︎</span> at the bottom of the screen.<br><span class="small">On newer iOS versions: tap <span class="key">•••</span> first, then <b>Share</b>.</span></li>
+<li>Scroll down and choose <b>Add to Home Screen</b>. If you see an <b>"Open as Web App"</b> switch, leave it on.</li>
+<li>Tap <b>Add</b> in the top corner. A green wallet icon appears on your home screen.</li>
+<li>From now on, open the app <b>only from the icon</b>. It opens full-screen like any app and works without internet.</li>
+</ol>
+</div>
+
+<div class="card note">
+<h2>⚠️ Good to know</h2>
+<ul>
+<li><b>Install before you start entering data.</b> On iPhone, the home-screen app keeps its data separate from Safari – anything entered in a Safari tab won't show up in the icon app.</li>
+<li><b>Deleting the icon deletes all your data.</b> "Clear History and Website Data" in Safari settings may also erase it.</li>
+<li><b>Backup:</b> now and then go to <b>Settings</b> in the app → <b>Copy all expenses (CSV)</b> and paste it into Notes or an email to yourself.</li>
+<li><b>Updates are automatic</b> – when you're online, opening the app loads the newest version. Your data stays.</li>
+<li>Data doesn't move between devices – each phone keeps only what was entered on it.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>🧭 Basics</h2>
+<ul>
+<li><b>+</b> – add an expense: amount, category and date. The name is optional.</li>
+<li><b>Colors:</b> blue = needs, orange = wants, purple = savings & investments (the 50/30/20 rule). For "Other" you pick the color.</li>
+<li><b>Standing order / subscription:</b> when adding an expense, turn on "Repeats every month" and pick an end date. It's added automatically every month. Manage them in <b>Expenses</b> → <b>Standing orders & subscriptions</b>.</li>
+<li><b>In / Out:</b> add your salary and see what came in, what went out, and what carries over to next month.</li>
+<li><b>Settings:</b> language (עברית / English), budget per category, and backup.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>🤖 Android or computer?</h2>
+<ul>
+<li><b>Android:</b> <a href="https://github.com/Greed-C/expense-management/releases/latest/download/ExpenseManagement.apk">download the install file (APK)</a>, open it and allow "install unknown apps" if asked.</li>
+<li><b>Computer:</b> just open <a href="./">the app link</a> in a browser. In Chrome or Edge you can also install it from the install icon in the address bar.</li>
+</ul>
+</div>
+</section>
+
+</div>
+</body>
+</html>

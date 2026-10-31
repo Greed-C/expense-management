@@ -18,3 +18,9 @@ Hebrew / English. **All data stays on your phone** – nothing is sent anywhere.
 
 ## Privacy
 The app has no account, no server and no internet access to your data. Use **Settings → Copy backup** to keep a backup.
+
+## iPhone / computer (web version)
+
+Open **https://greed-c.github.io/expense-management/** in Safari and choose *Share → Add to Home Screen*.
+Step-by-step guide (Hebrew + English): **https://greed-c.github.io/expense-management/guide.html**
+Same app, works offline, data stays only on your own device.

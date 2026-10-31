@@ -134,7 +134,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 .pkc:focus-visible,.pkarrow:focus-visible,.pktitle:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .pkfoot{display:flex;justify-content:space-between;margin-top:10px;gap:8px}
 .pkfoot button{border:0;background:var(--bg);border-radius:10px;padding:9px 14px;cursor:pointer;font-weight:600}
-.flowk{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.flowk{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
 @media (max-width:820px){.flowk{grid-template-columns:repeat(2,1fr)}}
 .kt{font-size:12.5px;color:var(--ink2)}
 .kn{font-family:var(--display);font-size:26px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums}
@@ -215,8 +215,8 @@ const BASE_CATS=[
  {id:'other',e:'📦',he:'אחר',en:'Other',type:'wants'}];
 const METHODS=[['card','כרטיס אשראי','Credit card'],['cash','מזומן','Cash'],['bit','ביט / פייבוקס','Bit / PayBox'],['transfer','העברה בנקאית','Bank transfer'],['standing','הוראת קבע','Standing order']];
 const T={
- he:{brand:'ניהול הוצאות',home:'ראשי',list:'הוצאות',year:'שנה',settings:'הגדרות',spentMonth:'הוצאת החודש',vsLast:'לעומת חודש קודם',noPrev:'אין נתונים לחודש הקודם',ofIncome:'מתוך הכנסה של',left:'נשאר להוציא',over:'חריגה של',setIncome:'הגדר הכנסה חודשית בהגדרות כדי לראות כמה נשאר',byCat:'לפי קטגוריה',byCatHint:'כמה הלך על כל דבר החודש',pace:'קצב ההוצאות',paceHint:'הוצאה מצטברת לפי יום בחודש',thisM:'החודש',lastM:'חודש קודם',split:'צרכים / רצונות / חיסכון',splitHint:'השוואה לכלל 50/30/20',needs:'צרכים',wants:'רצונות',save:'חיסכון',target:'יעד',top:'ההוצאות הגדולות',search:'חיפוש…',allCats:'כל הקטגוריות',noItems:'אין הוצאות בחודש הזה עדיין. לחץ על + כדי להוסיף.',add:'הוצאה חדשה',edit:'עריכת הוצאה',amount:'סכום (₪)',name:'על מה?',cat:'קטגוריה',date:'תאריך',method:'אמצעי תשלום',note:'הערה',saveB:'שמירה',del:'מחיקה',cancel:'ביטול',confirmDel:'ללחוץ שוב כדי למחוק',saved:'נשמר ✓',deleted:'נמחק',yearTotal:'סה״כ השנה',avgM:'ממוצע לחודש',yearBars:'הוצאות לפי חודש',yearCats:'קטגוריות השנה',income:'הכנסה חודשית (₪)',budgets:'תקציב חודשי לכל קטגוריה (₪)',budgetsHint:'השאר ריק אם אין תקציב. מעבר לתקציב יסומן באדום.',lang:'שפה',copyCsv:'העתק את כל ההוצאות (CSV)',copied:'הועתק – אפשר להדביק באקסל',data:'הנתונים',dataHint:'הנתונים נשמרים רק בטלפון הזה ולא נשלחים לשום מקום. מומלץ לגבות מדי פעם: העתק את הגיבוי ושמור אותו (למשל בהערה או במייל לעצמך).',count:'הוצאות',loading:'טוען…',offline:'לא מצליח להתחבר לנתונים כרגע. נסה לרענן בעוד רגע.',noDb:'לא ניתן לשמור נתונים במכשיר הזה.',budget:'תקציב',imported:'יובא',saveErr:'השמירה נכשלה – נסה שוב',perDay:'ליום',copyBk:'העתק גיבוי',restore:'שחזור מגיבוי',pasteBk:'הדבק כאן את הגיבוי שהעתקת',restored:'הנתונים שוחזרו ✓',badBk:'הגיבוי לא תקין',flowTab:'הכנסות / הוצאות',flow:'הכנסות והוצאות',inMonth:'נכנס החודש',outMonth:'יצא על הוצאות',savedMonth:'נשאר / נחסך',rate:'אחוז חיסכון',addInc:'הוספת הכנסה',incName:'מקור',incType:'סוג',salary:'משכורת',bonus:'בונוס / מענק',reserve:'מילואים',otherInc:'אחר',incList:'ההכנסות החודש',noInc:'אין הכנסות רשומות לחודש הזה. הוסף משכורת למעלה.',flowChart:'נכנס מול יצא',flowHint:'הכנסות מול ההוצאות שרשומות באפליקציה; הנקודה מראה כמה נשאר. חודשים בלי כל ההוצאות ייראו טובים מהמציאות.',cumSaved:'כמה נשאר מצטבר השנה',recTitle:'המלצה לפי המשכורת',recHint:'רק המלצה – לא משנה את המסך הראשי',recBase:'לפי הכנסה של',recNeeds:'צרכים – עד 50%',recWants:'רצונות – עד 30%',recSave:'חיסכון – לפחות 20%',actual:'בפועל',okS:'בסדר',overS:'מעל',underS:'מתחת',keep:'כל הכבוד – נשארת בתוך ההמלצה החודש.',noBase:'הוסף הכנסה כדי לקבל המלצה.',avg3:'(ממוצע 3 חודשים אחרונים)',year12:'אם תחסוך ככה כל חודש, בעוד שנה יהיו לך',today:'היום',edited:'עריכה',update:'עדכון',saveAmt:'נשאר',spentAmt:'הוצאות',incAmt:'הכנסות'},
- en:{brand:'Expense Management',home:'Home',list:'Expenses',year:'Year',settings:'Settings',spentMonth:'Spent this month',vsLast:'vs last month',noPrev:'No data for last month',ofIncome:'of your income',left:'left to spend',over:'over by',setIncome:'Set your monthly income in Settings to see what’s left',byCat:'By category',byCatHint:'Where the money went this month',pace:'Spending pace',paceHint:'Running total by day of month',thisM:'This month',lastM:'Last month',split:'Needs / wants / savings',splitHint:'Compared with the 50/30/20 rule',needs:'Needs',wants:'Wants',save:'Savings',target:'target',top:'Biggest expenses',search:'Search…',allCats:'All categories',noItems:'No expenses this month yet. Tap + to add one.',add:'New expense',edit:'Edit expense',amount:'Amount (₪)',name:'What for?',cat:'Category',date:'Date',method:'Paid with',note:'Note',saveB:'Save',del:'Delete',cancel:'Cancel',confirmDel:'Tap again to delete',saved:'Saved ✓',deleted:'Deleted',yearTotal:'Total this year',avgM:'Monthly average',yearBars:'Spending by month',yearCats:'Categories this year',income:'Monthly income (₪)',budgets:'Monthly budget per category (₪)',budgetsHint:'Leave empty for no budget. Going over shows in red.',lang:'Language',copyCsv:'Copy all expenses (CSV)',copied:'Copied – paste into Excel',data:'Your data',dataHint:'Your data is stored only on this phone and is never sent anywhere. Back it up now and then: copy the backup and keep it somewhere safe (a note or an email to yourself).',count:'expenses',loading:'Loading…',offline:'Can’t reach your data right now. Try again in a moment.',noDb:'This device can’t store data.',budget:'budget',imported:'imported',saveErr:'Couldn’t save – please try again',perDay:'per day',copyBk:'Copy backup',restore:'Restore from backup',pasteBk:'Paste the backup you copied',restored:'Data restored ✓',badBk:'That backup isn’t valid',flowTab:'In / Out',flow:'Money in/out',inMonth:'Came in this month',outMonth:'Went out on expenses',savedMonth:'Left / saved',rate:'Savings rate',addInc:'Add income',incName:'Source',incType:'Type',salary:'Salary',bonus:'Bonus / grant',reserve:'Reserve duty',otherInc:'Other',incList:'Income this month',noInc:'No income recorded for this month. Add your salary above.',flowChart:'Money in vs money out',flowHint:'Income vs the expenses recorded in the app; the dot shows what was left. Months where not every expense was recorded look better than reality.',cumSaved:'Left over, running total this year',recTitle:'Recommendation based on your salary',recHint:'Just a guide – it doesn’t change the Home tab',recBase:'Based on income of',recNeeds:'Needs – up to 50%',recWants:'Wants – up to 30%',recSave:'Savings – at least 20%',actual:'actual',okS:'OK',overS:'over',underS:'under',keep:'Nice – you stayed within the guide this month.',noBase:'Add your income to get a recommendation.',avg3:'(average of last 3 months)',year12:'If you keep this up every month, in a year you’ll have',today:'Today',edited:'Edit',update:'Update',saveAmt:'Left',spentAmt:'Expenses',incAmt:'Income'}};
+ he:{brand:'ניהול הוצאות',home:'ראשי',list:'הוצאות',year:'שנה',settings:'הגדרות',spentMonth:'הוצאת החודש',vsLast:'לעומת חודש קודם',noPrev:'אין נתונים לחודש הקודם',ofIncome:'מתוך הכנסה של',left:'נשאר להוציא',over:'חריגה של',setIncome:'הגדר הכנסה חודשית בהגדרות כדי לראות כמה נשאר',byCat:'לפי קטגוריה',byCatHint:'כמה הלך על כל דבר החודש',pace:'קצב ההוצאות',paceHint:'הוצאה מצטברת לפי יום בחודש',thisM:'החודש',lastM:'חודש קודם',split:'צרכים / רצונות / חיסכון',splitHint:'השוואה לכלל 50/30/20',needs:'צרכים',wants:'רצונות',save:'חיסכון',target:'יעד',top:'ההוצאות הגדולות',search:'חיפוש…',allCats:'כל הקטגוריות',noItems:'אין הוצאות בחודש הזה עדיין. לחץ על + כדי להוסיף.',add:'הוצאה חדשה',edit:'עריכת הוצאה',amount:'סכום (₪)',name:'על מה?',cat:'קטגוריה',date:'תאריך',method:'אמצעי תשלום',note:'הערה',saveB:'שמירה',del:'מחיקה',cancel:'ביטול',confirmDel:'ללחוץ שוב כדי למחוק',saved:'נשמר ✓',deleted:'נמחק',yearTotal:'סה״כ השנה',avgM:'ממוצע לחודש',yearBars:'הוצאות לפי חודש',yearCats:'קטגוריות השנה',income:'הכנסה צפויה לחודש (₪)',budgets:'תקציב חודשי לכל קטגוריה (₪)',budgetsHint:'השאר ריק אם אין תקציב. מעבר לתקציב יסומן באדום.',lang:'שפה',copyCsv:'העתק את כל ההוצאות (CSV)',copied:'הועתק – אפשר להדביק באקסל',data:'הנתונים',count:'הוצאות',loading:'טוען…',offline:'לא מצליח להתחבר לנתונים כרגע. נסה לרענן בעוד רגע.',noDb:'לא ניתן לשמור נתונים במכשיר הזה.',budget:'תקציב',imported:'יובא',saveErr:'השמירה נכשלה – נסה שוב',perDay:'ליום',investedL:'הושקע / נחסך',spentL:'הוצאות',leftAcc:'נשאר בחשבון',incFrom:'הכנסה',incSrcThis:'משכורת החודש',incSrcAvg:'ממוצע 3 חודשים',incSrcSet:'הכנסה צפויה מההגדרות',invTag:'השקעה',noSpendNote:'חיסכון והשקעות לא נספרים כהוצאה',flowTab:'הכנסות / הוצאות',flow:'הכנסות והוצאות',inMonth:'נכנס החודש',outMonth:'יצא על הוצאות',savedMonth:'נשאר / נחסך',rate:'אחוז חיסכון (כולל השקעות)',addInc:'הוספת הכנסה',incName:'מקור',incType:'סוג',salary:'משכורת',bonus:'בונוס / מענק',reserve:'מילואים',otherInc:'אחר',incList:'ההכנסות החודש',noInc:'אין הכנסות רשומות לחודש הזה. הוסף משכורת למעלה.',flowChart:'נכנס מול יצא',flowHint:'הכנסות מול ההוצאות שרשומות באפליקציה; הנקודה מראה כמה נשאר. חודשים בלי כל ההוצאות ייראו טובים מהמציאות.',cumSaved:'כמה נשאר מצטבר השנה',recTitle:'המלצה לפי המשכורת',recHint:'רק המלצה – לא משנה את המסך הראשי',recBase:'לפי הכנסה של',recNeeds:'צרכים – עד 50%',recWants:'רצונות – עד 30%',recSave:'חיסכון – לפחות 20%',actual:'בפועל',okS:'בסדר',overS:'מעל',underS:'מתחת',keep:'כל הכבוד – נשארת בתוך ההמלצה החודש.',noBase:'הוסף הכנסה כדי לקבל המלצה.',avg3:'(ממוצע 3 חודשים אחרונים)',year12:'אם תחסוך ככה כל חודש, בעוד שנה יהיו לך',today:'היום',edited:'עריכה',update:'עדכון',saveAmt:'נחסך (כולל השקעות)',spentAmt:'הוצאות',incAmt:'הכנסות'},
+ en:{brand:'Expense Management',home:'Home',list:'Expenses',year:'Year',settings:'Settings',spentMonth:'Spent this month',vsLast:'vs last month',noPrev:'No data for last month',ofIncome:'of your income',left:'left to spend',over:'over by',setIncome:'Set your monthly income in Settings to see what’s left',byCat:'By category',byCatHint:'Where the money went this month',pace:'Spending pace',paceHint:'Running total by day of month',thisM:'This month',lastM:'Last month',split:'Needs / wants / savings',splitHint:'Compared with the 50/30/20 rule',needs:'Needs',wants:'Wants',save:'Savings',target:'target',top:'Biggest expenses',search:'Search…',allCats:'All categories',noItems:'No expenses this month yet. Tap + to add one.',add:'New expense',edit:'Edit expense',amount:'Amount (₪)',name:'What for?',cat:'Category',date:'Date',method:'Paid with',note:'Note',saveB:'Save',del:'Delete',cancel:'Cancel',confirmDel:'Tap again to delete',saved:'Saved ✓',deleted:'Deleted',yearTotal:'Total this year',avgM:'Monthly average',yearBars:'Spending by month',yearCats:'Categories this year',income:'Expected monthly income (₪)',budgets:'Monthly budget per category (₪)',budgetsHint:'Leave empty for no budget. Going over shows in red.',lang:'Language',copyCsv:'Copy all expenses (CSV)',copied:'Copied – paste into Excel',data:'Your data',count:'expenses',loading:'Loading…',offline:'Can’t reach your data right now. Try again in a moment.',noDb:'This device can’t store data.',budget:'budget',imported:'imported',saveErr:'Couldn’t save – please try again',perDay:'per day',investedL:'Saved / invested',spentL:'Spent',leftAcc:'Left in account',incFrom:'Income',incSrcThis:'this month’s salary',incSrcAvg:'3-month average',incSrcSet:'expected income from Settings',invTag:'investment',noSpendNote:'Savings & investments are not counted as spending',flowTab:'In / Out',flow:'Money in/out',inMonth:'Came in this month',outMonth:'Went out on expenses',savedMonth:'Left / saved',rate:'Savings rate (incl. investments)',addInc:'Add income',incName:'Source',incType:'Type',salary:'Salary',bonus:'Bonus / grant',reserve:'Reserve duty',otherInc:'Other',incList:'Income this month',noInc:'No income recorded for this month. Add your salary above.',flowChart:'Money in vs money out',flowHint:'Income vs the expenses recorded in the app; the dot shows what was left. Months where not every expense was recorded look better than reality.',cumSaved:'Left over, running total this year',recTitle:'Recommendation based on your salary',recHint:'Just a guide – it doesn’t change the Home tab',recBase:'Based on income of',recNeeds:'Needs – up to 50%',recWants:'Wants – up to 30%',recSave:'Savings – at least 20%',actual:'actual',okS:'OK',overS:'over',underS:'under',keep:'Nice – you stayed within the guide this month.',noBase:'Add your income to get a recommendation.',avg3:'(average of last 3 months)',year12:'If you keep this up every month, in a year you’ll have',today:'Today',edited:'Edit',update:'Update',saveAmt:'Saved (incl. investments)',spentAmt:'Expenses',incAmt:'Income'}};
 // ---------- state ----------
 let LANG='he', VIEW='home', EXP=[], INC=[], incEdit=null, SET={income:0,budgets:{}}, setVersion=null, db=null, editId=null, delArm=false;
 try{LANG=localStorage.getItem('mm_lang')||'he'}catch(e){}
@@ -231,6 +231,9 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const monthName=(y,m,short)=>new Date(y,m-1,1).toLocaleString(LANG==='he'?'he-IL':'en-US',{month:short?'short':'long',year:short?undefined:'numeric'});
 const inMonth=(e,y,m)=>e.date&&e.date.startsWith(ym(y,m));
 const sum=a=>a.reduce((s,e)=>s+(+e.amount||0),0);
+const isSave=e=>cat(e.cat).type==='save';
+const spendOf=a=>sum(a.filter(e=>!isSave(e)));
+const savedOf=a=>sum(a.filter(isSave));
 function prevYM(y,m){return m===1?{y:y-1,m:12}:{y,m:m-1}}
 // ---------- tooltip / toast ----------
 const tip=document.getElementById('tip');
@@ -240,7 +243,7 @@ function banner(msg){const b=document.getElementById('banner');b.textContent=msg
 // ---------- charts ----------
 function paceChart(y,m){
   const days=new Date(y,m,0).getDate(); const p=prevYM(y,m); const pdays=new Date(p.y,p.m,0).getDate();
-  const cum=(yy,mm,n)=>{const a=Array(n).fill(0);EXP.filter(e=>inMonth(e,yy,mm)).forEach(e=>{const d=+e.date.slice(8,10);a[d-1]+=+e.amount||0});for(let i=1;i<n;i++)a[i]+=a[i-1];return a};
+  const cum=(yy,mm,n)=>{const a=Array(n).fill(0);EXP.filter(e=>inMonth(e,yy,mm)&&!isSave(e)).forEach(e=>{const d=+e.date.slice(8,10);a[d-1]+=+e.amount||0});for(let i=1;i<n;i++)a[i]+=a[i-1];return a};
   const isCur=(y===now.getFullYear()&&m===now.getMonth()+1); const upto=isCur?now.getDate():days;
   const A=cum(y,m,days).slice(0,upto), B=cum(p.y,p.m,pdays);
   const W=640,H=220,pl=48,pr=14,pt=12,pb=26; const max=Math.max(1,...A,...B);
@@ -266,7 +269,7 @@ function donut(parts){ // [{v,color,label}]
   return s+`<text x="${C}" y="${C+5}" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink)">${ils(tot)}</text></svg>`;
 }
 function yearBars(y){
-  const vals=[...Array(12)].map((_,i)=>sum(EXP.filter(e=>inMonth(e,y,i+1))));
+  const vals=[...Array(12)].map((_,i)=>spendOf(EXP.filter(e=>inMonth(e,y,i+1))));
   const W=640,H=230,pl=48,pr=10,pt=12,pb=28; const max=Math.max(1,...vals);
   const raw=max/4,pw=Math.pow(10,Math.floor(Math.log10(raw))),step=[1,2,2.5,5,10].map(k=>k*pw).find(k=>k>=raw),top=step*4;
   const cw=(W-pl-pr)/12,bw=Math.min(30,cw*.62); const avgN=vals.filter(v=>v>0).length; const avg=avgN?vals.reduce((a,b)=>a+b,0)/avgN:0;
@@ -287,19 +290,25 @@ function catRows(list,withBudget){
   return rows.map(([id,v])=>{const c=cat(id);const b=withBudget?+(SET.budgets||{})[id]||0:0;const over=b&&v>b;const w=b?Math.min(100,v/b*100):v/max*100;
     return `<div class="catrow" data-tip="${esc(cname(c))}: ${ils(v)}${b?' / '+t('budget')+' '+ils(b):''}"><div class="ico">${c.e}</div><div><div class="nm">${esc(cname(c))}${b?` <span class="small">${t('budget')} ${ils(b)}</span>`:''}</div><div class="bar ${over?'over':''}"><i style="width:${w}%"></i></div></div><div class="amt" style="${over?'color:var(--bad)':''}">${ils(v)}</div></div>`}).join('');
 }
+function incomeFor(y,m){const v=sum(incOf(y,m));if(v)return {v,src:'incSrcThis'};const b=salaryBase(y,m);if(b.v)return {v:b.v,src:'incSrcAvg'};const st=+SET.income||0;return st?{v:st,src:'incSrcSet'}:{v:0,src:null}}
 function vHome(){
-  const {y,m}=CUR; const L=EXP.filter(e=>inMonth(e,y,m)); const tot=sum(L); const p=prevYM(y,m); const ptot=sum(EXP.filter(e=>inMonth(e,p.y,p.m)));
-  const d=ptot?Math.round((tot-ptot)/ptot*100):null; const inc=+SET.income||0;
+  const {y,m}=CUR; const L=EXP.filter(e=>inMonth(e,y,m)); const S=L.filter(e=>!isSave(e)); const tot=sum(S); const inv=savedOf(L);
+  const p=prevYM(y,m); const ptot=spendOf(EXP.filter(e=>inMonth(e,p.y,p.m)));
+  const d=ptot?Math.round((tot-ptot)/ptot*100):null; const I=incomeFor(y,m); const inc=I.v; const left=inc-tot-inv;
   const days=new Date(y,m,0).getDate(); const isCur=(y===now.getFullYear()&&m===now.getMonth()+1);
   const split={needs:0,wants:0,save:0};L.forEach(e=>{split[cat(e.cat).type]+= +e.amount||0});
-  const base=inc||tot||1; const targets={needs:.5,wants:.3,save:.2}; const colors={needs:'var(--needs)',wants:'var(--wants)',save:'var(--save)'};
-  const top=[...L].sort((a,b)=>b.amount-a.amount).slice(0,5);
+  const base=inc||(tot+inv)||1; const targets={needs:.5,wants:.3,save:.2}; const colors={needs:'var(--needs)',wants:'var(--wants)',save:'var(--save)'};
+  const top=[...S].sort((a,b)=>b.amount-a.amount).slice(0,5);
+  const pct=v=>inc?Math.min(100,v/inc*100):0;
   return `<div class="grid g2">
    <section class="card">
     <div class="hero"><div><div class="sub" style="margin:0 0 6px">${t('spentMonth')} · ${monthName(y,m)}</div><div class="big">${ils(tot)}</div>
-     <div class="sub">${L.length} ${t('count')} · ${ils(tot/(isCur?Math.max(1,now.getDate()):days))} ${t('perDay')}</div></div>
+     <div class="sub">${S.length} ${t('count')} · ${ils(tot/(isCur?Math.max(1,now.getDate()):days))} ${t('perDay')}${inv?` · <span style="color:var(--save);font-weight:600">${t('investedL')}: ${ils(inv)}</span>`:''}</div></div>
      <div>${d===null?`<span class="small">${t('noPrev')}</span>`:`<span class="delta ${d>0?'up':'down'}">${d>0?'▲':'▼'} ${Math.abs(d)}% ${t('vsLast')}</span>`}</div></div>
-    ${inc?`<div class="meter ${tot>inc?'over':''}"><i style="width:${Math.min(100,tot/inc*100)}%"></i></div><div class="kv"><span>${ils(tot)} ${t('ofIncome')} ${ils(inc)}</span><span style="${tot>inc?'color:var(--bad);font-weight:700':''}">${tot>inc?t('over')+' '+ils(tot-inc):t('left')+': '+ils(inc-tot)}</span></div>`:`<p class="small" style="margin:12px 0 0">${t('setIncome')}</p>`}
+    ${inc?`<div class="meter ${left<0?'over':''}" style="display:flex"><i style="width:${pct(tot)}%;border-radius:0"></i><i style="width:${pct(inv)}%;background:var(--save);border-radius:0"></i></div>
+      <div class="kv"><span>${t('incFrom')}: <b>${ils(inc)}</b> <span class="small">(${t(I.src)})</span></span><span style="${left<0?'color:var(--bad);font-weight:700':''}">${left<0?t('over')+' '+ils(-left):t('left')+': '+ils(left)}</span></div>
+      <div class="legend" style="margin-top:8px"><span><i style="background:var(--accent)"></i>${t('spentL')} ${ils(tot)}</span><span><i style="background:var(--save)"></i>${t('investedL')} ${ils(inv)}</span><span><i style="background:var(--bg);border:1px solid var(--line)"></i>${t('leftAcc')} ${ils(Math.max(0,left))}</span></div>`
+     :`<p class="small" style="margin:12px 0 0">${t('setIncome')}</p>`}
    </section>
    <section class="card"><h3>${t('split')}</h3><p class="hint">${t('splitHint')}</p>
     <div class="split"><div>${donut(['needs','wants','save'].map(k=>({v:split[k],color:colors[k],label:t(k)})))}</div>
@@ -308,11 +317,11 @@ function vHome(){
   </div>
   <div class="grid g2" style="margin-top:14px">
    <section class="card"><h3>${t('pace')}</h3><p class="hint">${t('paceHint')}</p><div class="legend" style="margin-bottom:6px"><span><i style="background:var(--accent)"></i>${t('thisM')}</span><span><i style="background:var(--muted)"></i>${t('lastM')}</span></div>${paceChart(y,m)}</section>
-   <section class="card"><h3>${t('byCat')}</h3><p class="hint">${t('byCatHint')}</p>${catRows(L,true)}</section>
+   <section class="card"><h3>${t('byCat')}</h3><p class="hint">${t('byCatHint')} · ${t('noSpendNote')}</p>${catRows(S,true)}</section>
   </div>
   ${top.length?`<section class="card" style="margin-top:14px"><h3>${t('top')}</h3><div class="list" style="margin-top:8px">${top.map(itemHtml).join('')}</div></section>`:''}`;
 }
-function itemHtml(e){const c=cat(e.cat);const mth=METHODS.find(x=>x[0]===e.method);return `<button class="item" data-id="${esc(e.id)}"><div class="ico">${c.e}</div><div><div class="t">${esc(e.name)}</div><div class="small">${esc(cname(c))}${mth?' · '+(LANG==='he'?mth[1]:mth[2]):''}${e.note?' · '+esc(e.note):''}</div></div><div class="amt">${ils2(e.amount)}</div></button>`}
+function itemHtml(e){const c=cat(e.cat);const mth=METHODS.find(x=>x[0]===e.method);return `<button class="item" data-id="${esc(e.id)}"><div class="ico">${c.e}</div><div><div class="t">${esc(e.name)}${isSave(e)?` <span class="status ok" style="font-size:11px;padding:1px 7px">${t('invTag')}</span>`:''}</div><div class="small">${esc(cname(c))}${mth?' · '+(LANG==='he'?mth[1]:mth[2]):''}${e.note?' · '+esc(e.note):''}</div></div><div class="amt">${ils2(e.amount)}</div></button>`}
 let Q='',QC='';
 function vList(){
   const {y,m}=CUR; let L=EXP.filter(e=>inMonth(e,y,m));
@@ -326,16 +335,15 @@ function listBody(L){
   return Object.entries(g).map(([d,arr])=>`<div class="day"><span>${new Date(d+'T12:00').toLocaleDateString(LANG==='he'?'he-IL':'en-GB',{weekday:'long',day:'numeric',month:'long'})}</span><span class="amt">${ils(sum(arr))}</span></div>${arr.map(itemHtml).join('')}`).join('');
 }
 function vYear(){
-  const y=CUR.y; const L=EXP.filter(e=>e.date&&e.date.startsWith(y+'-')); const tot=sum(L); const ms=new Set(L.map(e=>e.date.slice(0,7))).size||1;
-  return `<div class="grid g3"><section class="card"><div class="sub" style="margin:0">${t('yearTotal')} ${y}</div><div class="big" style="font-size:34px;margin-top:6px">${ils(tot)}</div></section>
-  <section class="card"><div class="sub" style="margin:0">${t('avgM')}</div><div class="big" style="font-size:34px;margin-top:6px">${ils(tot/ms)}</div></section>
-  <section class="card"><div class="sub" style="margin:0">${t('count')}</div><div class="big" style="font-size:34px;margin-top:6px">${L.length}</div></section></div>
-  <section class="card" style="margin-top:14px"><h3>${t('yearBars')} ${y}</h3><p class="hint">${LANG==='he'?'לחץ על חודש כדי לפתוח אותו':'Click a month to open it'}</p>${yearBars(y)}</section>
+  const y=CUR.y; const A=EXP.filter(e=>e.date&&e.date.startsWith(y+'-')); const L=A.filter(e=>!isSave(e)); const tot=sum(L); const inv=savedOf(A); const ms=new Set(L.map(e=>e.date.slice(0,7))).size||1;
+  const tile=(lbl,val,col)=>`<section class="card"><div class="sub" style="margin:0">${lbl}</div><div class="big" style="font-size:30px;margin-top:6px;${col?'color:'+col:''}">${val}</div></section>`;
+  return `<div class="flowk">${tile(t('yearTotal')+' '+y,ils(tot))}${tile(t('avgM'),ils(tot/ms))}${tile(t('investedL'),ils(inv),'var(--save)')}${tile(t('count'),L.length)}</div>
+  <section class="card" style="margin-top:14px"><h3>${t('yearBars')} ${y}</h3><p class="hint">${LANG==='he'?'לחץ על חודש כדי לפתוח אותו':'Click a month to open it'} · ${t('noSpendNote')}</p>${yearBars(y)}</section>
   <section class="card" style="margin-top:14px"><h3>${t('yearCats')}</h3>${catRows(L,false)}</section>`;
 }
 function vSettings(){
   const b=SET.budgets||{};
-  return `<section class="card"><h3>${t('income')}</h3><p class="hint">${LANG==='he'?'משמש לחישוב כמה נשאר ולכלל 50/30/20':'Used for “left to spend” and the 50/30/20 split'}</p><input id="s_income" type="number" inputmode="decimal" min="0" value="${SET.income||''}" style="max-width:220px"></section>
+  return `<section class="card"><h3>${t('income')}</h3><p class="hint">${LANG==='he'?'משמש רק בחודשים שעוד לא נרשמה בהם משכורת בלשונית הכנסות / הוצאות':'Used only for months with no salary recorded yet in the In / Out tab'}</p><input id="s_income" type="number" inputmode="decimal" min="0" value="${SET.income||''}" style="max-width:220px"></section>
   <section class="card" style="margin-top:14px"><h3>${t('budgets')}</h3><p class="hint">${t('budgetsHint')}</p><div class="setgrid">${BASE_CATS.map(c=>`<label><span class="ico">${c.e}</span><span>${esc(cname(c))}</span><input type="number" min="0" inputmode="decimal" data-bud="${c.id}" value="${b[c.id]||''}"></label>`).join('')}</div>
    <div class="actions" style="margin-top:12px"><button class="btn primary" id="saveSet" style="flex:0 0 auto">${t('saveB')}</button></div></section>
   `;
@@ -408,9 +416,6 @@ document.getElementById('view').addEventListener('click',async e=>{
   if(e.target.id==='saveSet'){ if(!db)return; const budgets={};document.querySelectorAll('[data-bud]').forEach(i=>{const v=parseFloat(i.value);if(v>0)budgets[i.dataset.bud]=v});
     const income=parseFloat(document.getElementById('s_income').value)||0;
     try{await db.doc('settings/main').set({income,budgets});SET={income,budgets};toast(t('saved'))}catch(err){toast(t('saveErr'))} }
-  if(e.target.id==='copyBk'){try{await navigator.clipboard.writeText(db.exportAll());toast(t('copied'))}catch(err){const ta=document.createElement('textarea');ta.value=db.exportAll();document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast(t('copied'))}}
-  if(e.target.id==='showRs'){document.getElementById('rsBox').classList.toggle('hidden')}
-  if(e.target.id==='doRs'){try{db.importAll(document.getElementById('rsText').value.trim());toast(t('restored'))}catch(err){toast(t('badBk'))}}
   if(e.target.id==='copyCsv'){const rows=[['date','name','category','amount','paid_with','note']].concat([...EXP].sort((a,b)=>a.date.localeCompare(b.date)).map(x=>[x.date,x.name,cname(cat(x.cat)),x.amount,x.method||'',x.note||'']));
     const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
     copyText(csv)}
@@ -480,7 +485,7 @@ function salaryBase(y,m){ // this month's income, else average of last 3 months 
   return vals.length?{v:vals.reduce((a,b)=>a+b,0)/vals.length,avg:true}:{v:0,avg:false};
 }
 function flowChart(y){
-  const inV=[...Array(12)].map((_,i)=>sum(incOf(y,i+1))), outV=[...Array(12)].map((_,i)=>sum(EXP.filter(e=>inMonth(e,y,i+1))));
+  const inV=[...Array(12)].map((_,i)=>sum(incOf(y,i+1))), outV=[...Array(12)].map((_,i)=>spendOf(EXP.filter(e=>inMonth(e,y,i+1))));
   const W=640,H=240,pl=48,pr=10,pt=14,pb=28; const max=Math.max(1,...inV,...outV);
   const raw=max/4,pw=Math.pow(10,Math.floor(Math.log10(raw))),step=[1,2,2.5,5,10].map(k=>k*pw).find(k=>k>=raw),top=step*4;
   const cw=(W-pl-pr)/12,bw=Math.min(16,cw*.3); const Y=v=>pt+(H-pt-pb)*(1-v/top);
@@ -495,7 +500,7 @@ function flowChart(y){
 }
 function cumChart(y){
   const vals=[];let c=0;const lastM=(y===now.getFullYear())?now.getMonth()+1:12;
-  for(let i=1;i<=lastM;i++){c+=sum(incOf(y,i))-sum(EXP.filter(e=>inMonth(e,y,i)));vals.push(c)}
+  for(let i=1;i<=lastM;i++){c+=sum(incOf(y,i))-spendOf(EXP.filter(e=>inMonth(e,y,i)));vals.push(c)}
   const W=1000,H=210,pl=52,pr=28,pt=12,pb=26; const mn=Math.min(0,...vals),mx=Math.max(1,...vals);
   const X=i=>pl+(W-pl-pr)*(i/11), Y=v=>pt+(H-pt-pb)*(1-(v-mn)/(mx-mn||1));
   let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" style="direction:ltr">`;
@@ -508,11 +513,11 @@ function cumChart(y){
 }
 function incItem(x){return `<button class="item" data-inc="${esc(x.id)}"><div class="ico">💼</div><div><div class="t">${esc(x.name)}</div><div class="small">${t(x.type==='other'?'otherInc':x.type)} · ${fmtDate(x.date)}${x.note?' · '+esc(x.note):''}</div></div><div class="amt pos">+${ils2(x.amount)}</div></button>`}
 function vFlow(){
-  const {y,m}=CUR; const IN=sum(incOf(y,m)); const L=EXP.filter(e=>inMonth(e,y,m)); const OUT=sum(L); const left=IN-OUT; const rate=IN?Math.round(left/IN*100):null;
+  const {y,m}=CUR; const IN=sum(incOf(y,m)); const L=EXP.filter(e=>inMonth(e,y,m)); const OUT=spendOf(L); const INV=savedOf(L); const left=IN-OUT; const inAcc=IN-OUT-INV; const rate=IN?Math.round(left/IN*100):null;
   const base=salaryBase(y,m); const split={needs:0,wants:0,save:0};L.forEach(e=>{split[cat(e.cat).type]+= +e.amount||0});
   let rec;
   if(!base.v) rec=`<p class="small">${t('noBase')}</p>`;
-  else{const B=base.v;const savedActual=split.save+Math.max(0,B-OUT);
+  else{const B=base.v;const savedActual=Math.max(0,B-OUT);
     const rows=[['recNeeds',B*.5,split.needs,'max'],['recWants',B*.3,split.wants,'max'],['recSave',B*.2,savedActual,'min']];
     const okAll=rows.every(r=>r[3]==='max'?r[2]<=r[1]:r[2]>=r[1]);
     rec=`<p class="small" style="margin:0 0 6px">${t('recBase')} ${ils(B)} ${base.avg?t('avg3'):''}</p><div class="rec">${rows.map(([k,target,act,kind])=>{const ok=kind==='max'?act<=target:act>=target;return `<div class="recrow"><span>${t(k)}<div class="small">${t('actual')}: ${ils(act)}</div></span><span class="amt">${ils(target)}</span><span class="status ${ok?'ok':'bad'}">${ok?t('okS'):(kind==='max'?t('overS')+' '+ils(act-target):t('underS')+' '+ils(target-act))}</span></div>`}).join('')}</div>
@@ -522,7 +527,8 @@ function vFlow(){
   return `<div class="flowk">
     <section class="card"><div class="kt">${t('inMonth')}</div><div class="kn pos">${ils(IN)}</div></section>
     <section class="card"><div class="kt">${t('outMonth')}</div><div class="kn">${ils(OUT)}</div></section>
-    <section class="card"><div class="kt">${t('savedMonth')}</div><div class="kn ${left<0?'neg':'pos'}">${ils(left)}</div></section>
+    <section class="card"><div class="kt">${t('investedL')}</div><div class="kn" style="color:var(--save)">${ils(INV)}</div></section>
+    <section class="card"><div class="kt">${t('leftAcc')}</div><div class="kn ${inAcc<0?'neg':''}">${ils(inAcc)}</div></section>
     <section class="card"><div class="kt">${t('rate')}</div><div class="kn ${rate!==null&&rate<0?'neg':''}">${rate===null?'–':rate+'%'}</div><div class="meter ${rate!==null&&rate<0?'over':''}"><i style="width:${rate===null?0:Math.max(0,Math.min(100,rate))}%"></i></div></section>
   </div>
   <div class="grid g2" style="margin-top:14px">
@@ -556,7 +562,6 @@ document.getElementById('view').addEventListener('submit',async e=>{
     incEdit=null; if(!date.startsWith(ym(CUR.y,CUR.m)))CUR={y:+date.slice(0,4),m:+date.slice(5,7)}; toast(t('saved')); render();}catch(err){toast(t('saveErr'))}
 });
 
-
 async function copyText(s){try{await navigator.clipboard.writeText(s)}catch(err){const ta=document.createElement('textarea');ta.value=s;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove()}toast(t('copied'))}
 // ---------- local on-device store (same API shape the app uses) ----------
 const LS_KEY='expense_mgmt_v1';
@@ -570,12 +575,8 @@ function makeLocalDb(){
   const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
   const docRef=(c,id)=>({id,set:async d=>{S[c][id]=JSON.parse(JSON.stringify(d));persist();fire(c)},delete:async()=>{delete S[c][id];persist();fire(c)},
     onSnapshot:(n)=>{const f=()=>n({exists:!!S[c][id],data:()=>S[c][id]});subs[c].push(f);setTimeout(f,0);return()=>{subs[c]=subs[c].filter(x=>x!==f)}}});
-  return {
-    collection:c=>({doc:id=>docRef(c,id||uid()),onSnapshot:(n)=>{const f=()=>n(snapOf(c));subs[c].push(f);setTimeout(f,0);return()=>{subs[c]=subs[c].filter(x=>x!==f)}}}),
-    doc:p=>{const [c,id]=p.split('/');return docRef(c,id)},
-    exportAll:()=>JSON.stringify({app:'expense-management',v:1,data:S}),
-    importAll:txt=>{const o=JSON.parse(txt);if(!o||o.app!=='expense-management'||!o.data)throw new Error('bad');S={expenses:o.data.expenses||{},income:o.data.income||{},settings:o.data.settings||{}};persist();['expenses','income','settings'].forEach(fire)}
-  };
+  return {collection:c=>({doc:id=>docRef(c,id||uid()),onSnapshot:(n)=>{const f=()=>n(snapOf(c));subs[c].push(f);setTimeout(f,0);return()=>{subs[c]=subs[c].filter(x=>x!==f)}}}),
+    doc:p=>{const [c,id]=p.split('/');return docRef(c,id)}};
 }
 
 // ---------- data ----------

@@ -24,12 +24,9 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Decode signing key
-        run: echo "${{ secrets.KEYSTORE_B64 }}" | base64 -d > "$RUNNER_TEMP/release.jks"
-
       - name: Build release APK
         env:
-          KS_PATH: ${{ runner.temp }}/release.jks
+          KS_PATH: ${{ github.workspace }}/signing/release.jks
           KS_PASS: ${{ secrets.KS_PASS }}
           VERSION_CODE: ${{ github.run_number }}
         run: |

@@ -238,7 +238,7 @@
     if (window.EMAndroid && EMAndroid.googleSignIn) { EMAndroid.googleSignIn(GID); return }
     var nonce = b64(crypto.getRandomValues(new Uint8Array(16))).replace(/[^A-Za-z0-9]/g, '');
     try { localStorage.setItem('em_gsi', nonce) } catch (e) { }
-    var back = location.href.split('#')[0].split('?')[0];
+    var back = location.origin + location.pathname.replace(/index\.html$/, '');
     location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=' + encodeURIComponent(GID) + '&redirect_uri=' + encodeURIComponent(back) +
       '&response_type=id_token&scope=' + encodeURIComponent('openid email') + '&nonce=' + nonce + '&state=' + nonce + '&prompt=select_account';
   }

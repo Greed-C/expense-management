@@ -3,8 +3,8 @@
         <item name="android:colorPrimary">#2d5bd0</item>
         <item name="android:colorPrimaryDark">#f4f2ee</item>
         <item name="android:colorAccent">#2d5bd0</item>
-        <item name="android:statusBarColor">#f4f2ee</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">#0f1f3d</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:navigationBarColor">#f4f2ee</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:windowBackground">@color/bg</item>

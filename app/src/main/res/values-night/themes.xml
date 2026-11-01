@@ -2,7 +2,7 @@
     <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
         <item name="android:colorPrimary">#7c9dff</item>
         <item name="android:colorAccent">#7c9dff</item>
-        <item name="android:statusBarColor">#14161b</item>
+        <item name="android:statusBarColor">#1a2547</item>
         <item name="android:navigationBarColor">#14161b</item>
         <item name="android:windowLightNavigationBar">false</item>
         <item name="android:windowLightStatusBar">false</item>

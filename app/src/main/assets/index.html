@@ -509,12 +509,12 @@ const cname=c=>c[LANG];
 const ils=n=>(Math.round(n)<0?'−':'')+'₪'+Math.abs(Math.round(n)).toLocaleString('en-US');
 const kfmt2=v=>Math.abs(v)>=1e5?'₪'+kfmt(v):ils(v);
 const kfmt=v=>!v?'0':Math.abs(v)>=1e6?(v/1e6).toLocaleString('en-US',{maximumFractionDigits:1})+'M':(v/1000).toLocaleString('en-US',{maximumFractionDigits:1})+'k';
-const ils2=n=>(n<0?'−':'')+'₪'+Math.abs(Number(n)).toLocaleString('en-US',{maximumFractionDigits:2});
+const ils2=n=>(n<0?'−':'')+'₪'+Math.abs(Number(n)).toLocaleString('en-US',{maximumFractionDigits:3});
 const pad=n=>String(n).padStart(2,'0');
-const MAXAMT=9999999.99;
+const MAXAMT=9999999.999;
 const parseAmt=v=>Math.min(MAXAMT,parseFloat(String(v||'').replace(/[^0-9.]/g,''))||0);
-const fmtNum=n=>Number(n).toLocaleString('en-US',{maximumFractionDigits:2});
-function fmtMoneyInput(el){const raw=el.value.replace(/[^0-9.]/g,'');const parts=raw.split('.');let int=parts[0].replace(/^0+(?=\d)/,'').slice(0,7);const dec=parts.length>1?'.'+parts.slice(1).join('').slice(0,2):'';
+const fmtNum=n=>Number(n).toLocaleString('en-US',{maximumFractionDigits:3});
+function fmtMoneyInput(el){const raw=el.value.replace(/[^0-9.]/g,'');const parts=raw.split('.');let int=parts[0].replace(/^0+(?=\d)/,'').slice(0,7);const dec=parts.length>1?'.'+parts.slice(1).join('').slice(0,3):'';
   const fromEnd=el.value.length-(el.selectionEnd??el.value.length);el.value=(int?Number(int).toLocaleString('en-US'):(dec?'0':''))+dec;const pos=Math.max(0,el.value.length-fromEnd);try{el.setSelectionRange(pos,pos)}catch(e){}}
 document.addEventListener('input',e=>{if(e.target.classList&&e.target.classList.contains('money'))fmtMoneyInput(e.target)});
 const ym=(y,m)=>y+'-'+pad(m);
@@ -937,14 +937,14 @@ sheetbg.addEventListener('click',e=>{if(e.target===sheetbg)closeSheet()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(pkbg.classList.contains('open'))closePicker();else if(document.getElementById('catbg').classList.contains('open'))closeCatEditor();else if(document.getElementById('daybg').classList.contains('open'))closeDay();else closeSheet()}});
 document.getElementById('sheet').addEventListener('submit',async ev=>{
   ev.preventDefault(); if(!db){banner(t('noDb'));return}
-  if(MODE==='inc'){ const amount=Math.round(parseAmt(document.getElementById('f_amount').value)*100)/100, name=document.getElementById('f_name').value.trim()||t('salary'), date=document.getElementById('f_date').dataset.value, type=document.getElementById('f_itype').value;
+  if(MODE==='inc'){ const amount=Math.round(parseAmt(document.getElementById('f_amount').value)*1000)/1000, name=document.getElementById('f_name').value.trim()||t('salary'), date=document.getElementById('f_date').dataset.value, type=document.getElementById('f_itype').value;
     if(!(amount>0)||!date){document.getElementById('f_amount').focus();return}
     { const yk=date.slice(0,4);const used=INC.filter(x=>x.id!==editInc&&x.date&&x.date.startsWith(yk+'-')).reduce((a,x)=>a+(+x.amount||0),0);if(used+amount>MAXM){capMsg(yk,used);return} }
     const prev=editInc?INC.find(x=>x.id===editInc):null; const btn=document.getElementById('saveBtn'); btn.disabled=true;
     try{const ref=editInc?db.collection('income').doc(editInc):db.collection('income').doc();await ref.set({name,amount,date,type,note:document.getElementById('f_note').value.trim(),source:prev?(prev.source||'app'):'app',created:prev?(prev.created||Date.now()):Date.now()});
       if(!date.startsWith(ym(CUR.y,CUR.m)))CUR={y:+date.slice(0,4),m:+date.slice(5,7)}; closeSheet(); toast(t('saved')); render();}catch(err){toast(t('saveErr'))} finally{btn.disabled=false}
     return; }
-  const amount=Math.round(parseAmt(document.getElementById('f_amount').value)*100)/100; const name=document.getElementById('f_name').value.trim()||cname(cat(selCat)); const date=document.getElementById('f_date').dataset.value;
+  const amount=Math.round(parseAmt(document.getElementById('f_amount').value)*1000)/1000; const name=document.getElementById('f_name').value.trim()||cname(cat(selCat)); const date=document.getElementById('f_date').dataset.value;
   if(!(amount>0)||!date){document.getElementById('f_amount').focus();return}
   if(!selCat){const fc=document.getElementById('f_cats');fc.classList.remove('needpick');void fc.offsetWidth;fc.classList.add('needpick');fc.scrollIntoView({block:'center',behavior:'smooth'});toast(t('pickCat'));return}
   if(!selKind)selKind=cat(selCat).type;
@@ -1103,7 +1103,7 @@ function carryStart(){ if(SET.carryFrom) return SET.carryFrom;
 function monthNet(y,m){const L=EXP.filter(e=>inMonth(e,y,m));return sum(incOf(y,m))-spendOf(L)-savedOf(L)}
 function carryInto(y,m){const st0=carryStart(),jan=ym(y,1);const st=st0>jan?st0:jan; // money doesn't roll into a new year by itself
   const target=ym(y,m);if(target<=st)return 0;let [cy,cm]=st.split('-').map(Number);let c=0;
-  while(ym(cy,cm)<target){c+=monthNet(cy,cm);cm++;if(cm>12){cm=1;cy++}} return Math.round(c*100)/100}
+  while(ym(cy,cm)<target){c+=monthNet(cy,cm);cm++;if(cm>12){cm=1;cy++}} return Math.round(c*1000)/1000}
 function flowChart(y){
   const inV=[...Array(12)].map((_,i)=>sum(incOf(y,i+1))), outV=[...Array(12)].map((_,i)=>spendOf(EXP.filter(e=>inMonth(e,y,i+1))));
   const W=640,H=240,pl=48,pr=10,pt=14,pb=28; const max=Math.max(1,...inV,...outV);
@@ -1212,7 +1212,7 @@ document.getElementById('view').addEventListener('click',e=>{
 });
 document.getElementById('view').addEventListener('submit',async e=>{
   if(e.target.id!=='incForm')return; e.preventDefault(); if(!db){banner(t('noDb'));return}
-  const amount=Math.round(parseAmt(document.getElementById('i_amount').value)*100)/100, name=document.getElementById('i_name').value.trim(), date=document.getElementById('i_date').dataset.value, type=document.getElementById('i_type').value;
+  const amount=Math.round(parseAmt(document.getElementById('i_amount').value)*1000)/1000, name=document.getElementById('i_name').value.trim(), date=document.getElementById('i_date').dataset.value, type=document.getElementById('i_type').value;
   if(!(amount>0)||!name||!date)return;
   { const yk=date.slice(0,4);const used=INC.filter(x=>x.id!==incEdit&&x.date&&x.date.startsWith(yk+'-')).reduce((a,x)=>a+(+x.amount||0),0);if(used+amount>MAXM){capMsg(yk,used);return} }
   const prev=incEdit?INC.find(x=>x.id===incEdit):null;

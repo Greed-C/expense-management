@@ -417,6 +417,16 @@ nav.tabs .tab::before{width:22px;height:22px}
 .chipedit{position:absolute;top:3px;inset-inline-end:3px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;background:var(--card);border:1px solid var(--line);color:var(--ink2);cursor:pointer}
 .chipedit:hover{border-color:var(--accent);color:var(--accent)}
 .catbtns{display:flex;gap:6px}.catbtns .btn{padding:7px 12px;font-size:13px;flex:0 0 auto}
+.wc2.long{font-size:clamp(17px,4.6vw,22px)}
+.wli .n{overflow-wrap:break-word;word-break:normal}
+.wli.long{grid-template-columns:10px minmax(0,1fr) auto;grid-template-rows:auto auto}
+.wli.long i{grid-row:1}.wli.long .n{grid-column:2/4;grid-row:1}.wli.long .v{grid-column:2;grid-row:2;text-align:start}.wli.long .p{grid-column:3;grid-row:2}
+.catrow{grid-template-columns:30px minmax(0,1fr) auto}.catrow .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brow .nm>span{min-width:0;overflow-wrap:anywhere}
+.link.small{padding:6px 6px;margin:-6px 0;display:inline-block}
+.progtop{flex-wrap:wrap;gap:6px 14px}.progtop>div:first-child>div:nth-child(2){font-size:clamp(22px,7.5vw,30px)!important}
+@media (max-width:360px){.dtile{padding:6px 3px}.dl .li{font-size:10.5px;letter-spacing:-.2px}.df{font-size:9px}}
+@media (max-width:400px){.progtop>div:last-child{text-align:start!important}}
 </style>
 </head>
 <body>
@@ -513,6 +523,7 @@ const cname=c=>c[LANG];
 const ils=n=>(Math.round(n)<0?'−':'')+'₪'+Math.abs(Math.round(n)).toLocaleString('en-US');
 const kfmt2=v=>Math.abs(v)>=1e5?'₪'+kfmt(v):ils(v);
 const kfmt=v=>!v?'0':Math.abs(v)>=1e6?(v/1e6).toLocaleString('en-US',{maximumFractionDigits:1})+'M':(v/1000).toLocaleString('en-US',{maximumFractionDigits:1})+'k';
+const ilsC=n=>{const a=Math.abs(n),sg=Math.round(n)<0?'−':'';if(a<(innerWidth<380?10000:100000))return ils(n);const f=a>=1e6?[a/1e6,'M']:[a/1e3,'K'];return sg+'₪'+(+f[0].toFixed(f[0]>=100?0:f[0]>=10?1:2))+f[1]};
 const ils2=n=>(n<0?'−':'')+'₪'+Math.abs(Number(n)).toLocaleString('en-US',{maximumFractionDigits:3});
 const pad=n=>String(n).padStart(2,'0');
 const MAXAMT=9999999.999;
@@ -672,9 +683,9 @@ function wheel(L){
   return `<div class="wheelbox"><div class="wheel ${sel?'has-sel':''}" data-mids='${JSON.stringify(mids)}'>
       <svg viewBox="0 0 220 220" width="100%" role="img" style="direction:ltr"><g class="wrot" style="transform:rotate(${rot}deg)">${segs}</g></svg>
       <div class="wcenter" data-tot="${ils(tot)}">${wcenter(sel,tot)}</div></div>
-    <div class="wleg">${parts.map(pt=>`<button type="button" class="wli ${pt.id===WSEL?'on':''}" data-wcat="${pt.id}" style="--c:${pt.color}"><i style="background:${pt.color}"></i><span class="n">${esc(cname(pt.c))}</span><span class="v">${ils(pt.v)}</span><span class="p">${pctTxt(pt.p)}</span></button>`).join('')}</div></div>`;
+    <div class="wleg">${parts.map(pt=>`<button type="button" class="wli ${pt.id===WSEL?'on':''} ${ils(pt.v).length>8?'long':''}" data-wcat="${pt.id}" style="--c:${pt.color}"><i style="background:${pt.color}"></i><span class="n">${esc(cname(pt.c))}</span><span class="v">${ils(pt.v)}</span><span class="p">${pctTxt(pt.p)}</span></button>`).join('')}</div></div>`;
 }
-function wcenter(sel,tot){return sel?`<div class="wc1">${sel.c.e} ${esc(cname(sel.c))}</div><div class="wc2">${ils(sel.v)}</div><div class="wc3">${pctTxt(sel.p)} ${t('ofTotal')}</div>`:`<div class="wc1">${t('total')}</div><div class="wc2">${ils(tot)}</div><div class="wc3">${t('tapCat')}</div>`}
+function wcenter(sel,tot){return sel?`<div class="wc1">${sel.c.e} ${esc(cname(sel.c))}</div><div class="wc2 fit ${ils(sel.v).length>9?'long':''}">${ils(sel.v)}</div><div class="wc3">${pctTxt(sel.p)} ${t('ofTotal')}</div>`:`<div class="wc1">${t('total')}</div><div class="wc2 fit ${ils(tot).length>9?'long':''}">${ils(tot)}</div><div class="wc3">${t('tapCat')}</div>`}
 function wheelSelect(id){
   WSEL=WSEL===id?null:id;const box=document.querySelector('.wheel');if(!box)return;
   const {tot,parts}=wheelData(EXP.filter(e=>inMonth(e,CUR.y,CUR.m)));const sel=parts.find(x=>x.id===WSEL);const mids=JSON.parse(box.dataset.mids);
@@ -722,7 +733,7 @@ function flowCard(y,m){
   const W=sm?Math.max(250,Math.min(innerWidth,1060)-66):1000,rowH=76,R=sm?54:62,sCols=Math.max(1,Math.min(2,src.length)),sRows=Math.ceil(src.length/sCols),srcH=sRows?sRows*66+(sRows-1)*8:0,dstH=74,netH=58;
   const H=sm?(srcH+(srcH?56:14)+2*R+8+netH+52+dstH+6):Math.max(src.length,3)*rowH+150;
   const cx=W/2,cy=sm?(srcH+(srcH?56:14)+R):H/2-24;
-  const card=(x,y,w,o,side)=>`<div class="pfc ${side} ${o.bg?'grad':''}" style="left:${x/W*100}%;top:${y/H*100}%;width:${w/W*100}%;${sm?`height:${(side==='dst'?dstH:66)/H*100}%;`:''}--c:${o.c}">${o.bg?`<i class="pbar" style="background:${o.bg}"></i>`:`<i class="pdot" style="background:${o.c}"></i>`}<span class="pn">${esc(o.n)}</span><b class="pv ${ils(Math.abs(o.v)).length>8?'long':''}" style="color:${o.c}">${o.v<0?'−':''}${ils(Math.abs(o.v))}</b>${side==='dst'?`<span class="pp">${pc(Math.abs(o.v))}%</span>`:`<span class="pt"><i style="width:${Math.min(100,o.v/(AV||1)*100)}%;background:${o.c}"></i></span>`}</div>`;
+  const card=(x,y,w,o,side)=>`<div class="pfc ${side} ${o.bg?'grad':''}" style="left:${x/W*100}%;top:${y/H*100}%;width:${w/W*100}%;${sm?`height:${(side==='dst'?dstH:66)/H*100}%;`:''}--c:${o.c}">${o.bg?`<i class="pbar" style="background:${o.bg}"></i>`:`<i class="pdot" style="background:${o.c}"></i>`}<span class="pn">${esc(o.n)}</span><b class="pv ${ils(Math.abs(o.v)).length>8?'long':''}" style="color:${o.c}">${o.v<0?'−':''}${ils(Math.abs(o.v))}</b>${side==='dst'?`<span class="pp">${pc(Math.abs(o.v))>999?'999+':pc(Math.abs(o.v))}%</span>`:`<span class="pt"><i style="width:${Math.min(100,o.v/(AV||1)*100)}%;background:${o.c}"></i></span>`}</div>`;
   let svg=`<svg class="pfs" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">`,html='';
   const path=(x1,y1,x2,y2,col,w)=>`<path d="${sm?`M${x1},${y1}C${x1},${(y1+y2)/2} ${x2},${(y1+y2)/2} ${x2},${y2}`:`M${x1},${y1}C${(x1+x2)/2},${y1} ${(x1+x2)/2},${y2} ${x2},${y2}`}" stroke="${col}" stroke-width="${w}" fill="none" stroke-dasharray="9 8" class="pfl"/>`;
   const wid=v=>Math.max(2.5,Math.min(9,2.5+6.5*Math.abs(v)/base));
@@ -737,7 +748,7 @@ function flowCard(y,m){
     dst.forEach((o,i)=>{const k=rtl?2-i:i,x=k*(dw+g);svg+=path(cx,netB,x+dw/2,d0,o.c,wid(o.v));html+=card(x,d0,dw,o,'dst')});
   }
   svg+='</svg>';
-  const pool=`<div class="pool" style="left:${(cx-R)/W*100}%;top:${(cy-R)/H*100}%;width:${2*R/W*100}%"><span>${t('totalPool')}</span><b>${ils(AV)}</b><small>100%</small></div>`;
+  const pool=`<div class="pool" style="left:${(cx-R)/W*100}%;top:${(cy-R)/H*100}%;width:${2*R/W*100}%"><span>${t('totalPool')}</span><b class="fit">${ils(AV)}</b><small>100%</small></div>`;
   const netBox=`<div class="pnet" style="left:${cx/W*100}%;top:${(cy+R+10)/H*100}%"><span>${t('netMonth')}</span><b style="color:${net<0?'var(--bad)':'var(--inc)'}">${net<0?'−':'+'}${ils(Math.abs(net))}</b></div>`;
   return `<section class="card" style="margin-top:14px"><h3>${t('flowTitle')} · ${monthName(y,m)}</h3><p class="hint">${t('pipeHint')}</p>
     <div class="pipe ${sm?'v':'h'}" style="aspect-ratio:${W}/${H}">${svg}${html}${pool}${netBox}</div></section>`;
@@ -752,11 +763,11 @@ function ledgerCard(y,m){
   const today=isCur?now.getDate():(future?0:n);const availNow=today?D[today].bal:monthStats(y,m).CARRY;
   const st=monthStats(y,m);const sm=innerWidth<600;
   let tiles='';for(let d=1;d<=n;d++){const o=D[d];const act=o.items.length>0;const fut=isCur&&d>today||future;
-    const lines=[];if(o.inc)lines.push(`<b class="li inc">+${ils(o.inc)}</b>`);if(o.ex)lines.push(`<b class="li exp">−${ils(o.ex)}</b>`);if(o.iv)lines.push(`<b class="li inv">−${ils(o.iv)}</b>`);
+    const lines=[];const F=sm?ilsC:ils;if(o.inc)lines.push(`<b class="li inc">+${F(o.inc)}</b>`);if(o.ex)lines.push(`<b class="li exp">−${F(o.ex)}</b>`);if(o.iv)lines.push(`<b class="li inv">−${F(o.iv)}</b>`);
     tiles+=`<button type="button" class="dtile ${act?'act':''} ${fut?'fut':''} ${isCur&&d===today?'today':''}" ${act?`data-day="${d}"`:'disabled'}>
       <span class="dh"><span>${new Date(y,m-1,d).toLocaleDateString(LANG==='he'?'he-IL':'en-GB',{day:'numeric',month:'short'})}</span>${o.inc?'<i class="ddot"></i>':''}</span>
       <span class="dl">${lines.length?lines.join(''):`<em>${fut?'':t('noAct')}</em>`}</span>
-      ${act?`<span class="df"><span>${t('leftShort')} ${ils(o.bal)}</span><span class="dd">${sm?'›':t('detail')+' ›'}</span></span>`:''}</button>`}
+      ${act?`<span class="df"><span>${t('leftShort')} ${(sm?ilsC:ils)(o.bal)}</span><span class="dd">${sm?'›':t('detail')+' ›'}</span></span>`:''}</button>`}
   return `<section class="card" style="margin-top:14px"><div class="lhead"><div><h3 style="margin:0">${t('ledgerTitle')} · ${monthName(y,m)}</h3><p class="hint" style="margin:2px 0 0">${t('ledgerHint')}</p></div>
     <div class="lnow"><span>${isCur?t('availNow'):t('availEnd')}</span><b style="color:${availNow<0?'var(--bad)':'var(--ink)'}">${ils(availNow)}</b><small>${t('ofW')} ${ils(st.AV)} ${t('thisMonthShort')}</small></div></div>
     <div class="dgrid">${tiles}</div></section>`;
@@ -1045,6 +1056,10 @@ document.getElementById('view').addEventListener('input',e=>{
 document.getElementById('view').addEventListener('change',e=>{if(e.target.id==='qc'){QC=e.target.value;document.getElementById('listBody').innerHTML=listBody()}});
 
 // ---------- date picker (Windows-style: days → months → years) ----------
+function fitText(){document.querySelectorAll('.fit').forEach(el=>{el.style.fontSize='';const box=el.parentElement;const max=box.clientWidth*(box.classList.contains('pool')?.84:.9);let f=parseFloat(getComputedStyle(el).fontSize);let g=0;while(el.scrollWidth>max&&f>10&&g++<30){f-=1;el.style.fontSize=f+'px'}})}
+render=(f=>function(){const r=f.apply(this,arguments);try{fitText()}catch(e){}return r})(render);
+wheelSelect=(f=>function(){const r=f.apply(this,arguments);try{fitText()}catch(e){}return r})(wheelSelect);
+addEventListener('resize',()=>{try{fitText()}catch(e){}});
 function isoToday(){const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
 function fmtDate(iso){if(!iso)return '';const d=new Date(iso+'T12:00');return d.toLocaleDateString(LANG==='he'?'he-IL':'en-GB',{weekday:'short',day:'numeric',month:'long',year:'numeric'})}
 function setDateBtn(id,iso){const b=document.getElementById(id);b.dataset.value=iso;const tx=b.querySelector('span');(tx||b).textContent=fmtDate(iso)}

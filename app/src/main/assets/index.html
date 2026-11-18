@@ -1428,6 +1428,9 @@ function makeLocalDb(){
 
 // ---------- data ----------
 let LOADED=false;
+(function(){let ver=0;const get=()=>ver?Promise.resolve(ver):fetch('webver.txt',{cache:'no-store'}).then(r=>r.ok?r.text():'').then(t=>(ver=+t||0)).catch(()=>0);
+new MutationObserver(()=>{const v=document.getElementById('view');if(VIEW!=='settings'||!v||document.getElementById('verLine')||!v.querySelector('#saveSet'))return;const d=document.createElement('p');d.id='verLine';d.className='hint';d.style.cssText='text-align:center;margin:18px 0 4px';v.appendChild(d);
+get().then(x=>{if(x)d.textContent=(LANG==='he'?'גרסה: ':'Version: ')+(z=>z.getDate()+'/'+(z.getMonth()+1)+'/'+z.getFullYear()+' '+String(z.getHours()).padStart(2,'0')+':'+String(z.getMinutes()).padStart(2,'0'))(new Date(x*1000))})}).observe(document.body,{childList:true,subtree:true})})();
 window.__updateReady=function(){toast(LANG==='he'?'הותקנה גרסה חדשה – מתעדכן…':'New version installed – updating…');const go=()=>{const busy=['sheetbg','catbg','daybg','impbg','pkbg'].some(id=>{const el=document.getElementById(id);return el&&el.classList.contains('open')});if(busy)setTimeout(go,1500);else location.reload()};setTimeout(go,1800)};
 window.__needApk=function(url){const b=document.getElementById('banner');b.innerHTML=(LANG==='he'?'יש עדכון לאפליקציה שצריך להתקין פעם אחת. ':'An app update needs to be installed once. ')+'<a href="'+url.replace(/"/g,'')+'" style="color:inherit;font-weight:700">'+(LANG==='he'?'להורדה':'Download')+'</a>';b.classList.add('show')};
 setTimeout(()=>{try{if(window.EMAndroid&&EMAndroid.status){const st=JSON.parse(EMAndroid.status());if(st.needApk)__needApk(st.needApk);if(st.updated)__updateReady()}}catch(e){}},800);

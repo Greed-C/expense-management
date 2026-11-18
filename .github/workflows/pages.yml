@@ -25,8 +25,17 @@ jobs:
 
       - name: Assemble site
         run: |
+          git log -1 --format=%ct > app/src/main/assets/webver.txt
           mkdir _site
           cp app/src/main/assets/* _site/
+          python3 - <<'PY'
+          import hashlib, json, os
+          d = 'app/src/main/assets'
+          files = {f: hashlib.sha256(open(os.path.join(d, f), 'rb').read()).hexdigest() for f in sorted(os.listdir(d)) if f != 'webver.txt'}
+          out = {'web': int(open(os.path.join(d, 'webver.txt')).read().strip()), 'native': int(open('native-version.txt').read().strip()),
+                 'apkUrl': 'https://github.com/Greed-C/expense-management/releases/latest', 'files': files}
+          json.dump(out, open('_site/update.json', 'w'), indent=1)
+          PY
           cp web/* _site/
           sed -i "s/__BUILD__/${{ github.run_number }}/" _site/sw.js
           touch _site/.nojekyll

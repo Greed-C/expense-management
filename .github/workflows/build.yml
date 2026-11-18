@@ -24,6 +24,9 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Stamp web version
+        run: git log -1 --format=%ct > app/src/main/assets/webver.txt
+
       - name: Build release APK
         env:
           KS_PATH: ${{ github.workspace }}/signing/release.jks

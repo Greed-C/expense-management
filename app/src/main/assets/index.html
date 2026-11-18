@@ -1119,7 +1119,7 @@ document.getElementById('c_name').addEventListener('input',drawCatEditor);
     [/ישראכרט|כאל|לאומי קארד|מקס איט|max|אמריקן אקספרס|דיינרס|ויזה כ\.א\.ל/i, 'db', { kind: 'skip', why: 'cardbill' }],
     [/גמל|השתלמות|פנסי|אלטשולר|מיטב|ילין|אנליסט|מור גמל|פסגות/, 'db', { kind: 'exp', cat: 'savings', name: d => d.replace(/\s+/g, ' ').trim(), method: 'standing', on: true }],
     [/נע-קניה|קניית ני"ע|קניה ני"ע/, 'db', { kind: 'exp', cat: 'savings', name: () => 'קניית ניירות ערך', method: 'transfer', on: true }],
-    [/נע-מכירה|מכירת ני"ע|מכירה ני"ע/, 'cr', { kind: 'skip', why: 'stocksell' }],
+    [/נע-מכירה|מכירת ני"ע|מכירה ני"ע/, 'cr', { kind: 'inc', type: 'other', name: () => 'משיכה מהשקעות', on: true }],
     [/מילואים|מופ"ת/, 'cr', { kind: 'inc', type: 'reserve', name: () => 'מילואים', on: true }],
     [/משהב"ט|משרד הביטחון|חיימ"ש/, 'cr', { kind: 'inc', type: 'reserve', name: () => 'משרד הביטחון – מילואים', on: true }],
     [/ביטוח|ביטו$/, 'cr', { kind: 'inc', type: 'other', name: () => 'החזר / תשלום מחברת ביטוח', on: true }],

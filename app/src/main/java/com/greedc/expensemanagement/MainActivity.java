@@ -42,7 +42,7 @@ import androidx.webkit.WebViewAssetLoader;
 public class MainActivity extends Activity {
     private static final String HOST = "appassets.androidplatform.net";
     /** Bump only when this Java code / the manifest changes; the web app updates itself. */
-    private static final int NATIVE_VERSION = 2;
+    private static final int NATIVE_VERSION = 3;
     private static final String UPDATE_BASE = "https://greed-c.github.io/expense-management/";
     private static final int PICK_FILE = 41;
     private WebView web;
@@ -151,7 +151,7 @@ public class MainActivity extends Activity {
             public boolean onShowFileChooser(WebView v, ValueCallback<Uri[]> cb, FileChooserParams params) {
                 if (fileCb != null) fileCb.onReceiveValue(null);
                 fileCb = cb;
-                Intent i = new Intent(Intent.ACTION_GET_CONTENT); i.addCategory(Intent.CATEGORY_OPENABLE); i.setType("application/pdf");
+                Intent i = new Intent(Intent.ACTION_GET_CONTENT); i.addCategory(Intent.CATEGORY_OPENABLE); i.setType("*/*"); i.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"application/pdf", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/octet-stream"});
                 try { startActivityForResult(Intent.createChooser(i, null), PICK_FILE); } catch (Exception e) { fileCb = null; cb.onReceiveValue(null); return false; }
                 return true;
             }

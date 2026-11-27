@@ -24,6 +24,3 @@ The app has no account, no server and no internet access to your data. Use **Set
 Open **https://greed-c.github.io/expense-management/** in Safari and choose *Share → Add to Home Screen*.
 Step-by-step guide (Hebrew + English): **https://greed-c.github.io/expense-management/guide.html**
 Same app, works offline, data stays only on your own device.
-
-## Developing
-The app's source is `src/my-money.html`; `npm run build` turns it into `app/src/main/assets/index.html`. `npm test` runs the Playwright test suites. See `CLAUDE.md` for the full workflow.

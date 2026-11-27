@@ -10,3 +10,8 @@ qa/private/
 *.png
 !web/*.png
 !app/src/main/res/**/*.png
+# Personal working notes for Claude Code – kept only on this PC, never public
+CLAUDE.md
+.claude/
+*.xlsx
+*.xls

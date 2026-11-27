@@ -63,9 +63,9 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   await p.fill('#q', ''); await p.selectOption('#qc', 'phone'); await sleep(150); n = await p.$$eval('#listBody .tx', x => x.length); ok('category filter', n === 1, 'items ' + n);
   // 11 budget tab editing + settings income keeps budgets
   await go('budget'); await p.click('[data-bedit="1"]'); await sleep(150); await p.fill('[data-bud="groceries"]', '1,200'); await p.click('#saveBud'); await sleep(250);
-  await go('settings'); await p.fill('#s_income', '15,000'); await p.fill('#s_name', 'Meir'); await p.click('#saveSet'); await sleep(250);
+  await go('settings'); await p.fill('#s_income', '15,000'); await p.fill('#s_name', 'Dana'); await p.click('#saveSet'); await sleep(250);
   const set = await p.evaluate(() => SET); ok('budget saved; settings save keeps budgets', set.income === 15000 && set.budgets.groceries === 1200, JSON.stringify(set));
-  await go('home'); ok('greeting uses name', (await p.textContent('#heroBody')).includes('Meir'));
+  await go('home'); ok('greeting uses name', (await p.textContent('#heroBody')).includes('Dana'));
   await go('budget'); ok('budget overview shows', (await p.textContent('#view')).includes('1,200'));
   // 12 CSV backup button exists and copies
   await go('settings'); const csvBtn = await p.$('#copyCsv'); ok('backup (CSV) button exists in Settings', !!csvBtn);

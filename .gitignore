@@ -2,3 +2,11 @@
 build/
 *.jks
 local.properties
+node_modules/
+qa/out/
+# Private test files (real statements and tests with real amounts) – never commit
+qa/private/
+*.pdf
+*.png
+!web/*.png
+!app/src/main/res/**/*.png

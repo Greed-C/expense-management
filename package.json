@@ -1,0 +1,13 @@
+{
+  "name": "expense-management",
+  "private": true,
+  "description": "Expense Management – Android app, web app (iPhone/PC) and the My Money source",
+  "scripts": {
+    "build": "node tools/build.js",
+    "serve": "node qa/serve.js",
+    "test": "node qa/run-all.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}

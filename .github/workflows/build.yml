@@ -24,6 +24,9 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Build app from src/my-money.html
+        run: python3 tools/make_apk_html.py
+
       - name: Stamp web version
         run: git log -1 --format=%ct > app/src/main/assets/webver.txt
 
